@@ -9,6 +9,11 @@
     <title>{{ page.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | absolute_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/page.css' | absolute_url }}">
+
+    {% if page.katex.enabled %}
+        <link rel="stylesheet" href="{{ '/assets/katex/katex.min.css' | absolute_url }}">
+    {% endif %}
+
 </head>
 
 <body>
