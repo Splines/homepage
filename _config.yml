@@ -25,3 +25,5 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+
+# https://minimalbb.github.io/cheat%20sheet/kramdown-markdown-guide-with-jekyll

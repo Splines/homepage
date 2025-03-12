@@ -45,10 +45,39 @@ h2 {
     font-family: "Vermiglione", serif;
     font-weight: 700;
     font-size: 1.6em;
-    color: #0f1b24;
+    color: #0f1b24d5;
 
     margin-top: 1.5em;
     margin-bottom: 0;
+
+    a::before {
+        content: "¶";
+        font-size: 1.3em;
+        color: #454545d6;
+        position: absolute;
+        left: -1.9rem;
+        width: 1.9rem;
+        transform: translateY(-10%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    a:hover::before {
+        opacity: 1;
+    }
+
+    &:hover {
+        a::before {
+            opacity: 1;
+        }
+    }
+
+    &:target {
+        a::before {
+            opacity: 1;
+            color: #88593a;
+        }
+    }
 }
 
 p {
