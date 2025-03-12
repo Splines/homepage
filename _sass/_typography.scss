@@ -13,30 +13,43 @@
 }
 
 body {
-    background-color: #FAFEFF;
+    background-color: #ffffff;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 18px;
 }
 
 h1 {
     font-family: "Vermiglione", serif;
-    font-size: 3.7em;
+    font-size: 3.5em;
     line-height: 1.05em;
 
     // https://resourceboy.com/textures/gold-textures/
-    // background-color: #563c29;
-    background: url("/assets/images/goldfoil.jpg"), #281a10;
+    background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
     background-size: cover;
     background-position: center;
-    // color: #58282394;
-    // color: #57382294;
-    // color: #57382224;
-    color: transparent;
-    background-blend-mode: lighten;
+    color: #281c143d;
+    background-blend-mode: hard-light;
     background-clip: text;
+}
+
+h2 {
+    font-family: "Vermiglione", serif;
+    font-size: 1.6em;
+    color: #0f1b24;
+
+    margin-top: 1.5em;
+    margin-bottom: 0;
 }
 
 p {
     font-family: "Rethink", sans-serif;
     font-size: 1.2em;
+    line-height: 1.5;
     color: #0f1b24;
-}
 
+    margin-top: 0.4em;
+    margin-bottom: 1em;
+}
