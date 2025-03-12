@@ -21,16 +21,23 @@
 
 @font-face {
     font-family: "Rethink";
-    src: url("/assets/fonts/RethinkSans-Regular.ttf");
-    font-weight: normal;
+    src: url("/assets/fonts/RethinkSans-Variable.ttf");
+    font-weight: 400 700;
     font-style: normal;
+}
+
+@font-face {
+    font-family: "Rethink";
+    src: url("/assets/fonts/RethinkSans-Italic-Variable.ttf");
+    font-weight: 400 700;
+    font-style: italic;
 }
 
 h1 {
     font-family: "Vermiglione", serif;
     font-weight: 600;
-    font-size: 3.2em;
-    line-height: 1.05em;
+    font-size: 3.2rem;
+    line-height: 1em;
 
     // https://resourceboy.com/textures/gold-textures/
     background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
@@ -47,12 +54,12 @@ h2 {
     font-size: 1.6em;
     color: #0f1b24d5;
 
-    margin-top: 1.5em;
+    margin-top: 1.65em;
     margin-bottom: 0;
 
     a::before {
         content: "¶";
-        font-size: 1.3em;
+        font-size: 2rem;
         color: #454545d6;
         position: absolute;
         left: -1.9rem;
@@ -80,8 +87,17 @@ h2 {
     }
 }
 
+h3 {
+    font-family: "Rethink", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #0f1b24d5;
+    margin-top: 1.2em;
+}
+
 p {
     font-family: "Rethink", sans-serif;
+    font-weight: 400;
     font-size: 1.1rem;
     line-height: 1.5;
     color: #0f1b24;
