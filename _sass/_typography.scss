@@ -1,7 +1,14 @@
 @font-face {
     font-family: "Vermiglione";
     src: url("/assets/fonts/Vermiglione-SemiBold.otf");
-    font-weight: bold;
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Vermiglione";
+    src: url("/assets/fonts/Vermiglione-Bold.otf");
+    font-weight: 700;
     font-style: normal;
 }
 
@@ -23,7 +30,8 @@ body {
 
 h1 {
     font-family: "Vermiglione", serif;
-    font-size: 3.5em;
+    font-weight: 600;
+    font-size: 3.2em;
     line-height: 1.05em;
 
     // https://resourceboy.com/textures/gold-textures/
@@ -37,6 +45,7 @@ h1 {
 
 h2 {
     font-family: "Vermiglione", serif;
+    font-weight: 700;
     font-size: 1.6em;
     color: #0f1b24;
 
@@ -46,7 +55,7 @@ h2 {
 
 p {
     font-family: "Rethink", sans-serif;
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 1.5;
     color: #0f1b24;
 
