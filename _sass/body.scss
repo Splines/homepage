@@ -7,7 +7,10 @@ html, body {
     padding: 0;
 }
 
+:root {
+    font-size: 18px;
+}
+
 body {
     background: linear-gradient(to top, #fff7f0, #fffcf8);
-    font-size: 18px;
 }

@@ -82,10 +82,21 @@ h2 {
 
 p {
     font-family: "Rethink", sans-serif;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     line-height: 1.5;
     color: #0f1b24;
 
     margin-top: 0.4em;
     margin-bottom: 1em;
+}
+
+a {
+    color: #88593a;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: #563c29;
+    }
 }
