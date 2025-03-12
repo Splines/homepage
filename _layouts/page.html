@@ -1,0 +1,24 @@
+---
+---
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{'/assets/css/main.css' | absolute_url}}">
+    <link rel="stylesheet" href="{{'/assets/css/page.css' | absolute_url}}">
+</head>
+
+<body>
+    <article id="content">
+        <header>
+            <h1>{{ page.title }}</h1>
+        </header>
+        {{ content }}
+    </article>
+
+</body>
+
+</html>
