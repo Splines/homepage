@@ -1,5 +1,12 @@
-html, body {
+// https://stackoverflow.com/a/17555766/
+html {
     height: 100%;
+}
+body {
+    min-height: 100%;
+    background: linear-gradient(to top, #fff7f0, #fffcf8);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 * {
@@ -9,8 +16,4 @@ html, body {
 
 :root {
     font-size: 18px;
-}
-
-body {
-    background: linear-gradient(to top, #fff7f0, #fffcf8);
 }
