@@ -1,5 +1,12 @@
 @font-face {
     font-family: "Vermiglione";
+    src: url("/assets/fonts/Vermiglione-Medium.otf");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Vermiglione";
     src: url("/assets/fonts/Vermiglione-SemiBold.otf");
     font-weight: 600;
     font-style: normal;
@@ -19,12 +26,13 @@
     font-style: normal;
 }
 
-body {
-    background-color: #ffffff;
-
+body * {
     margin: 0;
     padding: 0;
+}
 
+body {
+    background-color: #ffffff;
     font-size: 18px;
 }
 
