@@ -20,6 +20,8 @@ module Prism
     end
     
     def render_code(language, code)
+      puts code
+      code = strip_newlines_in_beginning_and_end(code)
       JS_CTX.eval("Prism.highlight(`#{code}`, Prism.languages.#{language}, '#{language}')")
     end
 
@@ -27,6 +29,10 @@ module Prism
       filename = nil
       code.gsub!(FILENAME_REGEX) { filename = $2; '' }
       filename
+    end
+
+    def strip_newlines_in_beginning_and_end(code)
+      code.gsub(/\A\n+/, '').gsub(/\n+\z/, '')
     end
 
     def wrap_in_figure(code, filename, language)

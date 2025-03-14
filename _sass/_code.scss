@@ -5,6 +5,12 @@
     border: 1.3px solid gray;
     border-radius: 5px;
     position: relative;
+
+    &:hover {
+        .code-copy-btn {
+            opacity: 1;
+        }
+    }
 }
 
 .code-caption {
@@ -32,12 +38,15 @@
     border-radius: 5px;
     background-color: #f8efe9;
     cursor: pointer;
+    opacity: 0;
 
+    
     &:hover {
         background-color: #f1e5d9;
     }
 
     transition: background-color 100ms;
+    transition: opacity 220ms ease-in-out;
 
     .code-copy-icon-clipboard {
         width: 1.1em;
