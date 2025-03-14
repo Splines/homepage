@@ -7,14 +7,14 @@ module Prism
 
     # Jekyll wraps code blocks in <pre><code> tags
     CODE_REGEX = /<pre><code(.*?)class="language-(.*?)"(.*?)>(.*?)<\/code><\/pre>/m.freeze
-    FILENAME_REGEX = /(.*)##FILENAME##\s*(.*)/.freeze
+    FILENAME_REGEX = /(.*)\+\+\+FILENAME\+\+\+\s*(.*)/.freeze
 
     def process(text)
       text.gsub(CODE_REGEX) { 
         language = $2
         code_block = $4
         filename = extract_filename!(code_block)
-        wrap_in_figure("<code#{$1}class=\"language-#{language}\"#{$3} tabindex='0'>#{render_code(language, code_block) }</code>",
+        wrap_in_figure("<code#{$1}class=\"language-#{language}\"#{$3}>#{render_code(language, code_block) }</code>",
                       filename, language)
       }
     end
@@ -31,10 +31,10 @@ module Prism
 
     def wrap_in_figure(code, filename, language)
       template = File.read('_plugins/code_figure.html')
-      template = template.gsub('{{ code }}', "<pre>#{code}</pre>")
+      template = template.gsub('{{ code }}', "<pre tabindex='0'>#{code}</pre>")
       template.gsub('{{ figcaption }}', filename\
         ? "<figcaption class=\"code-caption\">#{filename}</figcaption>"
-        : "<figcaption class=\"code-caption\">Code snippet (programming language: #{language})</figcaption>")
+        : "<figcaption class=\"only-aria\">Code snippet (programming language: #{language})</figcaption>")
     end
   end
 end

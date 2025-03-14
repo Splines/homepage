@@ -13,7 +13,7 @@ Here’s how your Cypress test might look like in the end.
 See the [GitHub repo][github].
 
 ```js
-// ##FILENAME## spec/cypress/e2e/submissions_spec.cy.js
+// +++FILENAME+++ spec/cypress/e2e/submissions_spec.cy.js
 import FactoryBot from "../support/factorybot";
 
 describe("Submissions", () => {

@@ -1,77 +1,90 @@
 @use "variables" as v;
 
-.code-block {
-    border: 1px solid #e1e4e8;
-    border-radius: 5px;
-    padding: 1em;
+.code-figure {
     font-family: v.$code-font;
+    border: 1.3px solid gray;
+    border-radius: 5px;
+    position: relative;
 }
 
-/**
- * GHColors theme by Avi Aryan (http://aviaryan.in)
- * Inspired by Github syntax coloring
- *
- * From https://github.com/PrismJS/prism-themes/blob/master/themes/prism-ghcolors.css
- */
+.code-caption {
+    font-family: v.$code-font;
+    font-size: .95em;
+    color: #393A34;
+    border-bottom: 1.3px solid #393a344f;
+    padding: 1em;
+}
 
-code[class*="language-"],
-pre[class*="language-"] {
+.code-copy-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: .7em;
+    right: .7em;
+
+    width: 2.7em;
+    height: 2.7em;
+
+    color: white;
+    border: 1px solid #cfbaba;
+    border-radius: 5px;
+    background-color: #f8efe9;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f1e5d9;
+    }
+
+    transition: background-color 100ms;
+
+    .code-copy-icon-clipboard {
+        width: 1.1em;
+        fill: #70604d;
+    }
+}
+
+code[class*="language-"] {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+
     color: #393A34;
     font-family: v.$code-font;
-    direction: ltr;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    font-size: .9em;
-    line-height: 1.2em;
-
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
-
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    -ms-hyphens: none;
+    font-size: .95em;
     hyphens: none;
+
+    &::selection {
+        text-shadow: none;
+        background: #b3d4fc;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+
+        &-track {
+            background: #f1f1f1;
+            border-radius: 3.8px;
+        }
+
+        &-thumb {
+            background: #888;
+            border-radius: 3.8px;
+
+            &:hover {
+                background: #555;
+            }
+        }
+    }
 }
 
-pre>code[class*="language-"] {
-    font-size: 1em;
-}
 
-pre[class*="language-"]::-moz-selection,
-pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection,
-code[class*="language-"] ::-moz-selection {
-    background: #b3d4fc;
-}
-
-pre[class*="language-"]::selection,
-pre[class*="language-"] ::selection,
-code[class*="language-"]::selection,
-code[class*="language-"] ::selection {
-    background: #b3d4fc;
-}
-
-/* Code blocks */
-pre[class*="language-"] {
-    padding: 1em;
-    margin: .5em 0;
-    overflow: auto;
-    border: 1px solid #dddddd;
-    background-color: white;
-}
-
-/* Inline code */
-:not(pre)>code[class*="language-"] {
-    padding: .2em;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    background: #f8f8f8;
-    border: 1px solid #dddddd;
-}
-
+/**
+ * Theme inspired by GitHub Colors theme by Avi Aryan
+ * https://github.com/PrismJS/prism-themes/blob/master/themes/prism-ghcolors.css
+ */
 .token.comment,
 .token.prolog,
 .token.doctype,
