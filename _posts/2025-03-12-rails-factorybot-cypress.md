@@ -2,6 +2,7 @@
 layout: page
 title:  "Rails FactoryBot in Cypress"
 date:   2024-06-26
+code: true
 ---
 
 Cypress tests don't come TODO
@@ -12,7 +13,7 @@ Here’s how your Cypress test might look like in the end.
 See the [GitHub repo][github].
 
 ```js
-// spec/cypress/e2e/submissions_spec.cy.js
+// ##FILENAME## spec/cypress/e2e/submissions_spec.cy.js
 import FactoryBot from "../support/factorybot";
 
 describe("Submissions", () => {
@@ -40,7 +41,7 @@ One more ingredient is test isolation. Without it, you will likely end up frustr
 
 The solution is easy: provide routes with respective controllers in your Rails application that allow to clean the database and create mock objects. And then call these routes from your Cypress tests. That’s all you need, but of course a bit syntactic sugar and convenience methods on top of that might be desirable such that you can write this in Cypress tests:
 
-```
+```js
 cy.cleanDatabase();
 cy.createUserAndLogin("admin");
 FactoryBot.create("assignment", "with_deadline_tomorrow", { file_type: ".pdf", size_max: 10 })
