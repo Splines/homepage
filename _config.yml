@@ -30,5 +30,4 @@ exclude:
 # https://minimalbb.github.io/cheat%20sheet/kramdown-markdown-guide-with-jekyll
 
 kramdown:
-  syntax_highlighter_opts:
-    disable : true
+  syntax_highlighter: nil

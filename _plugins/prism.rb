@@ -1,4 +1,5 @@
 require 'execjs'
+require 'cgi'
 
 module Prism
   class << self
@@ -12,7 +13,7 @@ module Prism
     def process(text)
       text.gsub(CODE_REGEX) { 
         language = $2
-        code_block = $4
+        code_block = CGI.unescapeHTML($4) # Decode HTML entities
         filename = extract_filename!(code_block)
         wrap_in_figure("<code#{$1}class=\"language-#{language}\"#{$3}>#{render_code(language, code_block) }</code>",
                       filename, language)
@@ -20,7 +21,6 @@ module Prism
     end
     
     def render_code(language, code)
-      puts code
       code = strip_newlines_in_beginning_and_end(code)
       JS_CTX.eval("Prism.highlight(`#{code}`, Prism.languages.#{language}, '#{language}')")
     end
