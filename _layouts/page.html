@@ -11,13 +11,15 @@
     <link rel="stylesheet" href="{{ '/assets/css/page.css' | absolute_url }}">
 
     {% if page.katex.enabled %}
-        <link rel="stylesheet" href="{{ '/assets/katex/katex.min.css' | absolute_url }}">
+    <link rel="stylesheet" href="{{ '/assets/katex/katex.min.css' | absolute_url }}">
     {% endif %}
 
     {% if page.code %}
-        <link rel="stylesheet" href="{{ '/assets/css/code.css' | absolute_url }}">
-        <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
+    <link rel="stylesheet" href="{{ '/assets/css/code.css' | absolute_url }}">
+    <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
     {% endif %}
+
+    <script defer src="{{ '/assets/js/back.js' | absolute_url }}"></script>
 </head>
 
 <body>
@@ -43,9 +45,14 @@
 
     </article>
 
-    <div id="whitespace-below-article">
-    </div>
+    <a class="return-back" href="/" onclick="return navigateBack()">
+        <svg>
+            <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
+        </svg>
+        <i>Back</i>
+    </a>
 
+    <div id="whitespace-below-article"></div>
 </body>
 
 </html>

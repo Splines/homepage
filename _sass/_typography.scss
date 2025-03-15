@@ -1,3 +1,5 @@
+@use "variables" as v;
+
 @font-face {
     font-family: "Vermiglione";
     src: url("/assets/fonts/Vermiglione-Medium.otf");
@@ -34,7 +36,7 @@
 }
 
 h1 {
-    font-family: "Vermiglione", serif;
+    font-family: v.$serif-font;
     font-weight: 600;
     font-size: 3.2rem;
     line-height: 1em;
@@ -49,7 +51,7 @@ h1 {
 }
 
 h2 {
-    font-family: "Vermiglione", serif;
+    font-family: v.$serif-font;
     font-weight: 700;
     font-size: 1.6rem;
     color: #0f1b24d5;
@@ -88,7 +90,7 @@ h2 {
 }
 
 h3 {
-    font-family: "Rethink", sans-serif;
+    font-family: v.$normal-font;
     font-weight: 700;
     font-size: 1.1rem;
     color: #0f1b24d5;
@@ -96,7 +98,7 @@ h3 {
 }
 
 p {
-    font-family: "Rethink", sans-serif;
+    font-family: v.$normal-font;
     font-weight: 400;
     font-size: 1.1rem;
     line-height: 1.5;
@@ -110,9 +112,9 @@ a {
     color: #88593a;
     text-decoration: underline;
     text-underline-offset: 0.2rem;
-    transition: color 0.3s ease;
+    transition: v.$link-color-transition;
 
     &:hover {
-        color: #563c29;
+        color: v.$link-color-hover;
     }
 }

@@ -1,3 +1,5 @@
+@use "variables" as v;
+
 // https://stackoverflow.com/a/17555766/
 html {
     height: 100%;
@@ -7,6 +9,8 @@ body {
     background: linear-gradient(to top, #fff7f0, #fffcf8);
     background-repeat: no-repeat;
     background-attachment: fixed;
+
+    font-family: v.$normal-font;
 }
 
 * {
