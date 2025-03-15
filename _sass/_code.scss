@@ -83,20 +83,19 @@ code[class*="language-"] {
     }
 
     &::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
+        height: 12px;
 
         &-track {
             background: #f1f1f1;
-            border-radius: 3.8px;
+            border-radius: 3.7px;
         }
 
         &-thumb {
             background: #888;
-            border-radius: 3.8px;
+            border-radius: 3.7px;
 
             &:hover {
-                background: #555;
+                background: #7b7b7b;
             }
         }
     }
