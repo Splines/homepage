@@ -38,9 +38,13 @@ module Prism
     def wrap_in_figure(code, filename, language)
       template = File.read('_plugins/code_figure.html')
       template = template.gsub('{{ code }}', "<pre tabindex='0'>#{code}</pre>")
-      template.gsub('{{ figcaption }}', filename\
+      template.gsub!('{{ figcaption }}', filename\
         ? "<figcaption class=\"code-caption\">#{filename}</figcaption>"
         : "<figcaption class=\"only-aria\">Code snippet (programming language: #{language})</figcaption>")
+      if filename.nil?
+        template.gsub!('class="code-copy-btn"', 'class="code-copy-btn copy-code-btn-only-on-hover"')
+      end
+      template
     end
   end
 end
