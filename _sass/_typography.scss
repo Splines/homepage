@@ -71,14 +71,25 @@ h2 {
 
     a::before {
         content: "¶";
-        font-size: 2rem;
+        display: inline-block;
+        font-size: 1.6rem;
         color: #454545d6;
-        position: absolute;
-        left: -1.9rem;
-        width: 1.9rem;
-        transform: translateY(-10%);
+
         opacity: 0;
         transition: opacity 0.3s ease;
+
+        --anchor-link-offset: 1rem;
+        margin-left: calc(-1 * var(--anchor-link-offset));
+        width: var(--anchor-link-offset);
+
+        @media (min-width: 400px) {
+            font-size: 1.8rem;
+            --anchor-link-offset: 1.3rem;
+        }
+
+        @media (min-width: 900px) {
+            --anchor-link-offset: 1.6rem;
+        }
     }
 
     a:hover::before {
