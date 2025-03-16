@@ -38,7 +38,7 @@
 h1 {
     font-family: v.$serif-font;
     font-weight: 600;
-    font-size: 3.2rem;
+
     line-height: 1em;
 
     // https://resourceboy.com/textures/gold-textures/
@@ -48,6 +48,16 @@ h1 {
     color: #281c143d;
     background-blend-mode: hard-light;
     background-clip: text;
+
+    font-size: 2.7rem;
+
+    @media (min-width: 600px) {
+        font-size: 2.8rem;
+    }
+
+    @media (min-width: 1000px) {
+        font-size: 2.9rem;
+    }
 }
 
 h2 {
@@ -92,7 +102,7 @@ h2 {
 h3 {
     font-family: v.$normal-font;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #0f1b24d5;
     margin-top: 1.2em;
 }
@@ -100,8 +110,8 @@ h3 {
 p {
     font-family: v.$normal-font;
     font-weight: 400;
-    font-size: 1.1rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.5rem;
     color: #0f1b24;
 
     margin-top: 0.4em;

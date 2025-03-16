@@ -4,6 +4,7 @@
 html {
     height: 100%;
 }
+
 body {
     min-height: 100%;
     background: linear-gradient(to top, #fff7f0, #fffcf8);
@@ -19,7 +20,23 @@ body {
 }
 
 :root {
-    font-size: 18px;
+    font-size: 15px;
+
+    @media (min-width: 470px) {
+        font-size: 16px;
+    }
+
+    @media(min-width: 560px) {
+        font-size: 17px;
+    }
+
+    @media(min-width: 800px) {
+        font-size: 18px;
+    }
+
+    @media(min-width: 900px) {
+        font-size: 19px;
+    }
 }
 
 .only-aria {
