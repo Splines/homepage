@@ -13,4 +13,7 @@
     "css.lint.validProperties": [
         "---"
     ],
+    "files.exclude": {
+        ".jekyll-cache/": true
+    }
 }
