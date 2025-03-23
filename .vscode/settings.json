@@ -1,4 +1,82 @@
 {
+    "editor.formatOnSave": false, // it still autosaves with the options below
+    //////////////////////////////////////
+    // JS (ESLint)
+    //////////////////////////////////////
+    "[javascript]": {
+        "editor.formatOnSave": false, // to avoid formatting twice (ESLint + VSCode)
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.indentSize": 2,
+        "editor.tabSize": 2,
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.format.enable": true, // use ESLint as formatter
+    // this disables VSCode built-in formatter (instead we want to use ESLint)
+    "javascript.validate.enable": false,
+    "eslint.options": {
+        "overrideConfigFile": ".config/eslint.mjs"
+    },
+    "eslint.validate": [
+        "javascript",
+        "html"
+    ],
+    //////////////////////////////////////
+    // HTML
+    //////////////////////////////////////
+    "[html]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.indentSize": 2,
+        "editor.tabSize": 2,
+    },
+    //////////////////////////////////////
+    // Files
+    //////////////////////////////////////
+    "files.exclude": {
+        "node_modules/": true,
+        ".jekyll-cache/": true
+    },
+    "search.exclude": {
+        "_site": true
+    },
+    //////////////////////////////////////
+    // Editor
+    //////////////////////////////////////
+    "editor.indentSize": 2,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.renderFinalNewline": "on",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 100, // toggle via Alt + Z shortcut
+    "editor.mouseWheelZoom": true,
+    "editor.rulers": [
+        {
+            "column": 80, // soft limit
+            "color": "#e5e5e5"
+        },
+        {
+            "column": 100, // hard limit
+            "color": "#c9c9c9"
+        }
+    ],
+    //////////////////////////////////////
+    // Git
+    //////////////////////////////////////
+    "git.inputValidation": true,
+    "git.inputValidationSubjectLength": 50,
+    "git.inputValidationLength": 72,
+    //////////////////////////////////////
+    // Spell Checker
+    //////////////////////////////////////
+    "cSpell.enabled": true,
+    "cSpell.ignorePaths": [
+        "node_modules",
+        ".git"
+    ],
+    "cSpell.language": "en",
     "cSpell.words": [
         "execjs",
         "figcaption",
@@ -10,10 +88,4 @@
         "Splience",
         "tabindex"
     ],
-    "css.lint.validProperties": [
-        "---"
-    ],
-    "files.exclude": {
-        ".jekyll-cache/": true
-    }
 }

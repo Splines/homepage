@@ -5,54 +5,54 @@
 <html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width" charset="utf-8">
-    <title>{{ page.title }}</title>
-    <link rel="stylesheet" href="{{ '/assets/css/main.css' | absolute_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/page.css' | absolute_url }}">
+  <meta charset="utf-8" content="width=device-width" name="viewport">
+  <title>{{ page.title }}</title>
+  <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/page.css' | absolute_url }}" rel="stylesheet">
 
-    {% if page.katex.enabled %}
-    <link rel="stylesheet" href="{{ '/assets/katex/katex.min.css' | absolute_url }}">
-    {% endif %}
+  {% if page.katex.enabled %}
+  <link href="{{ '/assets/katex/katex.min.css' | absolute_url }}" rel="stylesheet">
+  {% endif %}
 
-    {% if page.code %}
-    <link rel="stylesheet" href="{{ '/assets/css/code.css' | absolute_url }}">
-    <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
-    {% endif %}
+  {% if page.code %}
+  <link href="{{ '/assets/css/code.css' | absolute_url }}" rel="stylesheet">
+  <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
+  {% endif %}
 
-    <script defer src="{{ '/assets/js/back.js' | absolute_url }}"></script>
+  <script defer src="{{ '/assets/js/back.js' | absolute_url }}"></script>
 </head>
 
 <body>
-    <article>
+  <article>
 
-        <header>
-            <h1>{{ page.title_on_page | default: page.title }}</h1>
-            <p>
-                written by {{ site.author_name }}
-                <br>
-                published
-                <time datetime="{{ page.date | date: '%Y-%m-%d' }}">
-                    {{ page.date | date: "%B %-d, %Y" }}
-                </time>
-            </p>
-        </header>
+    <header>
+      <h1>{{ page.title_on_page | default: page.title }}</h1>
+      <p>
+        written by {{ site.author_name }}
+        <br>
+        published
+        <time datetime="{{ page.date | date: '%Y-%m-%d' }}">
+          {{ page.date | date: "%B %-d, %Y" }}
+        </time>
+      </p>
+    </header>
 
-        <hr class="header-content-separator">
+    <hr class="header-content-separator">
 
-        <div>
-            {{ content }}
-        </div>
+    <div>
+      {{ content }}
+    </div>
 
-    </article>
+  </article>
 
-    <a class="return-back" href="/" onclick="return navigateBack()">
-        <svg>
-            <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
-        </svg>
-        <i>Back</i>
-    </a>
+  <a class="return-back" href="/" onclick="return navigateBack()">
+    <svg>
+      <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
+    </svg>
+    <i>Back</i>
+  </a>
 
-    <div id="whitespace-below-article"></div>
+  <div id="whitespace-below-article"></div>
 </body>
 
 </html>

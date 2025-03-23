@@ -10,6 +10,11 @@ baseurl: "" # the subpath of your site, e.g. /blog
 # url: "https://example.com" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: /:year/:title
 
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
 # No theme: https://stackoverflow.com/a/57424621/
 
 plugins:
