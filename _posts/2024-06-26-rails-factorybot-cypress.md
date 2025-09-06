@@ -1,8 +1,9 @@
 ---
 layout: page
-title:  "Rails FactoryBot in Cypress"
-date:   2024-06-26
+title: "Rails FactoryBot in Cypress"
+date: 2024-06-26
 code: true
+excerpt: Test excerpt
 ---
 
 Cypress tests don't come TODO
@@ -23,7 +24,7 @@ describe("Submissions", () => {
   });
 
   it("can create a submission", function () {
-    FactoryBot.create("assignment", "with_deadline_tomorrow", { file_type: ".pdf", size_max: 10 })
+    FactoryBot.create("assignment", "with_deadline_tomorrow", { file_type: ".pdf" })
       .as("assignment");
 
     cy.then(() => {
@@ -44,10 +45,9 @@ The solution is easy: provide routes with respective controllers in your Rails a
 ```js
 cy.cleanDatabase();
 cy.createUserAndLogin("admin");
-FactoryBot.create("assignment", "with_deadline_tomorrow", { file_type: ".pdf", size_max: 10 })
+FactoryBot.create("assignment", "with_deadline_tomorrow", { file_type: ".pdf" })
 ```
 
 I’ve set up a [GitHub repo][github] providing a minimal demo that you can follow along to implement this in your own project. You really don’t need much code for this. Happy testing!
-
 
 [github]: https://github.com/Splines/cypress-rails-factory-bot
