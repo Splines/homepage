@@ -4,4 +4,3 @@ _site
 .jekyll-metadata
 notes
 node_modules
-package-lock.json
