@@ -1,5 +1,15 @@
+@use "variables" as v;
+
 h2 {
   color: #563c29;
+}
+
+.post-time {
+  margin: 0;
+  color: #88593a;
+  font-style: italic;
+  font-family: v.$serif_font;
+  letter-spacing: 0.1rem;
 }
 
 .post-list {
@@ -28,4 +38,8 @@ h2 {
   bottom: 0;
   left: 0;
   width: 100%;
+}
+
+.post-excerpt {
+  margin-top: 0.5em;
 }

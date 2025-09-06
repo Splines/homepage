@@ -9,6 +9,13 @@
 
 @font-face {
     font-family: "Vermiglione";
+    src: url("/assets/fonts/Vermiglione-MediumItalic.otf");
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Vermiglione";
     src: url("/assets/fonts/Vermiglione-SemiBold.otf");
     font-weight: 600;
     font-style: normal;
@@ -84,9 +91,6 @@ p {
     font-size: 1rem;
     line-height: 1.5rem;
     color: #0f1b24;
-
-    margin-top: 0.4em;
-    margin-bottom: 1em;
 }
 
 a {

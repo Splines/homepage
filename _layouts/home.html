@@ -28,13 +28,15 @@
           {{ post.title }}</a>
         </h2>
 
-        <p>
+        <p class="post-time">
           <time datetime="{{ post.date | date: '%Y-%m-%d' }}">
             {{ post.date | date: "%B %Y" }}
           </time>
         </p>
 
-        <p>{{ post.excerpt }}</p>
+        <p class="post-excerpt">
+          {{ post.excerpt }}
+        </p>
 
       </div>
       {% endfor %}
