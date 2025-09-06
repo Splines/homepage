@@ -1,8 +1,4 @@
 ---
 layout: home
-abc: nice
+title: Blog | Splines
 ---
-
-### {{ page.abc }}
-
-and another test
