@@ -1,35 +1,33 @@
 {
-    "editor.formatOnSave": false, // it still autosaves with the options below
+    "editor.formatOnSave": false, // autosave configured via options below
     //////////////////////////////////////
-    // JS (ESLint)
+    // ESLint: JS, HTML
     //////////////////////////////////////
-    "[javascript]": {
-        "editor.formatOnSave": false, // to avoid formatting twice (ESLint + VSCode)
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.indentSize": 2,
-        "editor.tabSize": 2,
-    },
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+      "source.fixAll.eslint": "explicit"
     },
-    "eslint.format.enable": true, // use ESLint as formatter
-    // this disables VSCode built-in formatter (instead we want to use ESLint)
-    "javascript.validate.enable": false,
+    "eslint.format.enable": true,
     "eslint.options": {
-        "overrideConfigFile": ".config/eslint.mjs"
+      "overrideConfigFile": ".config/eslint.mjs"
     },
     "eslint.validate": [
-        "javascript",
-        "html"
+      "javascript",
+      "html",
     ],
-    //////////////////////////////////////
-    // HTML
-    //////////////////////////////////////
-    "[html]": {
-        "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.formatOnSave": false,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.indentSize": 2,
         "editor.tabSize": 2,
+    },
+    "[html]": {
+      "editor.formatOnSave": false,
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+      "editor.indentSize": 2,
+      "editor.tabSize": 2,
+    },
+    "emmet.includeLanguages": {
+      "erb": "html",
     },
     //////////////////////////////////////
     // Files

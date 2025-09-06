@@ -1,10 +1,9 @@
-import js from "@eslint/js";
-import stylistic from "@stylistic/eslint-plugin";
+import eslint from "@eslint/js";
 import html from "@html-eslint/eslint-plugin";
+import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
 
 export default [
-  js.configs.recommended,
   {
     // Globally ignore the following paths
     ignores: [
@@ -14,9 +13,11 @@ export default [
     ],
   },
   {
+    files: ["**/*.js", "**/*.mjs"],
     plugins: {
       "@stylistic": stylistic,
     },
+    ...eslint.configs.recommended,
     rules: {
       ...stylistic.configs.customize({
         "indent": 2,
@@ -35,7 +36,6 @@ export default [
         ...globals.browser,
       },
     },
-    ignores: ["**/*.html**"],
   },
   {
     files: ["**/*.html"],
