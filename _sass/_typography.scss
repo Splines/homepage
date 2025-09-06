@@ -40,6 +40,8 @@ h1 {
     font-weight: 600;
 
     line-height: 1em;
+    display: inline-block;
+    padding-bottom: 0.1em;
 
     // https://resourceboy.com/textures/gold-textures/
     background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
