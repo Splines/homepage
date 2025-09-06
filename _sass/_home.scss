@@ -5,7 +5,12 @@ h2 {
 }
 
 #social {
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
+
+  .contact {
+    font-family: v.$code_font;
+    font-size: 0.8rem;
+  }
 }
 
 .post-time {
