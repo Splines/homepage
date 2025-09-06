@@ -67,49 +67,6 @@ h2 {
     font-weight: 700;
     font-size: 1.6rem;
     color: #0f1b24d5;
-
-    padding-top: 1.4em;
-    margin-bottom: 0;
-
-    a::before {
-        content: "¶";
-        display: inline-block;
-        font-size: 1.6rem;
-        color: #454545d6;
-
-        opacity: 0;
-        transition: opacity 0.3s ease;
-
-        --anchor-link-offset: 1rem;
-        margin-left: calc(-1 * var(--anchor-link-offset));
-        width: var(--anchor-link-offset);
-
-        @media (min-width: 400px) {
-            font-size: 1.8rem;
-            --anchor-link-offset: 1.3rem;
-        }
-
-        @media (min-width: 900px) {
-            --anchor-link-offset: 1.6rem;
-        }
-    }
-
-    a:hover::before {
-        opacity: 1;
-    }
-
-    &:hover {
-        a::before {
-            opacity: 1;
-        }
-    }
-
-    &:target {
-        a::before {
-            opacity: 1;
-            color: #88593a;
-        }
-    }
 }
 
 h3 {

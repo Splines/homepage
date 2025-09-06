@@ -1,0 +1,31 @@
+h2 {
+  color: #563c29;
+}
+
+.post-list {
+  margin-top: 2em;
+}
+
+.post-card {
+  position: relative; // for the link (!)
+  
+  padding: 1em;
+  margin-bottom: 1em;
+
+  border: 2px solid #563c29;
+  border-radius: 0.5em;
+
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 7px #563C2940;
+  }
+}
+
+.post-card-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
