@@ -5,7 +5,7 @@ description: >-
 
 baseurl: "" # the subpath of your site, e.g. /blog
 # url: "https://example.com" # the base hostname & protocol for your site, e.g. http://example.com
-permalink: /:year/:title
+permalink: /blog/:year/:title
 
 collections:
   pages:
