@@ -24,8 +24,17 @@ header {
     }
 }
 
+p {
+  margin-top: 0.4em;
+  margin-bottom: 0.9em;
+}
+
+figure {
+  margin-bottom: 0.9em;
+}
+
 h2 {
-  padding-top: 1.4em;
+  padding-top: 0.9em;
   margin-bottom: 0;
 
   a::before {
@@ -120,9 +129,4 @@ h2 {
             fill: v.$link-color-hover;
         }
     }
-}
-
-p {
-  margin-top: 0.4em;
-  margin-bottom: 1em;
 }
