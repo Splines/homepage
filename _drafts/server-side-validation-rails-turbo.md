@@ -221,7 +221,7 @@ When the user has JavaScript disabled in their browser, the `Turbo-Frame` reques
 render :new, status: :unprocessable_entity
 ```
 
-will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM[^whole-dom] is replaced. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only part of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just render HTML/CSS without JS), the user still gets a correct-looking page.
+will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM is replaced[^whole-dom]. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only part of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just render HTML/CSS without JS), the user still gets a correct-looking page.
 
 Then, you can build upon that. In our case, this is implicit by the fact that a missing `Turbo-Frame` header implies that the turbo-rails gem does not overwrite the layout. However, when you use Turbo Streams later on, keep this in mind for your controllers. E.g. always include a fallback `format.html` as well:
 
@@ -230,6 +230,78 @@ respond_to do |format|
   format.turbo_stream { render :something }
   format.html { redirect_to @something_else }
 end
+```
+
+## Bonus: Navigate out of Turbo Frame with links.
+
+By default, all links and forms of a `<turbo-frame>` target the frame, i.e. when clicking on a link inside the form, we expect a response with a Turbo Frame. If that is not what you want, check out [the docs](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame). E.g. you could use `target: _top` such that the navigation targets the entire page.
+
+```erb
+<%= turbo_frame_tag event, target: "_top" do %>
+```
+
+But in this case, you have to re-configure the behavior for the form submit button since we want it to target only the frame:
+
+```erb
+<%= f.submit t("events.create"), data: { "turbo-frame": dom_id(event) } %>
+```
+
+## Bonus: General form errors
+
+What if all fields you've shown to the user have valid input, but there is still an error on the server-side? Simply imagine that you do a `params.expect(event: [:title, :description])` but forgot to even include the description field to your template. No client-side validation can catch this, but there's still an error if `description` has a presence validation in the backend.
+
+To not let our users baffled with a form that seems valid but doesn't do anything, let's include a generic error message next to the submit button by overwriting the `form_with` helper method. This code has to be adapted according to how you adjusted the `ActionView::Base.field_error_proc`. In our case, it's easy to check if the form contains any visible validation error messages in the user markup: just check for the `class="invalid-feedback"` string in the HTML. In this case, we don't want to show our generic message. Otherwise, we do to at least show one message on the whole form.
+
+```rb
+// +++FILENAME+++ helpers/application_helper.rb
+module ApplicationHelper
+  # Overrides form_with to show a general form error message if the form
+  # has errors but no field-specific errors shown on the page.
+  def form_with(**options, &)
+    # Render the form to a string
+    form_html = capture do
+      super(**options, &)
+    end
+
+    form_object = options[:model] || options[:scope]
+    form_html = add_whole_form_error_message(form_object, form_html)
+
+    form_html.html_safe # rubocop:disable Rails/OutputSafety
+  end
+
+  private
+
+    # Adds a general form error message if the form object has errors but
+    # no field-specific error markup is present.
+    def add_whole_form_error_message(form_object, form_html)
+      if !form_object.respond_to?(:errors) || form_object.errors.empty? \\
+        || form_html.include?('class="invalid-feedback"')
+        return form_html
+      end
+
+      doc = Nokogiri::HTML::DocumentFragment.parse(form_html)
+      submit_buttons = doc.css('button[type="submit"],input[type="submit"]')
+      return unless submit_buttons.any?
+
+      last_submit = submit_buttons.last
+      error_span = Nokogiri::HTML::DocumentFragment.parse(
+        content_tag(:span, t("errors.unknown"),
+                    class: "invalid-feedback d-block",
+                    "aria-live": "polite")
+      )
+      last_submit.add_next_sibling(error_span)
+      doc.to_html
+    end
+end
+```
+
+```yaml
+// +++FILENAME+++ config/locales/validation/en.myl
+en:
+  errors:
+    unknown: >
+      You filled out the form correctly, but unfortunately something went wrong
+      on the server. Please try again later and contact us if the problem persists.
 ```
 
 
