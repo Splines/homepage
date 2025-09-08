@@ -74,10 +74,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to @event, notice: t("events.created")
     else
-      respond_to do |format|
-        # What we're interested in in this blog post
-        format.html { render :new, status: :unprocessable_content }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -119,7 +116,7 @@ When we re-render the `new` template in the `create` method, we have initialized
 
 ## Customize how errors are rendered
 
-But what about our errors? Well, Rails is about convention over configuration. By default, Rails will generate the following `div` around a field that contains a validation error:
+But what about our errors? Well, Rails is about convention over configuration. By default, it will generate the following `div` around a field that contains a validation error:
 
 ```html
 <div class="field_with_errors">
@@ -166,42 +163,30 @@ TODO
 
 ## Server-side errors without page reload (Turbo)
 
-The title promised to use [Turbo from the Hotwire umbrella](https://turbo.hotwired.dev/), so let's do that. The goal is to only replace the form itself, but not the entire page, whenever we encounter errors in forms. This is a perfect use case for [Turbo Frames](https://turbo.hotwired.dev/handbook/frames). First, we wrap the form inside a `<turbo-frame>` tag (see the [`turbo-rails` gem](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#decompose-with-turbo-frames)).
+The title promised to use [Turbo from the Hotwire umbrella](https://turbo.hotwired.dev/), so let's do that. For a general introduction to Hotwire, besides the great docs themselves, you might also want to read [this blog post](https://boringrails.com/articles/thinking-in-hotwire-progressive-enhancement/). Our goal here is to only replace the form itself with an updated version of it (including validation errors). This is a perfect use case for [Turbo Frames](https://turbo.hotwired.dev/handbook/frames). From the docs:
+
+> Turbo Frames allow predefined parts of a page to be updated on request. Any links and forms inside a frame are captured, and the frame contents automatically update after receiving a response.
+
+To make use of this magic, we wrap the form inside a `<turbo-frame>` tag (see the [`turbo-rails` gem](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#decompose-with-turbo-frames)).
 
 ```erb
-// +++FILENAME+++ views/events/_form_.html.erb
-<%= turbo_frame_tag event, target: "_top" do %>
+// +++FILENAME+++ views/events/_form.html.erb
+<%= turbo_frame_tag event do %>
 <%= form_with(model: event) do |f| %>
 ...
 <% end %>
 <% end %>
 ```
 
-When called from `new.html.erb`, this will result in HTML as following. With target `_top`, we ensure that any links inside our form will [break out](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame) of the Turbo Frame.
+This will result in the following HTML:
 
 ```html
-<turbo-frame id="new_event" target="_top">
+<turbo-frame id="new_event">
   <!-- the form -->
 </turbo-frame>
 ```
 
-Last but not least, let's make use of Turbo Streams in our controller. From the [docs](https://turbo.hotwired.dev/handbook/streams):
-
-> Turbo Streams deliver page changes as fragments of HTML wrapped in `<turbo-stream>` elements. Each stream element specifies an action together with a target ID to declare what should happen to the HTML inside it. TODO: style blockquote.
-
-In our case, we want the controller to return a response like this, since then the client-side Turbo Stream JS code would take the turbo frame and replace it.
-
-```html
-<turbo-stream action="replace" target="new_event">
-  <template>
-    <turbo-frame id="new_event" target="_top">
-      <!-- the form -->
-    </turbo-frame>
-  </template>
-</turbo-stream>
-```
-
-TODO:
+And that's basically all you have to do. The `create` controller action stays exactly the same since we still want to render the `new.html.erb` template again whenever `@event.save` was unsuccessful.
 
 ```rb
 // +++FILENAME+++ controllers/events_controller.rb
@@ -210,17 +195,42 @@ def create
   if @event.save
     redirect_to @event, notice: t("events.created")
   else
-    respond_to do |format|
-      format.turbo_stream do
-        # Newly added turbo_stream response for invalid form submission
-        render turbo_stream: turbo_stream
-          .replace(
-            :new_event,
-            partial: "events/form", locals: { event: @event }
-          ), status: :unprocessable_content
-      end
-      format.html { render :new, status: :unprocessable_content }
-    end
+    render :new, status: :unprocessable_entity
   end
 end
 ```
+
+And the magic happens on the client-side now: the Turbo JS code (in your browser) detects that the response from our server contains a `turbo-frame`. It then tries to find the matching turbo-frame on the page via their IDs, in our case the automatically generated id `new_event`, and replaces the frame with the new content. No full page-reload needed. The look-and-feel of a Single Page App (SPA) just by adding a `<turbo-frame>` tag to your form. C'est la classe.
+
+
+### Only send what is really needed (automatic)
+
+Also notice that upon form submission, the Turbo JS code will set the `Turbo-Frame` request header. This allows the turbo-rails gem to provide a `turbo_frame_request?` method for your controllers, should you need it. It also registers a custom [layout method](https://github.com/hotwired/turbo-rails/blob/main/app/controllers/turbo/frames/frame_request.rb), which will only render a minimal layout in place of the application layout.
+
+In the end, the Turbo JS library in the browser will only extract the `<turbo-frame>` tag from the response, so no need to render and ship the whole page with all headers, the footer, maybe your sidebar etc. From the [Turbo Frame docs](https://turbo.hotwired.dev/handbook/frames):
+
+> Regardless of whether the server provides a full document, or just a fragment containing an updated version of the requested frame, only that particular frame will be extracted from the response to replace the existing content.
+
+Note that due to the turbo-rails gem overriding the layout, you have to keep [this note on custom layouts](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#a-note-on-custom-layouts) in mind should you use another layout than `application`.
+
+### Progressive enhancement (automatic)
+
+When the user has JavaScript disabled in their browser, the `Turbo-Frame` request header will not be sent (since the Turbo _JavaScript_ library could not add this header). Therefore, the turbo-rails library will also _not_ use the minimal layout in this case. Instead, this line of the events controller
+
+```rb
+render :new, status: :unprocessable_entity
+```
+
+will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM[^whole-dom] is replaced. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only part of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just render HTML/CSS without JS), the user still gets a correct-looking page.
+
+Then, you can build upon that. In our case, this is implicit by the fact that a missing `Turbo-Frame` header implies that the turbo-rails gem does not overwrite the layout. However, when you use Turbo Streams later on, keep this in mind for your controllers. E.g. always include a fallback `format.html` as well:
+
+```rb
+respond_to do |format|
+  format.turbo_stream { render :something }
+  format.html { redirect_to @something_else }
+end
+```
+
+
+[^whole-dom]: This is actually not entirely true since [Turbo Drives](https://turbo.hotwired.dev/handbook/drive) performs some optimizations, e.g. merging the contents of the `<head>` elements.
