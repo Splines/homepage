@@ -7,6 +7,8 @@
 <head>
   <meta charset="utf-8" content="width=device-width" name="viewport">
   <title>{{ page.title }}</title>
+  <!-- for Giscus mapping between blog post and GitHub Discussion -->
+  <meta content="{{ page.title }}" property="og:title">
   <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/page.css' | absolute_url }}" rel="stylesheet">
 
@@ -18,6 +20,24 @@
   <link href="{{ '/assets/css/code.css' | absolute_url }}" rel="stylesheet">
   <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
   {% endif %}
+
+  <!-- Giscus Comments -->
+  <script async
+    crossorigin="anonymous"
+    data-category="Homepage comments"
+    data-category-id="DIC_kwDOOG9Rj84CvIU6"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-lang="en"
+    data-loading="lazy"
+    data-mapping="og:title"
+    data-reactions-enabled="1"
+    data-repo="splines/homepage"
+    data-repo-id="R_kgDOOG9Rjw"
+    data-strict="1"
+    data-theme="light"
+    src="https://giscus.app/client.js">
+  </script>
 </head>
 
 <body>
@@ -50,7 +70,12 @@
     <i>Back</i>
   </a>
 
+  <div class="giscus container">
+    <!-- Comments rendered by Giscus -->
+  </div>
+
   <div id="whitespace-below-article"></div>
+
 </body>
 
 </html>

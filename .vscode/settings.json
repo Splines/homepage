@@ -76,14 +76,15 @@
     ],
     "cSpell.language": "en",
     "cSpell.words": [
-        "execjs",
-        "figcaption",
-        "github",
-        "jekyll",
-        "katex",
-        "Katex",
-        "kramdown",
-        "Splience",
-        "tabindex"
+      "execjs",
+      "figcaption",
+      "Giscus",
+      "github",
+      "jekyll",
+      "katex",
+      "Katex",
+      "kramdown",
+      "Splience",
+      "tabindex"
     ],
 }
