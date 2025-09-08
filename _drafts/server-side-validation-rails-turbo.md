@@ -54,9 +54,10 @@ en:
 
 ```
 
+
 ## Inline server-side validation errors
 
-So far so good. But how to show these error messages to the user inside a web form next to the respective input fields? Easy: whenever `@event.save` returns `false` (indicating there was a problem, e.g. a failed validation), send back the HTML of the entire page.
+So far so good. But how to show these error messages to the user inside a web form next to the respective input fields? Easy: whenever `@event.save` returns `false` (indicating there was a problem, e.g. a failed validation), send back the HTML of the entire page. Rails includes the errors by its own (see also next section).
 
 ```rb
 // +++FILENAME+++ controllers/events_controller.rb
@@ -113,4 +114,113 @@ When we re-render the `new` template in the `create` method, we have initialized
   </div>
 
 <% end %>
+```
+
+
+## Customize how errors are rendered
+
+But what about our errors? Well, Rails is about convention over configuration. By default, Rails will generate the following `div` around a field that contains a validation error:
+
+```html
+<div class="field_with_errors">
+  <!-- wraps the field that contained the error -->
+</div>
+
+```
+
+See also the Rails Guide on [Displaying Validation Errors in Views](https://guides.rubyonrails.org/active_record_validations.html#displaying-validation-errors-in-views). You may want to style the `field_with_errors` CSS class however you like. But this approach is limiting, e.g. for [Bootstrap](https://getbootstrap.com/docs/5.3/forms/validation/#server-side), you are expected to add an `is-invalid` class to the form element, and to add an element (`div`, `span` etc.) with the class `invalid-feedback` that contains the error message.
+Luckily, Rails is also customizable: in this case we are interested in the [error field wrapper](https://guides.rubyonrails.org/active_record_validations.html#customizing-error-field-wrapper). By default, it reads like this:
+
+```rb
+ActionView::Base.field_error_proc = proc do |html_tag, instance|
+  content_tag :div, html_tag, class: "field_with_errors"
+end
+```
+
+As we've seen, it simply wraps your field, here `html_tag`, inside a `div`. Let's overwrite this behavior in an initializer. This code is a mix of [this](https://dev.to/etoundi_1er/show-rails-validation-errors-inline-with-bootstrap-4-4ga6) and [this post](https://www.jorgemanrubia.com/2019/02/16/form-validations-with-html5-and-modern-rails/), the latter being a great writeup by _Jorge Manrubia_ that served me as inspiration. The code should be self-explanatory. It is adapted to [Bootstrap](https://getbootstrap.com/docs/5.3/forms/validation/#server-side), but you can really do whatever you want here. Don't forget to add `aria-live="polite"` to the error message to inform assistive technology users about the [updated site content](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-live).
+
+```rb
+// +++FILENAME+++ config/initializers/form_errors.rb
+ActionView::Base.field_error_proc = proc do |html_tag, instance|
+  fragment = Nokogiri::HTML.fragment(html_tag)
+  field = fragment.at("input,select,textarea")
+  next html_tag if field.nil?
+
+  field.add_class("is-invalid") # adapted for Bootstrap
+  error_message = [*instance.error_message].to_sentence
+  html = <<-HTML
+    #{fragment}
+    <span class="invalid-feedback" aria-live="polite">
+      #{error_message}
+    </span>
+  HTML
+
+  html.html_safe # rubocop:disable Rails/OutputSafety
+end
+```
+
+With this in place, your error messages that come from the server can look like this. Nice!
+
+TODO
+
+
+## Server-side errors without page reload (Turbo)
+
+The title promised to use [Turbo from the Hotwire umbrella](https://turbo.hotwired.dev/), so let's do that. The goal is to only replace the form itself, but not the entire page, whenever we encounter errors in forms. This is a perfect use case for [Turbo Frames](https://turbo.hotwired.dev/handbook/frames). First, we wrap the form inside a `<turbo-frame>` tag (see the [`turbo-rails` gem](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#decompose-with-turbo-frames)).
+
+```erb
+// +++FILENAME+++ views/events/_form_.html.erb
+<%= turbo_frame_tag event, target: "_top" do %>
+<%= form_with(model: event) do |f| %>
+...
+<% end %>
+<% end %>
+```
+
+When called from `new.html.erb`, this will result in HTML as following. With target `_top`, we ensure that any links inside our form will [break out](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame) of the Turbo Frame.
+
+```html
+<turbo-frame id="new_event" target="_top">
+  <!-- the form -->
+</turbo-frame>
+```
+
+Last but not least, let's make use of Turbo Streams in our controller. From the [docs](https://turbo.hotwired.dev/handbook/streams):
+
+> Turbo Streams deliver page changes as fragments of HTML wrapped in `<turbo-stream>` elements. Each stream element specifies an action together with a target ID to declare what should happen to the HTML inside it. TODO: style blockquote.
+
+In our case, we want the controller to return a response like this, since then the client-side Turbo Stream JS code would take the turbo frame and replace it.
+
+```html
+<turbo-stream action="replace" target="new_event">
+  <template>
+    <turbo-frame id="new_event" target="_top">
+      <!-- the form -->
+    </turbo-frame>
+  </template>
+</turbo-stream>
+```
+
+TODO:
+
+```rb
+// +++FILENAME+++ controllers/events_controller.rb
+def create
+  @event = Event.new(event_params)
+  if @event.save
+    redirect_to @event, notice: t("events.created")
+  else
+    respond_to do |format|
+      format.turbo_stream do
+        # Newly added turbo_stream response for invalid form submission
+        render turbo_stream: turbo_stream
+          .replace(
+            :new_event,
+            partial: "events/form", locals: { event: @event }
+          ), status: :unprocessable_content
+      end
+      format.html { render :new, status: :unprocessable_content }
+    end
+  end
+end
 ```
