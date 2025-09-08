@@ -70,9 +70,11 @@
     <i>Back</i>
   </a>
 
+  {% unless site.url contains 'localhost' %}
   <div class="giscus container">
     <!-- Comments rendered by Giscus -->
   </div>
+  {% endunless %}
 
   <div id="whitespace-below-article"></div>
 
