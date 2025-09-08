@@ -3,8 +3,47 @@ layout: page
 title: "Inline server-side form validation with Turbo"
 code: true
 excerpt: >
-  How to use <code>FactoryBot.create()</code> inside your Cypress frontend tests in order to set up some mock objects to interact with. TODO
+  A guide to Rails validations and how to show server-side validation messages
+  inline in your web forms. We employ Turbo Frames to avoid page reloads.
 ---
+
+## TL;DR — Too long, didn't read
+
+Use a [Rails model validation](https://guides.rubyonrails.org/active_record_validations.html#validations-overview). Install the [turbo-rails gem](https://github.com/hotwired/turbo-rails) and read the [Turbo Frames Hotwire documentation](https://turbo.hotwired.dev/handbook/frames). Then, wrap your forms in Turbo Frames (here, the model is called `Event` and passed as `event: @event`) to the form partial.
+
+```erb
+// +++FILENAME+++ views/events/new.html.erb
+<%= turbo_frame_tag event do %>
+  <%= form_with(model: event) do |f| %>
+    ...
+  <% end %>
+<% end %>
+```
+
+Have a `create` method like this in your controller:
+
+```rb
+// +++FILENAME+++ controllers/events_controller.rb
+def create
+  @event = Event.new(event_params)
+  if @event.save
+    redirect_to @event, notice: t("events.created")
+  else
+    # This is the error case where we rerender the new.html.erb template
+    render :new, status: :unprocessable_entity
+  end
+end
+```
+
+Last, but not least, customize the inline-styling by overwriting the [Rails error field wrapper](https://guides.rubyonrails.org/active_record_validations.html#customizing-error-field-wrapper) in an initializer.
+
+```rb
+// +++FILENAME+++ config/initializers/form_errors.rb
+ActionView::Base.field_error_proc = proc do |html_tag, instance|
+  # Do whatever you want. By default Rails does this:
+  content_tag :div, html_tag, class: "field_with_errors"
+end
+```
 
 ## Rails validation basics
 
@@ -34,7 +73,7 @@ irb> e.save
 => false
 ```
 
-Note how the array returned by `e.errors[:title]` contains a localized string from my `en.yml` file. You can customize the messages, e.g. define the key `blank` for a generic message whenever a `presence` validation is not met. Or specify messages down to single attributes of a model. See more details in the [i18n Rails Error Message Scopes guide](https://guides.rubyonrails.org/i18n.html#error-message-scopes).
+Note how the array returned by `e.errors[:title]` contains a localized string from my `en.yml` file. You can customize the messages, e.g. define a key named `blank` for a generic message whenever a `presence` validation is not met. Or specify messages down to single attributes of a model. See more details in the [i18n Rails Error Message Scopes guide](https://guides.rubyonrails.org/i18n.html#error-message-scopes).
 
 ```yml
 // +++FILENAME+++ config/locales/validation/en.yml
@@ -57,7 +96,7 @@ en:
 
 ## Inline server-side validation errors
 
-So far so good. But how to show these error messages to the user inside a web form next to the respective input fields? Easy: whenever `@event.save` returns `false` (indicating there was a problem, e.g. a failed validation), send back the HTML of the entire page. Rails includes the errors by its own (see also next section).
+So far so good. But how to show these error messages to the user inside a web form next to the respective input fields? Easy: whenever `@event.save` returns `false` (indicating there was a problem, e.g. a failed validation), send back the HTML of the entire page. Rails will by default include the error messages (see also next section).
 
 ```rb
 // +++FILENAME+++ controllers/events_controller.rb
@@ -74,6 +113,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to @event, notice: t("events.created")
     else
+      # This is the error case where we rerender the new.html.erb template
       render :new, status: :unprocessable_entity
     end
   end
@@ -88,9 +128,9 @@ end
 
 ```
 
-When we re-render the `new` template in the `create` method, we have initialized the variable `@event` beforehand via `@event = Event.new(event_params)`. Therefore, the `@event` object now holds the values the user has already input in the form, e.g. `@event[:description]` could give "My event description". This is great since when the `new` template passes this object to our form partial (see `event: @event`), Rails will render the input fields with the previous user input. This avoids that the whole form is reset and spares you some angry mails by your users.
+When we re-render the `new` template in the `create` method, we have initialized the variable `@event` beforehand via `@event = Event.new(event_params)`. Therefore, the `@event` object now holds the values that the user has already entered into the form fields, e.g. `@event[:description]` may give "My event description". This is great since when the `new` template passes this object to our form partial (see `event: @event`), Rails will render the input fields _with_ the previous user input. This avoids that the whole form is reset and spares you some angry mails by frustrated users.
 
-```html
+```erb
 // +++FILENAME+++ views/events/new.html.erb
 <h1>New Event</h1>
 <%= render "events/form", event: @event %>
@@ -116,17 +156,17 @@ When we re-render the `new` template in the `create` method, we have initialized
 
 ## Customize how errors are rendered
 
-But what about our errors? Well, Rails is about convention over configuration. By default, it will generate the following `div` around a field that contains a validation error:
+But what about our errors? Well, Rails is about [convention over configuration](https://rubyonrails.org/doctrine#convention-over-configuration). By default, it will generate the following `div` around any field containing a validation error:
 
 ```html
 <div class="field_with_errors">
-  <!-- wraps the field that contained the error -->
+  <!-- wraps the field that contains an error -->
 </div>
 
 ```
 
-See also the Rails Guide on [Displaying Validation Errors in Views](https://guides.rubyonrails.org/active_record_validations.html#displaying-validation-errors-in-views). You may want to style the `field_with_errors` CSS class however you like. But this approach is limiting, e.g. for [Bootstrap](https://getbootstrap.com/docs/5.3/forms/validation/#server-side), you are expected to add an `is-invalid` class to the form element, and to add an element (`div`, `span` etc.) with the class `invalid-feedback` that contains the error message.
-Luckily, Rails is also customizable: in this case we are interested in the [error field wrapper](https://guides.rubyonrails.org/active_record_validations.html#customizing-error-field-wrapper). By default, it reads like this:
+See also the Rails Guide on [Displaying Validation Errors in Views](https://guides.rubyonrails.org/active_record_validations.html#displaying-validation-errors-in-views). You may want to style the `field_with_errors` CSS class however you like. But this approach is limiting, e.g. for Bootstrap, you are [expected](https://getbootstrap.com/docs/5.3/forms/validation/#server-side) to add an `is-invalid` class to the form element, and to add an element (`div`, `span` etc.) with the class `invalid-feedback` that contains the error message.
+Luckily, Rails is also _customizable_: in this case, we are interested in the [error field wrapper](https://guides.rubyonrails.org/active_record_validations.html#customizing-error-field-wrapper). By default, it reads like this:
 
 ```rb
 ActionView::Base.field_error_proc = proc do |html_tag, instance|
@@ -165,11 +205,11 @@ With this in place, your error messages that come from the server can look like 
 
 ## Server-side errors without page reload (Turbo)
 
-The title promised to use [Turbo from the Hotwire umbrella](https://turbo.hotwired.dev/), so let's do that. For a general introduction to Hotwire, besides the great docs themselves, you might also want to read [this blog post](https://boringrails.com/articles/thinking-in-hotwire-progressive-enhancement/). Our goal here is to only replace the form itself with an updated version of it (including validation errors). This is a perfect use case for [Turbo Frames](https://turbo.hotwired.dev/handbook/frames). From the docs:
+The title promised to use [Turbo from the Hotwire umbrella](https://turbo.hotwired.dev/), so let's do that. For a general introduction to Hotwire — besides the great docs themselves — you might also want to read [this blog post](https://boringrails.com/articles/thinking-in-hotwire-progressive-enhancement/). Our goal here is to only replace the form itself with an updated version of it (including validation errors). This is a perfect use case for [Turbo Frames](https://turbo.hotwired.dev/handbook/frames):
 
 > Turbo Frames allow predefined parts of a page to be updated on request. Any links and forms inside a frame are captured, and the frame contents automatically update after receiving a response.
 
-To make use of this magic, we wrap the form inside a `<turbo-frame>` tag (see the [`turbo-rails` gem](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#decompose-with-turbo-frames)).
+To make use of this magic, we wrap the form inside a `<turbo-frame>` tag by using the `turbo_frame_tag` helper from the [`turbo-rails` gem](https://github.com/hotwired/turbo-rails?tab=readme-ov-file#decompose-with-turbo-frames).
 
 ```erb
 // +++FILENAME+++ views/events/_form.html.erb
@@ -197,19 +237,20 @@ def create
   if @event.save
     redirect_to @event, notice: t("events.created")
   else
+    # stays the same
     render :new, status: :unprocessable_entity
   end
 end
 ```
 
-And the magic happens on the client-side now: the Turbo JS code (in your browser) detects that the response from our server contains a `turbo-frame`. It then tries to find the matching turbo-frame on the page via their IDs, in our case the automatically generated id `new_event`, and replaces the frame with the new content. No full page-reload needed. The look-and-feel of a Single Page App (SPA) just by adding a `<turbo-frame>` tag to your form. C'est la classe.
+And the magic happens on the client-side now: the Turbo JS code (in your browser) detects that the response from our server contains a `<turbo-frame>` tag. It then tries to find the matching Turbo Frame on the page via their IDs — in our case the automatically generated id `new_event` — and replaces the frame with the new content. No full page-reload needed. The look-and-feel of a Single Page App (SPA) just by adding a `<turbo-frame>` tag to your form. C'est la classe.
 
 
 ### Only send what is really needed (automatic)
 
 Also notice that upon form submission, the Turbo JS code will set the `Turbo-Frame` request header. This allows the turbo-rails gem to provide a `turbo_frame_request?` method for your controllers, should you need it. It also registers a custom [layout method](https://github.com/hotwired/turbo-rails/blob/main/app/controllers/turbo/frames/frame_request.rb), which will only render a minimal layout in place of the application layout.
 
-In the end, the Turbo JS library in the browser will only extract the `<turbo-frame>` tag from the response, so no need to render and ship the whole page with all headers, the footer, maybe your sidebar etc. From the [Turbo Frame docs](https://turbo.hotwired.dev/handbook/frames):
+In the end, the Turbo JS library in the browser will only extract the `<turbo-frame>` tag from the response, so no need to render and ship the whole page with all headers, footer, maybe your sidebar etc. From the [Turbo Frame docs](https://turbo.hotwired.dev/handbook/frames):
 
 > Regardless of whether the server provides a full document, or just a fragment containing an updated version of the requested frame, only that particular frame will be extracted from the response to replace the existing content.
 
@@ -217,26 +258,27 @@ Note that due to the turbo-rails gem overriding the layout, you have to keep [th
 
 ### Progressive enhancement (automatic)
 
-When the user has JavaScript disabled in their browser, the `Turbo-Frame` request header will not be sent (since the Turbo _JavaScript_ library could not add this header). Therefore, the turbo-rails library will also _not_ use the minimal layout in this case. Instead, this line of the events controller
+When the user has JavaScript disabled in their browser, the `Turbo-Frame` request header will not be sent (since the Turbo _JavaScript_ library could not execute and therefore not add this header). Therefore, the turbo-rails library will also _not_ use the minimal layout in this case. Instead, this line of the events controller
 
 ```rb
 render :new, status: :unprocessable_entity
 ```
 
-will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM is replaced[^whole-dom]. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only part of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just render HTML/CSS without JS), the user still gets a correct-looking page.
+will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM is replaced[^whole-dom]. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only parts of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just HTML/CSS, no JS), the user can still admire a correct-looking page.
 
-Then, you can build upon that. In our case, this is implicit by the fact that a missing `Turbo-Frame` header implies that the turbo-rails gem does not overwrite the layout. However, when you use Turbo Streams later on, keep this in mind for your controllers. E.g. always include a fallback `format.html` as well:
+Then, you can build upon that. In our case, the baseline is implicit by the fact that a missing `Turbo-Frame` header implies that the turbo-rails gem does not overwrite the layout. However, when you use Turbo Streams later on, keep this in mind for your controllers. E.g. always include a fallback `format.html` as well:
 
 ```rb
 respond_to do |format|
+  # not needed in this blog post, just as outlook
   format.turbo_stream { render :something }
   format.html { redirect_to @something_else }
 end
 ```
 
-## Bonus: Navigate out of Turbo Frame with links
+## Bonus: Break out of Turbo Frames
 
-By default, all links and forms of a `<turbo-frame>` target the frame, i.e. when clicking on a link inside the form, we expect a response with a Turbo Frame. If that is not what you want, check out [the docs](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame). E.g. you could use `target: _top` such that the navigation targets the entire page.
+By default, all links and forms of a `<turbo-frame>` target _the frame itself_. That is, when clicking on a link inside the form, we expect a response that includes a Turbo Frame. If that is not what you want, check out [the docs](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame). E.g. you could use `target: _top`, such that the navigation targets _the entire page_.
 
 ```erb
 <%= turbo_frame_tag event, target: "_top" do %>
@@ -250,9 +292,9 @@ But in this case, you have to re-configure the behavior for the form submit butt
 
 ## Bonus: General form errors
 
-What if all fields you've shown to the user have valid input, but there is still an error on the server-side? Simply imagine that you do a `params.expect(event: [:title, :description])` but forgot to even include the description field to your template. No client-side validation can catch this, but there's still an error if `description` has a presence validation in the backend.
+What if all fields you've shown to the user contain valid input, but there is still an error on the server-side? Simply imagine that you do a `params.expect(event: [:title, :description])` in the controller, but forgot to even include the description field in your template. No client-side validation can catch this, but there's still an error if `description` has a presence validation in the backend.
 
-To not let our users baffled with a form that seems valid but doesn't do anything, let's include a generic error message next to the submit button by overwriting the `form_with` helper method. This code has to be adapted according to how you adjusted the `ActionView::Base.field_error_proc`. In our case, it's easy to check if the form contains any visible validation error messages in the user markup: just check for the `class="invalid-feedback"` string in the HTML. In this case, we don't want to show our generic message. Otherwise, we do to at least show one message on the whole form.
+To not let our users baffled with a form that seems valid but doesn't do anything, let's include a generic error message next to the submit button by overwriting the `form_with` helper method. This code has to be adapted according to how you adjusted the `ActionView::Base.field_error_proc`. In our case, it's easy to check if the form contains any visible validation error messages in the user markup: just search for the `class="invalid-feedback"` string in the HTML. If any such class element is present, we don't want to show our generic error message. Otherwise, we do in order to at least show one message on the whole form.
 
 ```rb
 // +++FILENAME+++ helpers/application_helper.rb
