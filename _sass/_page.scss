@@ -153,3 +153,28 @@ h2 {
     }
   }
 }
+
+.image-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 30, 30, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: zoom-out;
+  transition: background 0.2s;
+}
+
+.image-modal-img {
+  max-width: 80vw;
+  max-height: 80vh;
+  border-radius: 5px;
+  box-shadow: 0 0.2em 1.2em #00000055;
+  background: white;
+  cursor: zoom-out;
+  transition: transform 0.2s;
+}

@@ -234,7 +234,7 @@ respond_to do |format|
 end
 ```
 
-## Bonus: Navigate out of Turbo Frame with links.
+## Bonus: Navigate out of Turbo Frame with links
 
 By default, all links and forms of a `<turbo-frame>` target the frame, i.e. when clicking on a link inside the form, we expect a response with a Turbo Frame. If that is not what you want, check out [the docs](https://turbo.hotwired.dev/handbook/frames#targeting-navigation-into-or-out-of-a-frame). E.g. you could use `target: _top` such that the navigation targets the entire page.
 
