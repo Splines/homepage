@@ -40,6 +40,27 @@ figure {
   }
 }
 
+blockquote {
+  position: relative;
+  margin: 1.5em 0;
+  padding-left: 2.2em;
+  font-style: italic;
+  color: #5a4636;
+
+  &::before {
+    content: "\201C";
+    position: absolute;
+    left: 0;
+    top: -0.1em;
+    font-size: 3.5em;
+    line-height: 1;
+    color: #e0d3c2;
+    font-family: v.$serif-font, serif;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
 img {
   width: 100%;
   border: 1.3px solid gray;
