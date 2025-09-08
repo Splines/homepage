@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     hideOriginalImage(img);
     document.body.appendChild(frame);
     document.body.appendChild(clone);
-    const modalData = { img, clone, frame, aspectRatio };
+    const originalWidth = img.getBoundingClientRect().width;
+    const modalData = { img, clone, frame, aspectRatio, originalWidth };
     requestAnimationFrame(() => animateToModal(modalData));
   }
 
@@ -84,14 +85,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * Animates the clone to the modal position and shows the backdrop.
-   * @param {{img, clone, frame, aspectRatio}} modalData
+   * @param {{img, clone, frame, aspectRatio, originalWidth}} modalData
    */
   function animateToModal(modalData) {
-    const { clone, frame, aspectRatio } = modalData;
+    const { clone, frame, aspectRatio, originalWidth } = modalData;
     const backdrop = createModalBackdrop();
     document.body.appendChild(backdrop);
 
-    const { left, top, width, height } = getModalTargetRect(aspectRatio);
+    const { left, top, width, height } = getModalTargetRect(aspectRatio, originalWidth);
     Object.assign(clone.style, {
       left: `${left}px`,
       top: `${top}px`,
@@ -145,19 +146,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /**
-   * Returns the target rect for the modal image (centered, max 80vw/vh, preserves aspect ratio).
+   * Returns the target rect for the modal image
+   * (centered, max 80vw/vh, max 500px width, min original width, preserves aspect ratio).
    * @param {number} aspectRatio
+   * @param {number} minWidth
    */
-  function getModalTargetRect(aspectRatio) {
+  function getModalTargetRect(aspectRatio, minWidth) {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const maxW = vw * 0.8;
+    const maxW = Math.min(vw * 0.8, 1300);
     const maxH = vh * 0.8;
-    let width = maxW;
+    let width = Math.max(maxW, minWidth);
     let height = width / aspectRatio;
     if (height > maxH) {
       height = maxH;
       width = height * aspectRatio;
+      if (width < minWidth) {
+        width = minWidth;
+        height = width / aspectRatio;
+      }
     }
     return {
       left: (vw - width) / 2 + window.scrollX,
