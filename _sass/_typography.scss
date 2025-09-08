@@ -1,105 +1,105 @@
 @use "variables" as v;
 
 @font-face {
-    font-family: "Vermiglione";
-    src: url("/assets/fonts/Vermiglione-Medium.otf");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Vermiglione";
+  src: url("/assets/fonts/Vermiglione-Medium.otf");
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Vermiglione";
-    src: url("/assets/fonts/Vermiglione-MediumItalic.otf");
-    font-weight: 500;
-    font-style: italic;
+  font-family: "Vermiglione";
+  src: url("/assets/fonts/Vermiglione-MediumItalic.otf");
+  font-weight: 500;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: "Vermiglione";
-    src: url("/assets/fonts/Vermiglione-SemiBold.otf");
-    font-weight: 600;
-    font-style: normal;
+  font-family: "Vermiglione";
+  src: url("/assets/fonts/Vermiglione-SemiBold.otf");
+  font-weight: 600;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Vermiglione";
-    src: url("/assets/fonts/Vermiglione-Bold.otf");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Vermiglione";
+  src: url("/assets/fonts/Vermiglione-Bold.otf");
+  font-weight: 700;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Rethink";
-    src: url("/assets/fonts/RethinkSans-Variable.ttf");
-    font-weight: 400 700;
-    font-style: normal;
+  font-family: "Rethink";
+  src: url("/assets/fonts/RethinkSans-Variable.ttf");
+  font-weight: 400 700;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Rethink";
-    src: url("/assets/fonts/RethinkSans-Italic-Variable.ttf");
-    font-weight: 400 700;
-    font-style: italic;
+  font-family: "Rethink";
+  src: url("/assets/fonts/RethinkSans-Italic-Variable.ttf");
+  font-weight: 400 700;
+  font-style: italic;
 }
 
 h1 {
-    font-family: v.$serif-font;
-    font-weight: 600;
+  font-family: v.$serif-font;
+  font-weight: 600;
 
-    line-height: 1em;
-    display: inline-block;
-    padding-bottom: 0.1em;
+  line-height: 1em;
+  display: inline-block;
+  padding-bottom: 0.1em;
 
-    // https://resourceboy.com/textures/gold-textures/
-    background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
-    background-size: cover;
-    background-position: center;
-    color: #281c143d;
-    background-blend-mode: hard-light;
-    background-clip: text;
+  // https://resourceboy.com/textures/gold-textures/
+  background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
+  background-size: cover;
+  background-position: center;
+  color: #281c143d;
+  background-blend-mode: hard-light;
+  background-clip: text;
 
-    font-size: 2.7rem;
+  font-size: 2.7rem;
 
-    @media (min-width: 600px) {
-        font-size: 2.8rem;
-    }
+  @media (min-width: 600px) {
+    font-size: 2.8rem;
+  }
 
-    @media (min-width: 1000px) {
-        font-size: 2.9rem;
-    }
+  @media (min-width: 1000px) {
+    font-size: 2.9rem;
+  }
 }
 
 h2 {
-    font-family: v.$serif-font;
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: #0f1b24d5;
+  font-family: v.$serif-font;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: #0f1b24d5;
 }
 
 h3 {
-    font-family: v.$normal-font;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #0f1b24d5;
-    margin-top: 1.2em;
-    margin-bottom: -0.2em;
+  font-family: v.$normal-font;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f1b24d5;
+  margin-top: 1.2em;
+  margin-bottom: -0.2em;
 }
 
 p {
-    font-family: v.$normal-font;
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: #0f1b24;
+  font-family: v.$normal-font;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: #0f1b24;
 }
 
 a {
-    color: #88593a;
-    text-decoration: underline;
-    text-underline-offset: 0.2rem;
-    transition: v.$link-color-transition;
+  color: #88593a;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+  transition: v.$link-color-transition;
 
-    &:hover {
-        color: v.$link-color-hover;
-    }
+  &:hover {
+    color: v.$link-color-hover;
+  }
 }

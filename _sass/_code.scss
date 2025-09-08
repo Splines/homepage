@@ -2,103 +2,103 @@
 @use "utils";
 
 .code-figure {
-    font-family: v.$code-font;
-    border: 1.3px solid gray;
-    border-radius: 5px;
-    position: relative;
+  font-family: v.$code-font;
+  border: 1.3px solid gray;
+  border-radius: 5px;
+  position: relative;
 
-    &:hover {
-        .code-copy-btn{
-            opacity: 1;
-        }
+  &:hover {
+    .code-copy-btn {
+      opacity: 1;
     }
+  }
 }
 
 .code-caption {
-    font-family: v.$code-font;
-    font-size: .95em;
-    color: #393A34;
-    border-bottom: 1.3px solid #393a344f;
-    padding: 1em;
+  font-family: v.$code-font;
+  font-size: .95em;
+  color: #393A34;
+  border-bottom: 1.3px solid #393a344f;
+  padding: 1em;
 }
 
 .copy-code-btn-only-on-hover {
-    opacity: 0;
+  opacity: 0;
 }
 
 .code-copy-btn {
-    position: absolute;
-    top: .7em;
-    right: .7em;
+  position: absolute;
+  top: .7em;
+  right: .7em;
 
-    width: 2.7em;
-    height: 2.7em;
+  width: 2.7em;
+  height: 2.7em;
 
-    color: white;
-    border: 1px solid #cfbaba;
-    border-radius: 5px;
-    background-color: #f8efe9;
-    cursor: pointer;
+  color: white;
+  border: 1px solid #cfbaba;
+  border-radius: 5px;
+  background-color: #f8efe9;
+  cursor: pointer;
 
-    &:hover {
-        background-color: #f1e5d9;
-    }
+  &:hover {
+    background-color: #f1e5d9;
+  }
 
-    transition: background-color 100ms;
-    transition: opacity 220ms ease-in-out;
+  transition: background-color 100ms;
+  transition: opacity 220ms ease-in-out;
 
-    >* {
-        @include utils.pos-absolute-and-center;
-        transition: opacity 220ms ease-in-out, transform 500ms ease-in-out;
-    }
+  >* {
+    @include utils.pos-absolute-and-center;
+    transition: opacity 220ms ease-in-out, transform 500ms ease-in-out;
+  }
 
-    .code-copy-icon-clipboard {
-        transform: scale(1);
-        width: 1.1em;
-        fill: #70604d;
-        transition: opacity 220ms ease-in-out, transform 500ms ease-in-out;
-    }
+  .code-copy-icon-clipboard {
+    transform: scale(1);
+    width: 1.1em;
+    fill: #70604d;
+    transition: opacity 220ms ease-in-out, transform 500ms ease-in-out;
+  }
 
-    .code-copy-icon-tick {
-        transform: scale(0);
-        opacity: 0;
-        width: 0.9em;
-        fill: green;
-    }
+  .code-copy-icon-tick {
+    transform: scale(0);
+    opacity: 0;
+    width: 0.9em;
+    fill: green;
+  }
 }
 
 code[class*="language-"] {
-    display: block;
-    overflow-x: auto;
-    padding: 1em;
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
 
-    color: #393A34;
-    font-family: v.$code-font;
-    font-size: .95em;
-    hyphens: none;
+  color: #393A34;
+  font-family: v.$code-font;
+  font-size: .95em;
+  hyphens: none;
 
-    &::selection {
-        text-shadow: none;
-        background: #b3d4fc;
+  &::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
+
+  &::-webkit-scrollbar {
+    height: 12px;
+
+    &-track {
+      background: #f1f1f1;
+      border-radius: 3.7px;
     }
 
-    &::-webkit-scrollbar {
-        height: 12px;
+    &-thumb {
+      background: #888;
+      border-radius: 3.7px;
 
-        &-track {
-            background: #f1f1f1;
-            border-radius: 3.7px;
-        }
-
-        &-thumb {
-            background: #888;
-            border-radius: 3.7px;
-
-            &:hover {
-                background: #7b7b7b;
-            }
-        }
+      &:hover {
+        background: #7b7b7b;
+      }
     }
+  }
 }
 
 
@@ -110,23 +110,23 @@ code[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-    color: #999988;
-    font-style: italic;
+  color: #999988;
+  font-style: italic;
 }
 
 .token.namespace {
-    opacity: .7;
+  opacity: .7;
 }
 
 .token.string,
 .token.attr-value {
-    color: #e3116c;
+  color: #e3116c;
 }
 
 .token.punctuation,
 .token.operator {
-    color: #393A34;
-    /* no highlight */
+  color: #393A34;
+  /* no highlight */
 }
 
 .token.entity,
@@ -139,34 +139,34 @@ code[class*="language-"] {
 .token.property,
 .token.regex,
 .token.inserted {
-    color: #36acaa;
+  color: #36acaa;
 }
 
 .token.atrule,
 .token.keyword,
 .token.attr-name,
 .language-autohotkey .token.selector {
-    color: #00a4db;
+  color: #00a4db;
 }
 
 .token.function,
 .token.deleted,
 .language-autohotkey .token.tag {
-    color: #9a050f;
+  color: #9a050f;
 }
 
 .token.tag,
 .token.selector,
 .language-autohotkey .token.keyword {
-    color: #00009f;
+  color: #00009f;
 }
 
 .token.important,
 .token.function,
 .token.bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .token.italic {
-    font-style: italic;
+  font-style: italic;
 }
