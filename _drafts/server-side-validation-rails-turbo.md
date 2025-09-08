@@ -158,8 +158,10 @@ end
 
 With this in place, your error messages that come from the server can look like this. Nice!
 
-TODO
-
+<figure class="image">
+  <img src="{{'/assets/blog/2025-server-side-validation-rails-turbo/error-on-title-field.png' | relative_url }}"
+    alt="Error message shown on the title field of the events form"/>
+</figure>
 
 ## Server-side errors without page reload (Turbo)
 

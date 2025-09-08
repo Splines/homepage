@@ -31,6 +31,20 @@ p {
 
 figure {
   margin-bottom: 0.9em;
+  margin-left: -4%;
+  margin-right: -4%;
+
+  &.image {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+img {
+  width: 100%;
+  border: 1.3px solid gray;
+  border-radius: 5px;
+  box-shadow: 0 0.1em 0.2em #00000015;
 }
 
 .footnotes {
