@@ -4,8 +4,18 @@
 bundle exec jekyll serve --livereload
 ```
 
-Then, access on `localhost:4000` instead of `127.0.0.1:4000` to avoid CORS errors.
+Then, access on [`localhost:4000`](http://localhost:4000) instead of `127.0.0.1:4000` to avoid local CORS errors.
 
+## How to publish drafts for others to review
+
+Add this to the frontmatter of the post:
+
+```
+---
+draft: true
+permalink: /blog/drafts/<your-random-hash>
+---
+```
 
 ## How to add a new language for code blocks
 
