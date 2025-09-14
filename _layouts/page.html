@@ -72,7 +72,8 @@
     <i>Back</i>
   </a>
 
-  {% unless site.url contains 'localhost' %}
+  {% unless site.url contains "localhost" %}
+  {% unless post.draft %}
   <div class="giscus container">
     <!-- Comments rendered by Giscus -->
   </div>
@@ -83,6 +84,7 @@
     </svg>
     <i>Back</i>
   </a>
+  {% endunless %}
   {% endunless %}
 
   <div id="whitespace-below-article"></div>

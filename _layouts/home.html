@@ -51,6 +51,7 @@
     <div class="post-list">
 
       {% for post in site.posts %}
+      {% unless post.draft %}
       <div class="post-card">
         <a class="post-card-link" href="{{ post.url | relative_url }}"></a>
 
@@ -69,6 +70,7 @@
         </p>
 
       </div>
+      {% endunless %}
       {% endfor %}
 
     </div>
