@@ -1,7 +1,6 @@
 ---
 layout: page
 title: "Rails FactoryBot in Cypress"
-date: 2024-06-26
 code: true
 excerpt: >
   How to use <code>FactoryBot.create()</code> inside your Cypress frontend tests in order to set up some mock objects to interact with.
