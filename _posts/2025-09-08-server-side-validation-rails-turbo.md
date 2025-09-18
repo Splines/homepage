@@ -243,7 +243,7 @@ def create
 end
 ```
 
-And the magic happens on the client-side now: the Turbo JS code (in your browser) detects that the response from our server contains a `<turbo-frame>` tag. It then tries to find the matching Turbo Frame on the page via their IDs — in our case the automatically generated id `new_event` — and replaces the frame with the new content. No full page-reload needed. The look-and-feel of a Single Page App (SPA) just by adding a `<turbo-frame>` tag to your form. C'est la classe.
+And the magic happens on the client-side now: the Turbo JS code (in your browser) detects that the response from our server contains a `<turbo-frame>` tag. It then tries to find the matching Turbo Frame on the page via their IDs — in our case the automatically generated id `new_event` — and replaces the frame with the new content. No full page-reload needed. The look-and-feel of a Single Page App (SPA) just by adding a `<turbo-frame>` tag to your form.
 
 
 ### Only send what is really needed (automatic)
