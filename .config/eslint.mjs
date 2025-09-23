@@ -65,7 +65,7 @@ export default [
         closeStyle: "newline",
         ifAttrsMoreThan: 5,
       }],
-      "@html-eslint/element-newline": ["error", { skip: ["pre", "code"] }],
+      "@html-eslint/element-newline": ["error", { skip: ["pre", "code"] }, { inline: ["$inline"] }],
       "@html-eslint/id-naming-convention": ["error", "kebab-case"],
       "@html-eslint/indent": ["error", 2, { tagChildrenIndent: { html: 0 } }],
       "@html-eslint/sort-attrs": "error",
