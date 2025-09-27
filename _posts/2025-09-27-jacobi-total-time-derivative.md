@@ -27,7 +27,7 @@ $$
 \begin{align*}
   f(\bm{x}(t), t) &= 2 \bigl(x_1(t)\bigr)^2 + \bigl(\ln(x_2(t))\bigr)^3 + 4 x_3(t) + \pi t,\\
   &\quad x_1(t) = \sin(t), \quad x_2(t) = \cos(2t),
-  \quad x_3(t) = \frac{1}{t},
+  \quad x_3(t) = \frac{1}{t}
 \end{align*}
 $$
 
@@ -45,7 +45,7 @@ $$
 
 One way to remember the formula is to form the total derivative with respect to all variables $x_1(t), x_2(t), x_3(t)$ and with respect to the independent variable $t$ itself. With $\dvv{f}{x_1} = \pdvv{f}{x_1} \cdot \dvv{x_1}{t}$ and likewise for $x_2$ and $x_3$, we then obtain the above formula.
 
-However, where does this equation really come from? In Calculus II, the multivariable chain rule
+However, where does this equation really come from? In Calculus II, the multivariable chain rule is introduced
 
 $$
 \begin{align*}
@@ -53,7 +53,7 @@ $$
 \end{align*}
 $$
 
-is introduced, with $J_f$ being the Jacobian matrix of function $f$. We will give a recap on this matrix and the chain rule to then examine the relationship between the multivariable chain rule and the total time derivative of a function $f$.
+with $J_f$ being the Jacobian matrix of function $f$. We will give a recap on this matrix and the chain rule to then examine the relationship between the multivariable chain rule and the total time derivative of a function $f$.
 
 
 ## Jacobian matrix
@@ -72,7 +72,7 @@ $$
   \vdots & \vdots & \ddots & \vdots\\
   (\partial_1 f_m)(\bm{x}) & (\partial_2 f_m)(\bm{x}) & \dots & (\partial_n f_m)(\bm{x})
  \end{pmatrix}
- \in \Matrix_{m\times n}(\R),
+ \in \Matrix_{m\times n}(\R)
 \end{align*}
 $$
 
@@ -80,18 +80,18 @@ where $\partial_j f_i$ is a shorthand for $\pdvv{f_i}{x_j}$. Common notations fo
 
 $$
 \begin{align*}
- J_f(\bm{x}) = (Df)(\bm{x}) = \pdvv{(f_1, \dots, f_m)}{(x_1, \dots, x_n)}\,(\bm{x}).
+ J_f(\bm{x}) = (Df)(\bm{x}) = \pdvv{(f_1, \dots, f_m)}{(x_1, \dots, x_n)}\,(\bm{x})
 \end{align*}
 $$
 
-[^1]: Note however that $(Df)(\bm{x})$ is actually the differential of $f$ at $\bm{x}$, \ie the linear map $(Df)(\bm{x}): \R^n \rightarrow \R^m$, $\bm{y} \mapsto J_f(\bm{x}) \cdot \bm{y}$, where $\bm{y}\in \R^n$ is a column vector. Hence, the equality $J_f(\bm{x}) = (Df)(\bm{x})$ should be understood in the sense that the Jacobian matrix at $\bm{x}$ is the transformation matrix of the linear map $(Df)(\bm{x})$.
+[^1]: Note however that $(Df)(\bm{x})$ is actually the differential of $f$ at $\bm{x}$, i.e. the linear map $(Df)(\bm{x}): \R^n \rightarrow \R^m$, $\bm{y} \mapsto J_f(\bm{x}) \cdot \bm{y}$, where $\bm{y}\in \R^n$ is a column vector. Hence, the equality $J_f(\bm{x}) = (Df)(\bm{x})$ should be understood in the sense that the Jacobian matrix at $\bm{x}$ is the transformation matrix of the linear map $(Df)(\bm{x})$.
 
 ### Example
 
 As an example, take the function $f: \R^3 \rightarrow \R^2$ given by
 $$
 \begin{align*}
- f(x_1, x_2, x_3) \coloneqq \bigl(x_1 + 42 x_2,\quad (x_1 + e^{x_3})^2 \bigr).
+ f(x_1, x_2, x_3) \coloneqq \bigl(x_1 + 42 x_2,\quad (x_1 + e^{x_3})^2 \bigr)
 \end{align*}
 $$
 
@@ -107,7 +107,7 @@ $$
   1 & 42 & 0\\
   2 (x_1 + e^{x_3}) & 0 & 2 e^{x_3} (x_1 + e^{x_3})
  \end{pmatrix}
- \in \Matrix_{2\times 3}(\R).
+ \in \Matrix_{2\times 3}(\R)
 \end{align*}
 $$
 
@@ -122,7 +122,7 @@ For functions $f: U\rightarrow V$ and $g: V \rightarrow W$, where $U,V,W\subsete
 
 $$
 \begin{align*}
- \dv{x} \Bigl(g(f(x))\Bigr) = g'(f(x)) \cdot f'(x).
+ \dv{x} \Bigl(g(f(x))\Bigr) = g'(f(x)) \cdot f'(x)
 \end{align*}
 $$
 
@@ -142,7 +142,7 @@ The chain rule now states: $g\circ f: U\rightarrow \R^k$ is differentiable at $\
 
 $$
 \boxed{J_{g\circ f}(\bm{x}) = J_g(f(\bm{x})) \cdot J_f(\bm{x})
- \quad \in \Matrix_{k\times n}(\R).}
+ \quad \in \Matrix_{k\times n}(\R)}
 $$
 
 This is very similar to the case with one variable $x\in U\subseteq \R$ above, except now ($\bm{x}\in U\subseteq \R^n$) we make use of the Jacobian matrix and multiply matrices to account for the many variables $x_1, \dots, x_n$ that $\bm{x}$ consists of (thus _multivariable_ chain rule).
@@ -152,14 +152,14 @@ This is very similar to the case with one variable $x\in U\subseteq \R$ above, e
 As an example, take the function $f: \R^3 \to \R^2$ from above:
 $$
 \begin{align*}
- f(x_1, x_2, x_3) \coloneqq \bigl(x_1 + 42 x_2,\quad (x_1 + e^{x_3})^2 \bigr).
+ f(x_1, x_2, x_3) \coloneqq \bigl(x_1 + 42 x_2,\quad (x_1 + e^{x_3})^2 \bigr)
 \end{align*}
 $$
 and define $g: \R^2 \rightarrow \R,\, g(\bm{y}) \coloneqq y_1 \cdot y_2$, which puts us in this situation:
 
 <figure class="image">
   <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/chain-rule-example-commutative-diagram.svg' | relative_url }}"
-       style="max-width: 620px; padding: 1.5em;">
+       style="max-width: 640px; padding: 1.5em;">
 </figure>
 
 The Jacobian matrix for $g$ at $\bm{y} = (y_1, y_2) \in \R^2$ is:
@@ -211,7 +211,7 @@ $$
 \begin{align*}
   f(\bm{x}(t), t) &= 2 \bigl(x_1(t)\bigr)^2 + \bigl(\ln(x_2(t))\bigr)^3 + 4 x_3(t) + \pi t,\\
   &\quad x_1(t) = \sin(t), \quad x_2(t) = \cos(2t),
-  \quad x_3(t) = \frac{1}{t},
+  \quad x_3(t) = \frac{1}{t}
 \end{align*}
 $$
 **The tricky part is to realize we can prefix $f$ by another function $\gamma$ which translates from the independent time variable $t$ to the $(n+1)$-dimensional input vector $\bigl(x_1(t), \dots, x_n(t), t\bigr)$** passed into $f$. Note that for $f$ in the introduction, we have $n=3$, yet we will leave $n$ generic here. The situation presents itself as follows in terms of a commutative diagram:
@@ -230,10 +230,14 @@ $$
     x_1(t) & \cdots & x_n(t) & t
   \end{pmatrix}
 \end{align*}
-$$,
-where $I\subseteq \R$ is the interval of permitted time values. We often set $t \coloneqq 0$ for the start of a real measurement or thought experiment in physics and could therefore arbitrarily set $I \coloneqq [0, \infty)$. Furthermore, we demand every component of $\gamma$ to be continuous, i.e. $\gamma_i: I \xrightarrow{\text{continuous}} \R \quad \forall i=1,\dots, n+1$. With these properties, $\gamma$ is a **curve** and describes a trajectory. It just happens that as the last component of our $(n+1)$-dimensional space, $\gamma$ carries the time component itself, as we need to pass it into $f$ as well (as seen before, $f$ can directly depend on $t$, not just indirectly via $x_1(t)$ etc.).
+$$
+where $I\subseteq \R$ is the interval of permitted time values. We often set $t \coloneqq 0$ for the start of a real measurement or thought experiment in physics and could therefore arbitrarily set $I \coloneqq [0, \infty)$. Furthermore, we demand every component of $\gamma$ to be continuous, i.e.
+$$
+\gamma_i: I \xrightarrow{\text{continuous}} \R \quad \forall i=1,\dots, n+1
+$$
+With these properties, $\gamma$ is a **curve** and describes a trajectory. It just happens that as the last component of our $(n+1)$-dimensional space, $\gamma$ carries the time component itself, as we need to pass it into $f$ as well (as seen before, $f$ can directly depend on $t$, not just indirectly via $x_1(t)$ etc.).
 
-After all, the multivariable chain rule is now applicable to the composite function $f\circ \gamma$ (assuming differentiability of $f$ at the given point $\bm{x}(t)$ and differentiability of $\gamma$ at $t$). We obtain:
+The multivariable chain rule is now applicable to the composite function $f\circ \gamma$ (assuming differentiability of $f$ at the given point $\bm{x}(t)$ and differentiability of $\gamma$ at $t$). We obtain:
 $$
 \begin{align*}
  &\underbrace{J_{f\circ \gamma}(t)}_{\Matrix_{1\times 1}(\R) \cong \R} = \underbrace{J_f(\gamma(t))}_{\Matrix_{1\times (n+1)}(\R)} \cdot \underbrace{J_\gamma(t)}_{\Matrix_{(n+1) \times 1}(\R)}\\
@@ -253,7 +257,7 @@ $$
 \end{align*}
 $$
 
-This shows how the Jacobian matrix, multivariable chain rule and the total derivative are connected. We started with a function $f$ that had an _explicit_ time dependency (in our case the term $\pi t$) and _implicit_ time dependencies (since $x_1(t), \dots, x_n(t)$ are time-dependent). **We then wanted to compute the total derivative of $f$ with respect to $t$, which is just asking for the time derivative of the composite function $f\circ \gamma$, where $\gamma$ is a curve passing in all the parameters to $f$, including time $t$ itself**. This is in fact the definition of the total derivative of $f$ with respect to time $t$.
+This shows how the Jacobian matrix, multivariable chain rule, and the total derivative are connected. We started with a function $f$ that had an _explicit_ time dependency (in our case the term $\pi t$) and _implicit_ time dependencies (since $x_1(t), \dots, x_n(t)$ are time-dependent). **We then wanted to compute the total derivative of $f$ with respect to $t$, which is just asking for the time derivative of the composite function $f\circ \gamma$, where $\gamma$ is a curve passing in all the parameters to $f$, including time $t$ itself**. This is in fact the definition of the total derivative of $f$ with respect to time $t$.
 
 Note how the same formalism is applicable even when $f$ is not directly dependent on $t$. In this case, we still pass in $t$ as parameter to our function $f$, which is simply not using the variable at all. The term $\pdv{t} f(\bm{x}, t)$ will then evaluate to $0$ and we would get the same result as if we had just left out $t$ as last entry of $\gamma$ altogether. Therefore, our definition of $\gamma$ stays consistent.
 
@@ -332,7 +336,7 @@ $$
  \end{pmatrix}\\
  &= \pdv{x_1} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot \dot{x}_1 + \pdv{\dot{x}_1} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot \ddot{x}_1 + \pdv{t} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot 1\\
  &= -b \dot{x}_1 \dot{x}_1 + \bigl(2a\dot{x}_1 - b x_1\bigr) \ddot{x}_1 + 0\\
- &= \solution{-b \dot{x}_1^2 + \bigl(2a\dot{x}_1 - b x_1\bigr) \ddot{x}_1}.
+ &= \solution{-b \dot{x}_1^2 + \bigl(2a\dot{x}_1 - b x_1\bigr) \ddot{x}_1}
 \end{align*}
 $$
 
@@ -358,7 +362,7 @@ $$
 \begin{align*}
  &\dv{t} f\bigl(x_1, \dot{x}_1, t\bigr)\\
  &= \pdv{x_1} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot \dot{x}_1 + \pdv{\dot{x}_1} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot \ddot{x}_1 + \pdv{t} f\bigl(x_1, \dot{x}_1, t\bigr) \cdot 1\\
- &= \solution{-a \cdot \dv{x}\Bigr\rvert_{x=x_1} u(x) \cdot e^{-kt} \cdot \dot{x}_1 + 0 + a k u(x_1) e^{-kt} \cdot 1},
+ &= \solution{-a \cdot \dv{x}\Bigr\rvert_{x=x_1} u(x) \cdot e^{-kt} \cdot \dot{x}_1 + 0 + a k u(x_1) e^{-kt} \cdot 1}
 \end{align*}
 $$
 where $\dv{x}\bigr\rvert_{x=x_1} u(x) = 3$ if $u(x) \coloneqq 3x + 5$ (as an example).
