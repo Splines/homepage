@@ -1,8 +1,6 @@
 ---
 layout: page
 title: "Jacobi and the total time derivative"
-draft: true
-permalink: /blog/drafts/1b3665151907
 katex:
   enabled: true
   macros:
@@ -14,12 +12,12 @@ katex:
     \subopenin: \underset{\text{open}}{\subseteq}
     \solution: \underline{\underline{#1}}
 excerpt: >
-  The total derivative with respect to time t is fundamental to physics, yet still, its multivariable form might come out of nowhere when first introduced. In this article, we will revisit the Jacobian matrix and multivariable chain rule in order to highlight their relationship to the total time derivative. Many examples are provided along the way.
+  The total derivative with respect to time is fundamental to physics, yet still, its multivariable form might come out of nowhere when first introduced. We revisit the Jacobian matrix and multivariable chain rule in order to highlight their relationship to the total time derivative. Many examples are provided along the way.
 ---
 
 ## Motivation
 
-A fairly common task, that quickly becomes second nature to physics students, is to compute the total derivative of a multi-dimensional time-dependent function. Here, we will only deal with "innocent" functions, that is, continuous functions that are totally differentiable everywhere in their domain.
+A fairly common task, which quickly becomes second nature to physics students, is to compute the total derivative of a multi-dimensional time-dependent function. Here, we will only deal with "innocent" functions, that is, continuous functions that are totally differentiable everywhere in their domain.
 
 Suppose we have the function $f: \R^4 \rightarrow \R$ given by
 
