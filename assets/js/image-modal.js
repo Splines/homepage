@@ -2,7 +2,7 @@
  * Lets the user click on images to view them enlarged in a modal with a smooth transition.
  */
 document.addEventListener("DOMContentLoaded", function () {
-  const figures = document.querySelectorAll("figure.image img");
+  const figures = document.querySelectorAll("figure.clickable img");
   if (!figures.length) return;
 
   figures.forEach((img) => {

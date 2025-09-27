@@ -1,0 +1,16 @@
+$$
+\begin{tikzcd}
+	\R^3 \ar[r, "f"] \drar[dashrightarrow, "g\circ f" {left, below=0ex, xshift=-0.75em}]
+	& \R^2 \ar[d, "g"]\\
+	& \R
+\end{tikzcd}%
+\hspace{0cm}%
+\begin{tikzcd}
+	(x_1, x_2, x_3) \ar[r, "f"] \drar[dashrightarrow, "g\circ f" {left, below=0ex, xshift=-0.75em}]
+	& \begin{pmatrix}
+		\overbrace{x_1 + 42x_2}^{y_1}
+		& \overbrace{(x_1 + e^{x_3})^2}^{y_2}
+	\end{pmatrix} \ar[d, "g"]\\
+	& y_1 \cdot y_2
+\end{tikzcd}
+$$
