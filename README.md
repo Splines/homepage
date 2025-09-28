@@ -1,7 +1,14 @@
 # The Splines/Splience homepage
 
+Build locally
+
 ```bash
-bundle exec jekyll serve --livereload
+bundle exec jekyll serve --livereload --incremental
+```
+
+or short:
+```bash
+jekyll s -Il
 ```
 
 Then, access on [`localhost:4000`](http://localhost:4000) instead of `127.0.0.1:4000` to avoid local CORS errors.
