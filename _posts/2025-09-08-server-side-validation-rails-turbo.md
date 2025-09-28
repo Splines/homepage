@@ -20,7 +20,7 @@ Use a [Rails model validation](https://guides.rubyonrails.org/active_record_vali
 <% end %>
 ```
 
-Have a `create` method like this in your controller:
+Have a `create` method like this in your controller[^unprocessable-content]:
 
 ```rb
 // +++FILENAME+++ controllers/events_controller.rb
@@ -30,10 +30,12 @@ def create
     redirect_to @event, notice: t("events.created")
   else
     # This is the error case where we rerender the new.html.erb template
-    render :new, status: :unprocessable_entity
+    render :new, status: :unprocessable_content
   end
 end
 ```
+
+[^unprocessable-content]: There is `:unprocessable_entity` and `:unprocessable_content` which both map to the HTTP status code `422`. See [this GitHub comment](https://github.com/rspec/rspec-rails/issues/2763#issuecomment-2172602162) for why you should prefer `:unprocessable_content`. See also [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content).
 
 Last, but not least, customize the inline-styling by overwriting the [Rails error field wrapper](https://guides.rubyonrails.org/active_record_validations.html#customizing-error-field-wrapper) in an initializer.
 
@@ -114,7 +116,7 @@ class EventsController < ApplicationController
       redirect_to @event, notice: t("events.created")
     else
       # This is the error case where we rerender the new.html.erb template
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -238,7 +240,7 @@ def create
     redirect_to @event, notice: t("events.created")
   else
     # stays the same
-    render :new, status: :unprocessable_entity
+    render :new, status: :unprocessable_content
   end
 end
 ```
@@ -261,7 +263,7 @@ Note that due to the turbo-rails gem overriding the layout, you have to keep [th
 When the user has JavaScript disabled in their browser, the `Turbo-Frame` request header will not be sent (since the Turbo _JavaScript_ library could not execute and therefore not add this header). Therefore, the turbo-rails library will also _not_ use the minimal layout in this case. Instead, this line of the events controller
 
 ```rb
-render :new, status: :unprocessable_entity
+render :new, status: :unprocessable_content
 ```
 
 will use the usual application layout. So the entire page is re-rendered by Ruby on Rails and shipped as HTML to your browser where the entire DOM is replaced[^whole-dom]. Without JavaScript being activated on the users's browser, this is the best scenario you can get, as there is no way to replace only parts of the page without JS. So here, _progressive enhancement_ means that even with the bare minimum (just HTML/CSS, no JS), the user can still admire a correct-looking page.
