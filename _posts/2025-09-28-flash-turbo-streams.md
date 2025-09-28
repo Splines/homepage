@@ -171,13 +171,18 @@ We used `data-bs-dismiss="alert"` on the close button, so the Bootstrap JS code 
 
 But what about some niceties like auto-dismissal after some time? For example, the alert could automatically close after 6s. And let's render a small progress bar that indicates how much time is left. When you hover over the message, the auto-dismissal counter should be paused, in case you want to have more time to read the message.
 
+<figure class="image clickable" style="padding-left: 170px; padding-right: 170px;">
+  <img src="/assets/blog/2025-flash-turbo-streams/flash-messages-with-progress-stacked.png"
+    alt="Stacked Flash messages with a progress bar on top of each one indicating when they will close automatically.">
+</figure>
+
 Here is a Stimulus controller that does exactly that. We use a `MutationObserver` to listen to DOM changes. This allows us to also add the progress bar and the auto-dismissal feature to _newly shown_ flash messages prepended by Turbo Streams. You might come up with a different solution, e.g. listening to the [`turbo:before-stream-render`](https://turbo.hotwired.dev/reference/events#streams) event or the [`turbo:after-stream-render`](https://discuss.hotwired.dev/t/event-to-know-a-turbo-stream-has-been-rendered/1554/25) event.
 
 ```js
 // +++FILENAME+++ frontend/flash/_messages.controller.js
 import { Controller } from "@hotwired/stimulus";
 
-const AUTO_DISMISS_TIMEOUT = 6000;
+const AUTO_DISMISS_TIMEOUT_MS = 6000;
 
 /**
  * Handles flash messages auto-dismissal with a progress bar.
@@ -225,9 +230,9 @@ export default class extends Controller {
         return;
       }
       elapsed = Date.now() - start;
-      let percent = Math.min(100, (elapsed / AUTO_DISMISS_TIMEOUT) * 100);
+      let percent = Math.min(100, (elapsed / AUTO_DISMISS_TIMEOUT_MS) * 100);
       bar.style.width = percent + "%";
-      if (elapsed < AUTO_DISMISS_TIMEOUT) {
+      if (elapsed < AUTO_DISMISS_TIMEOUT_MS) {
         animationFrameId = requestAnimationFrame(updateBar);
       }
       else {
@@ -284,11 +289,11 @@ export default class extends Controller {
 }
 ```
 
-Then, use the Stimulus controller on the div that acts as container for our flash messages (I've used the name `flash-messages` as controller name).
+Then, use the Stimulus controller on the div that acts as container for our flash messages (I've named the controller `flash-messages`).
 
 ```erb
 // +++FILENAME+++ frontend/flash/_messages.html.erb
-<!-- see the data-controller attribute here -->
+<!-- see the data-controller attribute -->
 <div class="container-max-md" id="flash-messages" data-controller="flash-messages">
   <%= render partial: 'flash/message' %>
 </div>
