@@ -15,7 +15,11 @@
   <div class="container">
 
     <header>
-      <h1>{{ page.title }}</h1>
+      <div class="header-vertical">
+        <img src="{{ '/assets/images/splines.jpg' | absolute_url }}" alt="Me on top of a hill"
+             class="header-avatar">
+        <h1>{{ page.title }}</h1>
+      </div>
     </header>
 
     <div id="social">
@@ -37,8 +41,8 @@
 
       <br>
 
-      <p class="contact">
-        Contact me: info&lt;at&gt;&lt;domain&gt; (though I won't promise a reply)
+      <p class="contact" title="though I won't promise a reply :)">
+        Contact me: info&lt;at&gt;&lt;domain&gt;
       </p>
     </div>
 

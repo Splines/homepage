@@ -51,7 +51,7 @@ h1 {
   padding-bottom: 0.1em;
 
   // https://resourceboy.com/textures/gold-textures/
-  background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, #563c29, #563c29);
+  background: url("/assets/images/goldfoil.webp"), linear-gradient(142deg, v.$primary, v.$primary);
   background-size: cover;
   background-position: center;
   color: #281c143d;
