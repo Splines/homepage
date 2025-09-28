@@ -29,5 +29,5 @@ permalink: /blog/drafts/<your-random-hash>
 Download [prismjs](https://prismjs.com/download#themes=prism) and place the JS as `vendor/prism.js` to allow for server-side rendering of code blocks. Toggle these languages:
 
 ```
-JavaScript (needs C-like), HTML (and other markup languages), Ruby, JSON + Web App Manifest, YAML
+JavaScript (needs C-like), HTML (and other markup languages), ERB, CSS, Sass (SCSS), Ruby, JSON + Web App Manifest, YAML
 ```
