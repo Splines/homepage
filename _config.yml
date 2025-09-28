@@ -14,6 +14,7 @@ collections:
 
 feed:
   excerpt_only: true
+  disable_in_development: true
 
 # No theme: https://stackoverflow.com/a/57424621/
 
