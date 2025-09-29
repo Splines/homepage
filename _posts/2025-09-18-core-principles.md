@@ -22,3 +22,5 @@ My core beliefs and principles I try to live by as best as I can. Many should be
 - **Smile**. Not every day is rose. But life is a wonder and well worth living. Look others in the eye and offer them a smile that comes from the heart. Perhaps you will receive one back.
 
 In summary: Be kind and spread love. Treat everybody equally, with respect and dignity. Take care about your loved ones. Adopt a scientific mindset: Keep your curiosity alive to worship the wonders of this world; Convince me with facts; Help me improve by constructively criticizing me; Maintain a natural skepticism towards everything. But don't take yourself too seriously. And certainly don't loose your wigglyness: Exercise & Express yourself creatively, fail, stand up, do it again. And again. Smile. It's human after all.
+
+<small>_Thanks to Nils Richter for having reviewed this post._</small>
