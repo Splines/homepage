@@ -176,7 +176,7 @@ ActionView::Base.field_error_proc = proc do |html_tag, instance|
 end
 ```
 
-As we've seen, it simply wraps your field, here `html_tag`, inside a `div`. Let's overwrite this behavior in an initializer. This code is a mix of [this](https://dev.to/etoundi_1er/show-rails-validation-errors-inline-with-bootstrap-4-4ga6) and [this post](https://www.jorgemanrubia.com/2019/02/16/form-validations-with-html5-and-modern-rails/), the latter being a great writeup by _Jorge Manrubia_ that served me as inspiration. The code should be self-explanatory. It is adapted to [Bootstrap](https://getbootstrap.com/docs/5.3/forms/validation/#server-side), but you can really do whatever you want here. Don't forget to add `aria-live="polite"` to the error message to inform assistive technology users about the [updated site content](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-live).
+As we've seen, it simply wraps your field, here `html_tag`, inside a `div`. Let's overwrite this behavior in an initializer. This code is a mix of [this](https://dev.to/etoundi_1er/show-rails-validation-errors-inline-with-bootstrap-4-4ga6) and [this post](https://www.jorgemanrubia.com/2019/02/16/form-validations-with-html5-and-modern-rails/), the latter being a great writeup by _Jorge Manrubia_ that served me as inspiration. The code should be self-explanatory. It is adapted to [Bootstrap](https://getbootstrap.com/docs/5.3/forms/validation/#server-side), but you can really do whatever you want here. Don't forget to add `aria-live="polite"` to the error message to inform assistive technology users about the [updated site content](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-live). And note that we use `content_tag` here since it automatically [**escapes**](https://github.com/rails/rails/blob/cf6b3107753a762b27bfcf9eefcfd9feb43f0242/actionview/lib/action_view/helpers/tag_helper.rb#L230) the error message (which might contain user strings for custom validations).
 
 ```rb
 // +++FILENAME+++ config/initializers/form_errors.rb
@@ -185,13 +185,19 @@ ActionView::Base.field_error_proc = proc do |html_tag, instance|
   field = fragment.at("input,select,textarea")
   next html_tag if field.nil?
 
-  field.add_class("is-invalid") # adapted for Bootstrap
+  # classes adapted to Bootstrap
+  field.add_class("is-invalid")
   error_message = [*instance.error_message].to_sentence
+  error_span = ActionController::Base.helpers.content_tag(
+    :span,
+    error_message,
+    class: "invalid-feedback",
+    aria: { live: "polite" }
+  )
+
   html = <<-HTML
     #{fragment}
-    <span class="invalid-feedback" aria-live="polite">
-      #{error_message}
-    </span>
+    #{error_span}
   HTML
 
   html.html_safe # rubocop:disable Rails/OutputSafety
