@@ -305,8 +305,8 @@ What if all fields you've shown to the user contain valid input, but there is st
 To not let our users baffled with a form that seems valid but doesn't do anything, let's include a generic error message next to the submit button by overwriting the `form_with` helper method. This code has to be adapted according to how you adjusted the `ActionView::Base.field_error_proc`. In our case, it's easy to check if the form contains any visible validation error messages in the user markup: just search for the `class="invalid-feedback"` string in the HTML. If any such class element is present, we don't want to show our generic error message. Otherwise, we do in order to at least show one message on the whole form.
 
 ```rb
-// +++FILENAME+++ helpers/application_helper.rb
-module ApplicationHelper
+// +++FILENAME+++ helpers/form_unknown_error_helper.rb
+module FormUnknownErrorHelper
   # Overrides form_with to show a general form error message if the form
   # has errors but no field-specific errors shown on the page.
   def form_with(**options, &)
