@@ -24,7 +24,7 @@ ARG USER_GID=$USER_UID
 RUN groupadd --gid $USER_GID $USERNAME \\
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \\
     #
-    # [Optional] Add sudo support.
+    # [Optional] Add sudo support
     # Omit if you don't need to install software after connecting.
     && apt-get update \\
     && apt-get install -y sudo \\
@@ -35,7 +35,7 @@ RUN groupadd --gid $USER_GID $USERNAME \\
 # * Anything else you want to do like clean up goes here *
 # ********************************************************
 
-# [Optional] Set the default user. Omit if you want to keep the default as root.
+# Set the default user to the non-root user created above
 USER $USERNAME
 ```
 
