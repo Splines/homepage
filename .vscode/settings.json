@@ -60,6 +60,10 @@
             "color": "#c9c9c9"
         }
     ],
+    "[markdown]": {
+      "editor.wordWrap": "wordWrapColumn",
+      "editor.wordWrapColumn": 75,
+    },
     //////////////////////////////////////
     // Git
     //////////////////////////////////////
