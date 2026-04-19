@@ -246,7 +246,17 @@ While Typst also supports a [BibLaTeX](https://typst.app/docs/reference/model/bi
 
 For my Thesis defense (also called "colloquium"), I copied over some formulas from my Typst document to PowerPoint. For this purpose, I've developed [PPTypst](https://github.com/splines/pptypst), a powerful PowerPoint plugin that lets you insert and edit (!) Typst equations directly in PowerPoint. Here is how one of my slides looked like:
 
-TODO: show slide
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-1.jpg' | relative_url }}" />
+</figure>
+
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-2.jpg' | relative_url }}" />
+</figure>
+
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-3.jpg' | relative_url }}" />
+</figure>
 
 
 ## Final words
