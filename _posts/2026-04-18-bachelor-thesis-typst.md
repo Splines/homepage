@@ -109,7 +109,7 @@ as I want to use physica everywhere. Then, in every Typst file, you just put thi
 
 Getting beautiful vector-graphic plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file:
 
-```txt
+```py
 fig.savefig("my-plot.typ")
 ```
 
@@ -121,7 +121,7 @@ Furthermore, you could also use packages like [cetz](https://typst.app/universe/
 
 Additionally, to achieve a good aspect ratio for your figures, I use [this tip](https://jwalton.info/Embed-Publication-Matplotlib-Latex/), essentially calculating the golden ratio.
 
-```txt
+```py
 // +++FILENAME+++ plot_size.py
 def get_plot_size(width=447.87, fraction=1):
     """Gets beautiful figure dimensions with the golden ratio. For usage in LaTeX/Typst documents.
@@ -163,7 +163,7 @@ def get_plot_size(width=447.87, fraction=1):
 plt.figure(figsize=get_plot_size())
 ```
 
-The hardcoded width `447.87` is according to my Typst document. To measure the width of your document, you can use this snippet:
+The hardcoded width `447.87` is according to my Typst document. To measure the width of your document, you can use this Typst snippet:
 
 ```typ
 #layout(size => {

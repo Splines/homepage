@@ -30,5 +30,7 @@ permalink: /blog/drafts/<your-random-hash>
 Download [prismjs](https://prismjs.com/download#themes=prism) and place the JS as `vendor/prism.js` to allow for server-side rendering of code blocks. Toggle these languages:
 
 ```text
-JavaScript (needs C-like), HTML (and other markup languages), ERB, CSS, Sass (SCSS), Ruby, JSON + Web App Manifest, YAML, Docker
+JavaScript (needs C-like), HTML (and other markup languages), ERB, CSS, Sass (SCSS), Ruby, JSON + Web App Manifest, YAML, Docker, Python
 ```
+
+You can also directly use [this link](https://prismjs.com/download#themes=prism&languages=markup+css+clike+javascript+docker+erb+json+markup-templating+python+ruby+scss+yaml).
