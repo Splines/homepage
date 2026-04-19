@@ -4,7 +4,7 @@ title: "I wrote my Physics Bachelor Thesis in Typst"
 title_on_page: "I wrote my Physics Bachelor Thesis in Typst"
 code: true
 excerpt: >
-  Here you can read my Thesis, and find out how I solved some challenges along the way.
+  Spoiler: it was an awesome experience. Here, you can read my Thesis, and find out how I solved some challenges along the way.
 ---
 
 <figure class="image clickable">
@@ -14,7 +14,7 @@ excerpt: >
 This is my first bigger document I've ever written in [Typst](https://github.com/typst/typst), a markup-based typesetting system as modern alternative to LaTeX. After several months of work, I handed in my Bachelor Thesis in Physics at Heidelberg University on the 1st of April (no April Fool's joke). If you want to give Typst a try in your browser, there is a [Typst Playground](https://typst.app/play).
 
 <object
-  data="/assets/blog/2026-bachelor-thesis-typst/prime-refine.pdf#view=FitV"
+  data="/assets/blog/2026-bachelor-thesis-typst/prime-refine.pdf#view=FitV&navpanes=0"
   type="application/pdf"
   width="100%" height="1000px">
     <p>
