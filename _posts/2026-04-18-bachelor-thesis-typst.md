@@ -71,7 +71,7 @@ thesis.typ
 
 To keep my main `thesis.typ` file slim, I outsourced the template to its own folder `template/`. See also [Making a Template](https://typst.app/docs/tutorial/making-a-template/) in the Typst docs. This way, I can essentially use a regular `#show` rule, just like you would when using a template from the Typst Universe. If you want to style anything, you should also read [the docs on Styling](https://typst.app/docs/reference/styling).
 
-```txt
+```typ
 // +++FILENAME+++ thesis.typ
 #import "template/template.typ": *
 #import "imports.typ": *
@@ -93,7 +93,7 @@ To keep my main `thesis.typ` file slim, I outsourced the template to its own fol
 
 Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https://github.com/typst/typst/issues/595)). I work around this by putting my "global" imports into a file `imports.typ`, e.g. the physica package I basically want to use everywhere. Then, in every Typst file, you just put this at the top:
 
-```txt
+```typ
 #import "../imports.typ": *
 ```
 
@@ -103,7 +103,7 @@ There were many tiny challenges I had to solve along the way. Luckily, the Typst
 
 Enable heading-specific figure numbering and increase spacing.
 
-```txt
+```typ
 #show figure: set block(spacing: 1.5em)
 #show figure: set figure(gap: 1.0em)
 #set figure(numbering: n => numbering("1.1", counter(heading).get().first(), n), gap: 1em)
@@ -111,7 +111,7 @@ Enable heading-specific figure numbering and increase spacing.
 
 For multi-line figure captions, I want that the whole caption itself is centered on page, but the text inside is left-aligned. Solution from [here](https://forum.typst.app/t/how-to-center-caption-but-left-align-the-text-inside/2561).
 
-```txt
+```typ
 #show figure.caption: it => {
   align(box(align(it, left)), center)
 }
@@ -119,7 +119,7 @@ For multi-line figure captions, I want that the whole caption itself is centered
 
 Show references to equations in a custom format. Solution from [here](https://github.com/typst/typst/discussions/1917#discussioncomment-6703472).
 
-```txt
+```typ
 #show ref: it => {
   if it.element != none and it.element.func() == math.equation {
     // custom reference for equations
@@ -132,7 +132,7 @@ Show references to equations in a custom format. Solution from [here](https://gi
 
 Disable numbering for 3rd level headings (I don't use anything beyond that, so I only had to disable this for the 3rd level headings). Solution from [here](https://stackoverflow.com/a/77488450/).
 
-```txt
+```typ
 #set heading(numbering: "1.1")
 #show heading.where(level: 3): it => [
   #block(it.body)
@@ -141,7 +141,7 @@ Disable numbering for 3rd level headings (I don't use anything beyond that, so I
 
 Table of contents styling. I may have copied this from somewhere, though not sure anymore where from.
 
-```txt
+```typ
 #show outline: it => {
   show heading: pad.with(bottom: 1em)
   it
@@ -175,7 +175,7 @@ Table of contents styling. I may have copied this from somewhere, though not sur
 
 In case you need roman and arabic numbering, I took the following code snippet from the [parcio-thesis template](https://typst.app/universe/package/parcio-thesis).
 
-```txt
+```typ
 #let setup-numbering(doc, num: "1", reset: true, alternate: true) = {
   let footer = if alternate {
     context {
@@ -211,7 +211,7 @@ In case you need roman and arabic numbering, I took the following code snippet f
 
 Finally, for the appendix, you might want to do something like this in your `thesis.typ`.
 
-```txt
+```typ
 #set heading(numbering: "A", supplement: [Appendix])
 #counter(heading).update(0)
 
@@ -227,7 +227,7 @@ Finally, for the last polish, I try to avoid [widows and orphans](https://en.wik
 
 Getting beautiful vector-graphics plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file by using
 
-```txt
+```typ
 fig.savefig('my-plot.typ')
 ```
 
