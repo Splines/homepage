@@ -7,7 +7,7 @@ excerpt: >
   Here you can read my Thesis, and find out how I solved some challenges along the way.
 ---
 
-This is my first bigger document I've ever written in [Typst](https://github.com/typst/typst), a markup-based typesetting system as modern alternative to LaTeX. After several months of work, I handed in my Bachelor Thesis in Physics at Heidelberg University on the 1st of April (no April Fool's joke ^^). If you want to give Typst a first try in the Browser, there is a [Typst Playground](https://typst.app/play).
+This is my first bigger document I've ever written in [Typst](https://github.com/typst/typst), a markup-based typesetting system as modern alternative to LaTeX. After several months of work, I handed in my Bachelor Thesis in Physics at Heidelberg University on the 1st of April (no April Fool's joke). If you want to give Typst a try in your browser, there is a [Typst Playground](https://typst.app/play).
 
 <object
   data="/assets/blog/2026-bachelor-thesis-typst/prime-refine.pdf#view=FitV"
@@ -18,19 +18,19 @@ This is my first bigger document I've ever written in [Typst](https://github.com
     </p>
 </object>
 
-I didn't like the [LaTeX template](https://physik.uni-heidelberg.de/downloads) offered by our university too much, so I redesigned my very own in Typst. For sure, there were some challenges to overcome, but overall it felt so much easier and more intuitive to do than in LaTeX. I've been using LaTeX intensively for more than 3 years. Its typesetting looks gorgeous and I think TeX revolutionized the scientific world, just like Gutenberg did with his letterpress printing. But now it's time for a new step, and Typst is finally a competitor that can stand up against LaTeX in my opinion.
+I didn't like the [LaTeX template](https://physik.uni-heidelberg.de/downloads?lang=en#infoarea-398) offered by our university too much, so I redesigned my very own in Typst. For sure, there were some challenges to overcome, but overall it felt so much easier and more intuitive to do than in LaTeX. I've been using LaTeX intensively for more than 3 years. Its typesetting looks gorgeous and I think TeX revolutionized the scientific world, just like Gutenberg did with his letterpress printing. And while TeX will remain crucial for many years to come, there's no shame in trying out new things. Typst is finally a competitor that can stand up against LaTeX and is so much easier to use.
 
-## Packages
+## Typst Packages
 
-Listed are all packages from the [Typst Universe](https://typst.app/universe/) I've been using in my thesis:
+Here I've listed all packages from the [Typst Universe](https://typst.app/universe/) I've been using in my thesis:
 
 - [hydra](https://typst.app/universe/package/hydra) to easily set the page headings.
 
-- [Physica](https://typst.app/universe/package/physica) for easy math- and physics-related typesetting.
+- [physica](https://typst.app/universe/package/physica) for easy math- and physics-related typesetting.
 
-- [Unify](https://typst.app/universe/package/unify) to format numbers and SI units.
+- [unify](https://typst.app/universe/package/unify) to format numbers and SI units.
 
-- [equate](https://typst.app/universe/package/equate) to label a single line in a multiline math expression.
+- [equate](https://typst.app/universe/package/equate) to give labels to single lines in multiline math expressions.
 
 - [embiggen](https://typst.app/universe/package/embiggen) to use LaTeX-like delimiter sizing, e.g. `#big()` similar to `\big` in LaTeX.
 
@@ -42,7 +42,7 @@ Listed are all packages from the [Typst Universe](https://typst.app/universe/) I
 
 - [booktabs](https://typst.app/universe/package/booktabs) to get the look and feel of tables typeset with LaTeX's Booktabs package.
 
-- [subpar](https://typst.app/universe/package/subpar) to create sub figures with (a) and (b) and correct caption references.
+- [subpar](https://typst.app/universe/package/subpar) to create sub figures, e.g. "Figure 1 (a)", and get correct caption references.
 
 - [nth](https://typst.app/universe/package/nth) to generate English ordinal numbers, e.g. 1st.
 
@@ -50,7 +50,7 @@ Listed are all packages from the [Typst Universe](https://typst.app/universe/) I
 
 ## Project structure
 
-This is the gist of my project outline:
+This is the gist of my project outline.
 
 ```txt
 // +++FILENAME+++ Project Structure
@@ -69,7 +69,7 @@ literature.yml
 thesis.typ
 ```
 
-To keep my main `thesis.typ` file slim, I outsourced the template to its own folder `template/`. See also [Making a Template](https://typst.app/docs/tutorial/making-a-template/) in the Typst docs. This way, I can essentially use a regular `#show` rule, just like you would when using a template from the Typst Universe. If you want to style anything, you should also read [the docs on Styling](https://typst.app/docs/reference/styling).
+To keep my main `thesis.typ` file slim, I outsourced the template to its own folder `template/`. See also [Making a Template](https://typst.app/docs/tutorial/making-a-template/) in the Typst docs. This way, I can essentially use a regular `#show` rule, just like you would when using a template from the [Typst Universe](https://typst.app/universe/search/?kind=templates). If you want to style anything, you should also read [the docs on Styling](https://typst.app/docs/reference/styling).
 
 ```typ
 // +++FILENAME+++ thesis.typ
@@ -91,7 +91,15 @@ To keep my main `thesis.typ` file slim, I outsourced the template to its own fol
 #bibliography("literature.yml")
 ```
 
-Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https://github.com/typst/typst/issues/595)). I work around this by putting my "global" imports into a file `imports.typ`, e.g. the physica package I basically want to use everywhere. Then, in every Typst file, you just put this at the top:
+Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https://github.com/typst/typst/issues/595)). I work around this by putting my "global" imports into a file `imports.typ`. For example, it contains this line
+
+```typ
+// +++FILENAME+++ imports.typ
+#import "@preview/physica:0.9.5": *
+// more imports
+```
+
+as I want to use physica everywhere. Then, in every Typst file, you just put this at the top:
 
 ```typ
 #import "../imports.typ": *
@@ -99,18 +107,69 @@ Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https
 
 ## Plots: Matplotlib and Typst
 
-Getting beautiful vector-graphics plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file by using
+Getting beautiful vector-graphic plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file:
 
-```typ
-fig.savefig('my-plot.typ')
+```txt
+fig.savefig("my-plot.typ")
 ```
 
-This Typst file produces the plot natively in Typst using primitive shapes like lines, rectangles, circles, gradients, etc. The only problem is that it doesn't seem to respect your `xlim` and `ylim` properties (at the time of writing, see [this issue](https://github.com/daskol/mpl-typst/issues/14)), resulting in lines being shown even outside your plot region.
+This will produce a file `my-plot.typ`, which uses primitive Typst shapes to construct the plot, e.g. lines, rectangles, circles, gradients, etc. The only problem is that it doesn't seem to respect your `xlim` and `ylim` properties (at the time of writing, see [this issue](https://github.com/daskol/mpl-typst/issues/14)), resulting in lines being shown even outside your plot region.
 
-For plots where this was a problem, I switched to another great project, [mpl2typ](https://github.com/janekfleper/mpl2typ). It is not stable yet and feature-incomplete, but worth to give it a try.
+For plots where this was a problem, I switched to another great project: [mpl2typ](https://github.com/janekfleper/mpl2typ). It is not stable yet and feature-incomplete, but still worth to give it a try.
 
 Furthermore, you could also use packages like [cetz](https://typst.app/universe/package/cetz), [cetz-plot](https://typst.app/universe/package/cetz-plot) and [lilaq](https://typst.app/universe/package/lilaq) to plot directly in Typst. However, I share Janek Fleper's sentiment expressed [here](https://github.com/janekfleper/mpl2typ#why-not-a-typst-package) in that the heavy lifting for generating the layout of these plots isn't something Typst should do. I see Typst's role here just as someone who places my images in a text flow. I will continue to stick to Python for data exploration and also plotting via Matplotlib.
 
+Additionally, to achieve a good aspect ratio for your figures, I use [this tip](https://jwalton.info/Embed-Publication-Matplotlib-Latex/), essentially calculating the golden ratio.
+
+```txt
+// +++FILENAME+++ plot_size.py
+def get_plot_size(width=447.87, fraction=1):
+    """Gets beautiful figure dimensions with the golden ratio. For usage in LaTeX/Typst documents.
+
+    Taken from https://jwalton.info/Embed-Publication-Matplotlib-Latex/
+
+    Parameters
+    ----------
+    width: float
+            Document textwidth or columnwidth in pts
+    fraction: float, optional
+            Fraction of the width which you wish the figure to occupy
+
+    Returns
+    -------
+    fig_dim: tuple
+            Dimensions of figure in inches
+    """
+    # Width of figure (in pts)
+    fig_width_pt = width * fraction
+
+    # Convert from pt to inches
+    inches_per_pt = 1 / 72.27
+
+    # Golden ratio to set aesthetic figure height
+    # https://disq.us/p/2940ij3
+    golden_ratio = (5**0.5 - 1) / 2
+
+    # Figure width in inches
+    fig_width_in = fig_width_pt * inches_per_pt
+    # Figure height in inches
+    fig_height_in = fig_width_in * golden_ratio
+
+    fig_dim = (fig_width_in, fig_height_in)
+
+    return fig_dim
+
+# then use it like this
+plt.figure(figsize=get_plot_size())
+```
+
+The hardcoded width `447.87` is according to my Typst document. To measure the width of your document, you can use this snippet:
+
+```typ
+#layout(size => {
+  [Width of page is #size.width.]
+})
+```
 
 ## Literature with Hayagriva
 
