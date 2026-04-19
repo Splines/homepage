@@ -3,8 +3,14 @@ require 'cgi'
 
 module Prism
   class << self
-    JS_FILENAME = 'vendor/prism.js'
-    JS_CTX = ::ExecJS.compile(File.read(JS_FILENAME))
+    PRISM_CORE_JS = 'vendor/prism.js'
+    # from https://github.com/Mc-Zen/prism-typst/
+    # at commit https://github.com/Mc-Zen/prism-typst/tree/63fcf5c32b6b3433e4f36d6076794b1eb4d500fe
+    PRISM_TYPST_JS = 'vendor/prism-typst.js'
+
+    prism_code = File.read(PRISM_CORE_JS)
+    prism_code += "\n" + File.read(PRISM_TYPST_JS)
+    JS_CTX = ::ExecJS.compile(prism_code)
 
     # Jekyll wraps code blocks in <pre><code> tags
     CODE_REGEX = /<pre><code(.*?)class="language-(.*?)"(.*?)>(.*?)<\/code><\/pre>/m.freeze

@@ -90,6 +90,7 @@
       "kramdown",
       "Splience",
       "subopenin",
-      "tabindex"
+      "tabindex",
+      "Typst"
     ],
 }
