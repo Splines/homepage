@@ -97,6 +97,51 @@ Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https
 #import "../imports.typ": *
 ```
 
+## Plots: Matplotlib and Typst
+
+Getting beautiful vector-graphics plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file by using
+
+```typ
+fig.savefig('my-plot.typ')
+```
+
+This Typst file produces the plot natively in Typst using primitive shapes like lines, rectangles, circles, gradients, etc. The only problem is that it doesn't seem to respect your `xlim` and `ylim` properties (at the time of writing, see [this issue](https://github.com/daskol/mpl-typst/issues/14)), resulting in lines being shown even outside your plot region.
+
+For plots where this was a problem, I switched to another great project, [mpl2typ](https://github.com/janekfleper/mpl2typ). It is not stable yet and feature-incomplete, but worth to give it a try.
+
+Furthermore, you could also use packages like [cetz](https://typst.app/universe/package/cetz), [cetz-plot](https://typst.app/universe/package/cetz-plot) and [lilaq](https://typst.app/universe/package/lilaq) to plot directly in Typst. However, I share Janek Fleper's sentiment expressed [here](https://github.com/janekfleper/mpl2typ#why-not-a-typst-package) in that the heavy lifting for generating the layout of these plots isn't something Typst should do. I see Typst's role here just as someone who places my images in a text flow. I will continue to stick to Python for data exploration and also plotting via Matplotlib.
+
+
+## Literature with Hayagriva
+
+While Typst also supports a [BibLaTeX](https://typst.app/docs/reference/model/bibliography/) `.bib` file, I've tried out the new [Hayagriva](https://github.com/typst/hayagriva) format, which is a really simple YAML file that is nice to read and edit. Luckily, there is also an Online [converter](https://jonasloos.github.io/bibtex-to-hayagriva-webapp/) from BibTeX to Hayagriva since you will probably not find journals that offer you a Hayagriva citation export, yet ;)
+
+## Presentation
+
+For my Thesis defense (also called "colloquium"), I copied over some formulas from my Typst document to PowerPoint. For this purpose, I've developed [PPTypst](https://github.com/splines/pptypst), a powerful PowerPoint plugin that lets you insert and edit (!) Typst equations directly in PowerPoint. Here is how one of my slides looked like:
+
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-1.jpg' | relative_url }}" />
+</figure>
+
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-2.jpg' | relative_url }}" />
+</figure>
+
+<figure class="image clickable">
+  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-3.jpg' | relative_url }}" />
+</figure>
+
+## Final words
+
+All in all, I was very happy with this fresh experience of writing a longer scientific document in Typst. The feedback cycle is amazing since you directly see the changes in almost real-time. I made heavy use of Myriad-Dreamin's [tinymist](https://myriad-dreamin.github.io/tinymist/), a language server for Typst (among others available as [VSCode extension](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist), where you could even pop up the preview pane and show it on `localhost` in your browser).
+
+Just like with LaTeX, of course I have to search for some code snippets on the web for specific things, but at least I can now understand them as they are written in a language close to Rust (i.e. modern), and not a macro-driven language like TeX. I'd much rather want to maintain a package in a language close to modern imperative programming languages than some backslash-hell, e.g. the great LaTeX package [siunitx](https://ctan.org/pkg/siunitx), but would you want to maintain [its code](https://github.com/josephwright/siunitx/blob/main/siunitx-unit.dtx)? Me not, I have a hard time even reading it. With Typst instead, I can build upon code I see online (e.g. in packages and other templates), and even build upon them, without despairing in mysterious compiler error messages and a backslash hell.
+
+I'm sticking with Typst and will only use LaTeX sparingly from now on.
+
+---
+
 ## Challenges & Solutions
 
 There were many tiny challenges I had to solve along the way. Luckily, the Typst community is very active and welcoming. In addition to a regular search in your favorite search engine, I recommend to also search in the [Typst Issues](https://github.com/typst/typst/issues) on GitHub (remember to remove `state:open` in the search bar as the issue could have already been closed) and to search in the [Typst Forum](https://forum.typst.app/) as well (there's a small search icon next to your profile picture). What follows is a selection of challenges I faced & how I solved them.
@@ -223,46 +268,3 @@ Finally, for the appendix, you might want to do something like this in your `the
 
 Finally, for the last polish, I try to avoid [widows and orphans](https://en.wikipedia.org/wiki/Widows_and_orphans) by rephrasing some sentences and inserting some manual layout shifts that hopefully are subtle enough to go unnoticed, e.g. `#v(-0.2em)`. I also moved some figures around and cut paragraphs because I hate it when a sentence finishes 3 pages later (because in-between were only figures).
 
-## Plots: Matplotlib and Typst
-
-Getting beautiful vector-graphics plots that are accessible is not the easiest thing to do. Luckily, there is [mpl-typst](https://github.com/daskol/mpl-typst), a Matplotlib Typst backend. With this Python library, you can just generate your Matplotlib plots as usual, and then export them to a Typst file by using
-
-```typ
-fig.savefig('my-plot.typ')
-```
-
-This Typst file produces the plot natively in Typst using primitive shapes like lines, rectangles, circles, gradients, etc. The only problem is that it doesn't seem to respect your `xlim` and `ylim` properties (at the time of writing, see [this issue](https://github.com/daskol/mpl-typst/issues/14)), resulting in lines being shown even outside your plot region.
-
-For plots where this was a problem, I switched to another great project, [mpl2typ](https://github.com/janekfleper/mpl2typ). It is not stable yet and feature-incomplete, but worth to give it a try.
-
-Furthermore, you could also use packages like [cetz](https://typst.app/universe/package/cetz), [cetz-plot](https://typst.app/universe/package/cetz-plot) and [lilaq](https://typst.app/universe/package/lilaq) to plot directly in Typst. However, I share Janek Fleper's sentiment expressed [here](https://github.com/janekfleper/mpl2typ#why-not-a-typst-package) in that the heavy lifting for generating the layout of these plots isn't something Typst should do. I see Typst's role here just as someone who places my images in a text flow. I will continue to stick to Python for data exploration and also plotting via Matplotlib.
-
-
-## Literature with Hayagriva
-
-While Typst also supports a [BibLaTeX](https://typst.app/docs/reference/model/bibliography/) `.bib` file, I've tried out the new [Hayagriva](https://github.com/typst/hayagriva) format, which is a really simple YAML file that is nice to read and edit. Luckily, there is also an Online [converter](https://jonasloos.github.io/bibtex-to-hayagriva-webapp/) from BibTeX to Hayagriva since you will probably not find journals that offer you a Hayagriva citation export, yet ;)
-
-## Presentation
-
-For my Thesis defense (also called "colloquium"), I copied over some formulas from my Typst document to PowerPoint. For this purpose, I've developed [PPTypst](https://github.com/splines/pptypst), a powerful PowerPoint plugin that lets you insert and edit (!) Typst equations directly in PowerPoint. Here is how one of my slides looked like:
-
-<figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-1.jpg' | relative_url }}" />
-</figure>
-
-<figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-2.jpg' | relative_url }}" />
-</figure>
-
-<figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-3.jpg' | relative_url }}" />
-</figure>
-
-
-## Final words
-
-All in all, I was very happy with this fresh experience of writing a longer scientific document in Typst. The feedback cycle is amazing since you directly see the changes in almost real-time. I made heavy use of Myriad-Dreamin's [tinymist](https://myriad-dreamin.github.io/tinymist/), a language server for Typst (among others available as [VSCode extension](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist), where you could even pop up the preview pane and show it on `localhost` in your browser).
-
-Just like with LaTeX, of course I have to search for some code snippets on the web for specific things, but at least I can now understand them as they are written in a language close to Rust (i.e. modern), and not a macro-driven language like TeX. I'd much rather want to maintain a package in a language close to modern imperative programming languages than some backslash-hell, e.g. the great LaTeX package [siunitx](https://ctan.org/pkg/siunitx), but would you want to maintain [its code](https://github.com/josephwright/siunitx/blob/main/siunitx-unit.dtx)? Me not, I have a hard time even reading it. With Typst instead, I can build upon code I see online (e.g. in packages and other templates), and even build upon them, without despairing in mysterious compiler error messages and a backslash hell.
-
-I'm sticking with Typst and will only use LaTeX sparingly from now on.
