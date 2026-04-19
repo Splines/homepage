@@ -24,9 +24,13 @@ I didn't like the LaTeX template offered by our university too much, so I redesi
 
 Here is an overview over all packages from the [Typst Universe](https://typst.app/universe/) I've been using in my thesis:
 
+- [hydra](https://typst.app/universe/package/hydra) to easily set the page headings.
+
 - [Physica](https://typst.app/universe/package/physica) for easy math- and physics-related typesetting.
 
 - [Unify](https://typst.app/universe/package/unify) to format numbers and SI units.
+
+- [equate](https://typst.app/universe/package/equate) to label a single line in a multiline math expression.
 
 - [embiggen](https://typst.app/universe/package/embiggen) to use LaTeX-like delimiter sizing, e.g. `#big()` similar to `\big` in LaTeX.
 
@@ -92,6 +96,91 @@ Unfortunately, Typst doesn't offer global imports (upvote for [this issue](https
 ```txt
 #import "../imports.typ": *
 ```
+
+## Challenges & Solutions
+
+There were many tiny challenges I had to solve along the way. Luckily, the Typst community is very active and welcoming. In addition to a regular search in your favorite search engine, I recommend to also search in the [Typst Issues](https://github.com/typst/typst/issues) on GitHub (remember to remove `state:open` in the search bar as the issue could have already been closed) and to search in the [Typst Forum](https://forum.typst.app/) as well (there's a small search icon next to your profile picture).
+
+Here is an overview of challenges I faced & how I solved them:
+
+`chapter-intro`
+
+Enable heading-specific figure numbering and increase spacing.
+
+```txt
+#show figure: set block(spacing: 1.5em)
+#show figure: set figure(gap: 1.0em)
+#set figure(numbering: n => numbering("1.1", counter(heading).get().first(), n), gap: 1em)
+```
+
+Especially for multi-line figure captions, I want that the whole caption itself is centered on page, but the text inside is left-aligned. Solution from [here](https://forum.typst.app/t/how-to-center-caption-but-left-align-the-text-inside/2561).
+
+```txt
+#show figure.caption: it => {
+  align(box(align(it, left)), center)
+}
+```
+
+Show equations in a custom format. Solution from [here](https://github.com/typst/typst/discussions/1917#discussioncomment-6703472).
+
+```txt
+#show ref: it => {
+  if it.element != none and it.element.func() == math.equation {
+    // custom reference for equations
+    link(it.target)[(#it)]
+  } else {
+    it
+  }
+}
+```
+
+Disable numbering for 3rd level headings. Solution from [here](https://stackoverflow.com/a/77488450/).
+
+```txt
+#set heading(numbering: "1.1")
+#show heading.where(level: 3): it => [
+  #block(it.body)
+]
+```
+
+Table of contents styling.
+
+```txt
+#show outline: it => {
+  show heading: pad.with(bottom: 1em)
+  it
+}
+
+#show outline.entry: it => {
+  show linebreak: none
+  it
+}
+
+// Level 1 outline entries are bold and there is no fill
+#show outline.entry.where(level: 1): set outline.entry(fill: none)
+#show outline.entry.where(level: 1): set block(above: 1.35em)
+#show outline.entry.where(level: 1): set text(weight: "semibold")
+
+// Level 2 and 3 outline entries have a bigger gap and a dot fill
+#show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): set outline.entry(fill: repeat(
+  justify: true,
+  gap: 0.5em,
+)[.])
+
+#show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): it => link(
+  it.element.location(),
+  it.indented(
+    gap: 1em,
+    it.prefix(),
+    it.body() + box(width: 1fr, inset: (left: 5pt), it.fill) + box(width: 1.5em, align(right, it.page())),
+  ),
+)
+```
+
+
+## Last layout pass
+
+- manual `#v()` statements.
 
 
 
