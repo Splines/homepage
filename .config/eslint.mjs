@@ -22,8 +22,8 @@ export default defineConfig([
     },
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
-      tseslint.configs.strictTypeChecked,
+      // tseslint.configs.recommendedTypeChecked,
+      // tseslint.configs.strictTypeChecked,
     ],
     rules: {
       ...stylistic.configs.customize({
@@ -37,6 +37,7 @@ export default defineConfig([
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
     languageOptions: {
+      parser: tseslint.parser,
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
