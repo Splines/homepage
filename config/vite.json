@@ -1,0 +1,11 @@
+{
+  "all": {
+    "sourceCodeDir": "_frontend",
+    "watchAdditionalPaths": ["_layouts/**/*"]
+  },
+  "development": {
+    "autoBuild": true,
+    "publicOutputDir": "vite-dev",
+    "port": 3036
+  }
+}

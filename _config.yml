@@ -19,9 +19,15 @@ feed:
 # No theme: https://stackoverflow.com/a/57424621/
 
 plugins:
+  - jekyll/vite
   - jekyll-feed
 
 exclude:
+  - bin
+  - config
+  - vite.config.ts
+  - tmp
+  - Procfile.dev
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/
