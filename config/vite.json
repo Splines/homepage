@@ -1,6 +1,6 @@
 {
   "all": {
-    "sourceCodeDir": "_frontend",
+    "sourceCodeDir": "assets/vite",
     "watchAdditionalPaths": ["_layouts/**/*"]
   },
   "development": {
