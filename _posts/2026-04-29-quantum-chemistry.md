@@ -20,3 +20,5 @@ $$
 $$
 
 Ground state spatial wavefunction $\psi(r_1, r_2)$ for different values of $\lambda$ (adjust it by means of a slider).
+
+<div id="d3-wave" class="w-full h-96"></div>

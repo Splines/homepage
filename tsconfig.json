@@ -21,7 +21,7 @@
       "checkJs": true,
   },
   "include": [
-      "_posts/**/*.js",
-      "_posts/**/*.ts",
+      "assets/vite/**/*.js",
+      "assets/vite/**/*.ts",
   ],
 }
