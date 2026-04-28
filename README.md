@@ -1,5 +1,13 @@
 # The Splines/Splience homepage
 
+In a new workflow that combines Vite & Jekyll, all you have to do to locally get the homepage running is executing:
+
+```sh
+bin/dev
+```
+
+The "manual" old setup (without Vite) works as follows:
+
 Build locally
 
 ```bash
