@@ -1,9 +1,12 @@
+import css from "@eslint/css";
 import eslint from "@eslint/js";
 import html from "@html-eslint/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
 
-export default [
+export default defineConfig([
   {
     // Globally ignore the following paths
     ignores: [
@@ -13,11 +16,15 @@ export default [
     ],
   },
   {
-    files: ["**/*.js", "**/*.mjs"],
+    files: ["**/*.js", "**/*.mjs", "**/*.ts"],
     plugins: {
       "@stylistic": stylistic,
     },
-    ...eslint.configs.recommended,
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.recommendedTypeChecked,
+      tseslint.configs.strictTypeChecked,
+    ],
     rules: {
       ...stylistic.configs.customize({
         "indent": 2,
@@ -35,7 +42,19 @@ export default [
       globals: {
         ...globals.browser,
       },
+      parserOptions: {
+        // https://typescript-eslint.io/blog/project-service
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
+  },
+  {
+    // Disable type-checked linting
+    // https://typescript-eslint.io/troubleshooting/typed-linting/#how-do-i-disable-type-checked-linting-for-a-file
+    // https://typescript-eslint.io/troubleshooting/typed-linting/#i-get-errors-telling-me--was-not-found-by-the-project-service-consider-either-including-it-in-the-tsconfigjson-or-including-it-in-allowdefaultproject
+    files: ["**/*.js", "**/*.mjs", "**/*.mts"],
+    extends: [tseslint.configs.disableTypeChecked],
   },
   {
     files: ["**/*.html"],
@@ -77,4 +96,17 @@ export default [
       }],
     },
   },
-];
+  {
+    files: ["**/*.css"],
+    plugins: { css },
+    language: "css/css",
+    extends: [css.configs.recommended],
+    rules: {
+      "css/use-baseline": ["error", {
+        allowSelectors: ["nesting"],
+        allowProperties: ["user-select", "zoom", "resize"],
+      }],
+      "css/no-invalid-properties": ["error", { allowUnknownVariables: true }],
+    },
+  },
+]);

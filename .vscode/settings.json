@@ -12,20 +12,17 @@
     },
     "eslint.validate": [
       "javascript",
+      "typescript",
       "html",
     ],
-    "[javascript]": {
+    "[javascript,typescript,html,css]": {
         "editor.formatOnSave": false,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.indentSize": 2,
         "editor.tabSize": 2,
     },
-    "[html]": {
-      "editor.formatOnSave": false,
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.indentSize": 2,
-      "editor.tabSize": 2,
-    },
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
     "emmet.includeLanguages": {
       "erb": "html",
     },
