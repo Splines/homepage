@@ -12,8 +12,9 @@ const TICK_COUNT = 6;
 const LEGEND_TICK_COUNT = 5;
 
 export function createPlot(
-  container: d3.Selection<HTMLElement, unknown, HTMLElement, unknown>,
+  container: d3.Selection<HTMLDivElement, unknown, HTMLElement, unknown>,
   grid: GridData,
+  fixedMaxAbs: number,
 ): PlotHandle {
   // Sizing: square plot scaled to container width.
   const containerWidth = Math.max(container.node()?.clientWidth ?? 720, 420);
@@ -33,6 +34,9 @@ export function createPlot(
     .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
   const x = d3.scaleLinear().domain([0, 1]).range([0, plotSize]);
   const y = d3.scaleLinear().domain([0, 1]).range([plotSize, 0]);
+  const maxAbs = Math.max(fixedMaxAbs, 1e-12);
+  const color = d3.scaleDiverging<string>(d3.interpolateRdBu)
+    .domain([maxAbs, 0, -maxAbs]);
 
   // Density raster (one image; smooth via CSS image-rendering settings).
   const densityImage = plot.append("image")
@@ -64,15 +68,18 @@ export function createPlot(
   const legendY = 12;
   const legendWidth = 14;
   const legendHeight = plotSize - 24;
-  const legendScale = d3.scaleLinear().domain([-1, 1]).range([legendHeight, 0]);
+  const legendScale = d3.scaleLinear().domain([-maxAbs, maxAbs]).range([legendHeight, 0]);
   const legendAxis = d3.axisRight(legendScale).ticks(LEGEND_TICK_COUNT);
 
   const gradient = svg.append("defs").append("linearGradient")
     .attr("id", GRADIENT_ID)
     .attr("x1", "0%").attr("y1", "100%")
     .attr("x2", "0%").attr("y2", "0%");
-  gradient.selectAll("stop").data(["0%", "50%", "100%"]).join("stop")
-    .attr("offset", d => d);
+  gradient.selectAll("stop")
+    .data(d3.range(0, 1.0001, 1 / 16))
+    .join("stop")
+    .attr("offset", d => `${d * 100}%`)
+    .attr("stop-color", d => color(-maxAbs + d * 2 * maxAbs));
 
   plot.append("rect")
     .attr("class", "quantum-legend-bar")
@@ -104,9 +111,9 @@ export function createPlot(
   addLabel("quantum-axis-title quantum-axis-title-y", MARGIN.left - 38, MARGIN.top + plotSize / 2, tex`r_2`);
 
   // Legend title.
-  addLabel("quantum-legend-title", MARGIN.left + legendX + legendWidth / 2, MARGIN.top + legendY - 6, tex`\psi`);
+  addLabel("quantum-legend-title", MARGIN.left + legendX + legendWidth / 2, MARGIN.top + legendY - 13, tex`\psi`);
 
-  // Tick labels: rebuilt every render because legend domain changes with maxAbs.
+  // Tick labels are HTML overlays, so they stay sharp and never get clipped by SVG text boxes.
   const xTickLayer = labels.append("div").attr("class", "quantum-tick-layer");
   const yTickLayer = labels.append("div").attr("class", "quantum-tick-layer");
   const legendTickLayer = labels.append("div").attr("class", "quantum-tick-layer");
@@ -136,12 +143,14 @@ export function createPlot(
     () => MARGIN.left - 6, v => MARGIN.top + y(v),
     "quantum-tick-y",
   );
+  renderTickLabels(
+    legendTickLayer, legendScale.ticks(LEGEND_TICK_COUNT),
+    () => MARGIN.left + legendX + legendWidth + 8,
+    v => MARGIN.top + legendY + legendScale(v),
+    "quantum-tick-legend",
+  );
 
   const render = (solution: Solution): void => {
-    const maxAbs = Math.max(solution.maxAbs, 1e-12);
-    const color = d3.scaleDiverging<string>(d3.interpolateRdBu)
-      .domain([maxAbs, 0, -maxAbs]);
-
     // Paint density: psi[i*N + j] uses i = r1, j = r2. Image y axis is flipped.
     const image = ctx.createImageData(grid.nGrid, grid.nGrid);
     let p = 0;
@@ -157,19 +166,6 @@ export function createPlot(
     }
     ctx.putImageData(image, 0, 0);
     densityImage.attr("href", canvas.toDataURL("image/png"));
-
-    // Refresh legend gradient stops + ticks.
-    gradient.selectAll<SVGStopElement, string>("stop")
-      .data([color(-maxAbs), color(0), color(maxAbs)])
-      .attr("stop-color", d => d);
-    legendScale.domain([-maxAbs, maxAbs]);
-    legendAxisGroup.call(legendAxis).selectAll("text").remove();
-    renderTickLabels(
-      legendTickLayer, legendScale.ticks(LEGEND_TICK_COUNT),
-      () => MARGIN.left + legendX + legendWidth + 8,
-      v => MARGIN.top + legendY + legendScale(v),
-      "quantum-tick-legend",
-    );
   };
 
   return { render };

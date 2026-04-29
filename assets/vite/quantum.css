@@ -2,8 +2,9 @@
  * Quantum widget styles.
  *
  * Layout building blocks (top to bottom):
- *   .quantum-widget          – grid wrapper for controls + plot
- *     .quantum-controls      – heading, energy line, slider track
+ *   .quantum-widget          – post-level mount
+ *     .quantum-panel         – shared container for controls + plot
+ *       .quantum-controls    – heading, energy line, slider track
  *       .quantum-slider-track  – owns --thumb so ticks/value bubble align
  *     .quantum-plot          – positioned host: <svg> + KaTeX overlays
  *       .quantum-labels      – absolutely positioned KaTeX overlays
@@ -20,19 +21,23 @@
   --surface: #f4f8ff;
   --border: #d4deea;
 
-  display: grid;
-  gap: 1.25rem;
   width: 100%;
   margin: 2rem auto;
+}
+
+.quantum-panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 14px 32px rgb(17 36 71 / 10%);
+  overflow: visible;
 }
 
 .quantum-controls {
   display: grid;
   gap: 1rem;
-  padding: 1rem 1.1rem 1.4rem;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
+  padding: 1.1rem 1.2rem 1.35rem;
+  border-bottom: 1px solid rgb(126 149 181 / 30%);
 }
 
 .quantum-heading,
@@ -46,11 +51,14 @@
 
 .quantum-slider-track {
   position: relative;
-  padding-top: 1.6rem;   /* room for value bubble */
+  padding-top: 2rem;     /* room for value bubble */
   padding-bottom: 1.6rem; /* room for tick labels */
 }
 
 .quantum-slider {
+  position: relative;
+  z-index: 1;
+  display: block;
   width: 100%;
   margin: 0;
   cursor: pointer;
@@ -62,16 +70,23 @@
   position: absolute;
   left: calc(var(--thumb) / 2 + var(--p) * (100% - var(--thumb)));
   transform: translateX(-50%);
-  pointer-events: none;
 }
 
 .quantum-slider-value {
-  top: 0;
+  top: 0.05rem;
+  z-index: 2;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
   background: var(--accent);
   color: #fff;
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
   white-space: nowrap;
+}
+
+.quantum-slider-value:active {
+  cursor: grabbing;
 }
 
 .quantum-slider-value::after { /* little pointer toward the thumb */
@@ -96,6 +111,7 @@
   display: grid;
   justify-items: center;
   gap: 0.15rem;
+  pointer-events: none;
 }
 
 .quantum-slider-mark {
@@ -114,10 +130,8 @@
 .quantum-plot {
   position: relative;
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #fff;
-  overflow: hidden;
+  background: transparent;
+  overflow: visible;
 }
 
 .quantum-plot svg {

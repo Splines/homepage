@@ -20,14 +20,17 @@ function initialize(
 ): void {
   const grid = buildGridData(N_GRID);
   const cache = new Map<number, Solution>();
+  const maxLambdaSolution = solveGroundState(LAMBDA_MAX, grid);
   const tickValues = d3.range(LAMBDA_MIN, LAMBDA_MAX + 1, LAMBDA_TICK_STEP);
   const fraction = (lambda: number): number =>
     (lambda - LAMBDA_MIN) / (LAMBDA_MAX - LAMBDA_MIN);
+  cache.set(LAMBDA_MAX, maxLambdaSolution);
 
   container.selectAll("*").remove();
   container.classed("quantum-widget", true);
 
-  const controls = container.append("div").attr("class", "quantum-controls");
+  const panel = container.append("div").attr("class", "quantum-panel");
+  const controls = panel.append("div").attr("class", "quantum-controls");
 
   const heading = controls.append("div").attr("class", "quantum-heading");
   renderTex(heading.node(), tex`\text{Same-spin interacting wavefunction}`);
@@ -65,7 +68,7 @@ function initialize(
     .attr("class", "quantum-slider-label")
     .each(function (value) { renderTex(this as HTMLElement, tex`${value}`); });
 
-  const plot = createPlot(container, grid);
+  const plot = createPlot(panel, grid, maxLambdaSolution.maxAbs);
 
   const setSliderValue = (lambda: number): void => {
     sliderValue.style.setProperty("--p", `${fraction(lambda)}`);
@@ -82,6 +85,42 @@ function initialize(
     plot.render(solution);
     renderTex(energyText.node(), tex`E \approx ${solution.energy.toFixed(4)}\;\text{a.u.}`);
   };
+
+  const getThumbPixels = (): number => {
+    const sliderTrackNode = sliderTrack.node();
+    if (sliderTrackNode === null) return 0;
+
+    const rawThumb = getComputedStyle(sliderTrackNode).getPropertyValue("--thumb");
+    const thumbValue = parseFloat(rawThumb);
+    if (!Number.isFinite(thumbValue)) return 0;
+    if (rawThumb.trim().endsWith("px")) return thumbValue;
+
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    return thumbValue * rootFontSize;
+  };
+
+  const renderFromPointer = (clientX: number): void => {
+    const rect = slider.getBoundingClientRect();
+    const thumbPixels = getThumbPixels();
+    const trackStart = rect.left + thumbPixels / 2;
+    const trackWidth = Math.max(rect.width - thumbPixels, 1);
+    const pointerFraction = Math.min(Math.max((clientX - trackStart) / trackWidth, 0), 1);
+    const rawLambda = LAMBDA_MIN + pointerFraction * (LAMBDA_MAX - LAMBDA_MIN);
+    const lambda = Math.round(rawLambda / LAMBDA_STEP) * LAMBDA_STEP;
+    slider.value = String(lambda);
+    renderLambda(lambda);
+  };
+
+  sliderValue.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    sliderValue.setPointerCapture(event.pointerId);
+    renderFromPointer(event.clientX);
+  });
+  sliderValue.addEventListener("pointermove", (event) => {
+    if (sliderValue.hasPointerCapture(event.pointerId)) {
+      renderFromPointer(event.clientX);
+    }
+  });
 
   slider.addEventListener("input", () => renderLambda(Number(slider.value)));
   renderLambda(DEFAULT_LAMBDA);
