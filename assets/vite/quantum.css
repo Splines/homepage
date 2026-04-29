@@ -1,0 +1,170 @@
+/*
+ * Quantum widget styles.
+ *
+ * Layout building blocks (top to bottom):
+ *   .quantum-widget          – grid wrapper for controls + plot
+ *     .quantum-controls      – heading, energy line, slider track
+ *       .quantum-slider-track  – owns --thumb so ticks/value bubble align
+ *     .quantum-plot          – positioned host: <svg> + KaTeX overlays
+ *       .quantum-labels      – absolutely positioned KaTeX overlays
+ *
+ * Slider alignment trick:
+ *   The native range thumb sits at  thumb/2  ..  width - thumb/2 .
+ *   So a value with fraction p (0..1, exposed as CSS var --p) sits at
+ *   left = thumb/2 + p * (100% - thumb).
+ */
+
+.quantum-widget {
+  --thumb: 1.1rem;
+  --accent: #1452aa;
+  --surface: #f4f8ff;
+  --border: #d4deea;
+
+  display: grid;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.quantum-controls {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 1.1rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.quantum-heading,
+.quantum-energy {
+  color: #1a2e4f;
+  font-size: 1rem;
+  min-height: 1.4em;
+}
+
+/* --- Slider --- */
+
+.quantum-slider-track {
+  position: relative;
+  padding-top: 1.6rem;   /* room for value bubble */
+  padding-bottom: 1.6rem; /* room for tick labels */
+}
+
+.quantum-slider {
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.quantum-slider-value,
+.quantum-slider-tick {
+  position: absolute;
+  left: calc(var(--thumb) / 2 + var(--p) * (100% - var(--thumb)));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.quantum-slider-value {
+  top: 0;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.quantum-slider-value::after { /* little pointer toward the thumb */
+  content: "";
+  position: absolute;
+  bottom: -0.3rem;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--accent);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.quantum-slider-ticks {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1.4rem;
+}
+
+.quantum-slider-tick {
+  bottom: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+}
+
+.quantum-slider-mark {
+  width: 1px;
+  height: 0.45rem;
+  background: #7f95b5;
+}
+
+.quantum-slider-label {
+  color: #2c4874;
+  white-space: nowrap;
+}
+
+/* --- Plot --- */
+
+.quantum-plot {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.quantum-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.quantum-diagonal {
+  stroke: #111;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.55;
+}
+
+.quantum-legend-bar {
+  stroke: #333;
+  stroke-width: 0.6;
+}
+
+/* --- KaTeX overlays (axis titles, tick labels, legend title) --- */
+
+.quantum-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.quantum-label,
+.quantum-tick {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #1a2e4f;
+}
+
+.quantum-axis-title { font-size: 1.1rem; }
+.quantum-axis-title-y { transform: translate(-50%, -50%) rotate(-90deg); }
+.quantum-legend-title { font-size: 1.05rem; }
+
+.quantum-tick { font-size: 0.85rem; }
+.quantum-tick-x  { transform: translate(-50%, 0); }       /* anchor below axis */
+.quantum-tick-y  { transform: translate(-100%, -50%); }   /* right-align to axis */
+.quantum-tick-legend { transform: translate(0, -50%); }   /* left-align */
+
+/* Sizing tweaks for narrow screens */
+@media (max-width: 600px) {
+  .quantum-widget { --thumb: 1rem; }
+  .quantum-tick { font-size: 0.75rem; }
+  .quantum-axis-title { font-size: 1rem; }
+}

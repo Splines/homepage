@@ -1,13 +1,14 @@
 import * as d3 from "d3";
-import { buildGridData, solveGroundState } from "./quantum/solver";
-import { Solution } from "./quantum/solver";
+import { buildGridData, solveGroundState, type Solution } from "./quantum/solver";
 import { createPlot } from "./quantum/plot";
+import { renderTex, tex } from "./quantum/katex";
 
 const N_GRID = 42;
 const DEFAULT_LAMBDA = 10;
 const LAMBDA_MIN = 0;
 const LAMBDA_MAX = 200;
-const SLIDER_DEBOUNCE_MS = 0;
+const LAMBDA_STEP = 1;
+const LAMBDA_TICK_STEP = 25;
 
 const root = d3.select("#d3-wave") as d3.Selection<HTMLElement, unknown, HTMLElement, unknown>;
 if (!root.empty()) {
@@ -19,69 +20,69 @@ function initialize(
 ): void {
   const grid = buildGridData(N_GRID);
   const cache = new Map<number, Solution>();
+  const tickValues = d3.range(LAMBDA_MIN, LAMBDA_MAX + 1, LAMBDA_TICK_STEP);
+  const fraction = (lambda: number): number =>
+    (lambda - LAMBDA_MIN) / (LAMBDA_MAX - LAMBDA_MIN);
 
   container.selectAll("*").remove();
+  container.classed("quantum-widget", true);
 
-  const controls = container.append("div")
-    .style("display", "flex")
-    .style("align-items", "center")
-    .style("gap", "0.75rem")
-    .style("margin-bottom", "0.75rem")
-    .style("font-family", "ui-sans-serif, system-ui, sans-serif")
-    .style("font-size", "0.95rem");
+  const controls = container.append("div").attr("class", "quantum-controls");
 
-  controls.append("span").text("Same-spin interacting wavefunction");
-  const lambdaText = controls.append("span").text(`λ: ${DEFAULT_LAMBDA}`);
-  const energyText = controls.append("span").text("E ≈ computing…");
+  const heading = controls.append("div").attr("class", "quantum-heading");
+  renderTex(heading.node(), tex`\text{Same-spin interacting wavefunction}`);
 
-  const slider = controls.append("input")
+  const energyText = controls.append("div").attr("class", "quantum-energy");
+
+  // The slider track owns the `--thumb` CSS variable so the value bubble and
+  // tick marks can be positioned with one calc() that accounts for the thumb
+  // width, keeping every label visually aligned with the thumb.
+  const sliderTrack = controls.append("div").attr("class", "quantum-slider-track");
+
+  const sliderValue = sliderTrack.append("output")
+    .attr("class", "quantum-slider-value")
+    .attr("for", "quantum-lambda-slider")
+    .node() as HTMLOutputElement;
+
+  const slider = sliderTrack.append("input")
+    .attr("id", "quantum-lambda-slider")
+    .attr("class", "quantum-slider")
     .attr("type", "range")
     .attr("min", LAMBDA_MIN)
     .attr("max", LAMBDA_MAX)
-    .attr("step", 1)
+    .attr("step", LAMBDA_STEP)
     .attr("value", DEFAULT_LAMBDA)
-    .style("flex", "1 1 280px")
-    .style("max-width", "420px")
     .node() as HTMLInputElement;
+
+  const ticks = sliderTrack.append("div").attr("class", "quantum-slider-ticks")
+    .selectAll<HTMLDivElement, number>(".quantum-slider-tick")
+    .data(tickValues)
+    .join("div")
+    .attr("class", "quantum-slider-tick")
+    .style("--p", d => `${fraction(d)}`);
+  ticks.append("div").attr("class", "quantum-slider-mark");
+  ticks.append("div")
+    .attr("class", "quantum-slider-label")
+    .each(function (value) { renderTex(this as HTMLElement, tex`${value}`); });
 
   const plot = createPlot(container, grid);
 
-  let renderToken = 0;
-  let debounceHandle: number | undefined;
+  const setSliderValue = (lambda: number): void => {
+    sliderValue.style.setProperty("--p", `${fraction(lambda)}`);
+    renderTex(sliderValue, tex`\lambda = ${lambda}`);
+  };
 
-  const renderLambda = async (lambda: number): Promise<void> => {
-    const token = ++renderToken;
-    lambdaText.text(`λ: ${lambda}`);
-    energyText.text("E ≈ computing…");
-
-    // Yield to browser so the "computing…" label can paint before the
-    // potentially expensive solver call blocks the main thread.
-    await new Promise<void>((resolve) => {
-      window.requestAnimationFrame(() => resolve());
-    });
-    if (token !== renderToken) return;
-
+  const renderLambda = (lambda: number): void => {
+    setSliderValue(lambda);
     let solution = cache.get(lambda);
     if (solution === undefined) {
       solution = solveGroundState(lambda, grid);
       cache.set(lambda, solution);
     }
-    if (token !== renderToken) return;
-
     plot.render(solution);
-    energyText.text(`E ≈ ${solution.energy.toFixed(4)} a.u.`);
+    renderTex(energyText.node(), tex`E \approx ${solution.energy.toFixed(4)}\;\text{a.u.}`);
   };
 
-  slider.addEventListener("input", () => {
-    const lambda = Number(slider.value);
-    lambdaText.text(`λ: ${lambda}`);
-    if (debounceHandle !== undefined) {
-      window.clearTimeout(debounceHandle);
-    }
-    debounceHandle = window.setTimeout(() => {
-      void renderLambda(lambda);
-    }, SLIDER_DEBOUNCE_MS);
-  });
-
-  void renderLambda(DEFAULT_LAMBDA);
+  slider.addEventListener("input", () => renderLambda(Number(slider.value)));
+  renderLambda(DEFAULT_LAMBDA);
 }
