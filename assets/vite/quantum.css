@@ -1,25 +1,28 @@
 /*
  * Quantum widget styles.
  *
- * Layout building blocks (top to bottom):
- *   .quantum-widget          – post-level mount
+ * Layout:
+ *   .quantum-widget          – post-level mount, owns CSS variables
  *     .quantum-panel         – shared container for controls + plot
  *       .quantum-controls    – heading, energy line, slider track
- *       .quantum-slider-track  – owns --thumb so ticks/value bubble align
- *     .quantum-plot          – positioned host: <svg> + KaTeX overlays
- *       .quantum-labels      – absolutely positioned KaTeX overlays
+ *         .quantum-slider-track  – owns slider, value bubble and tick row
+ *       .quantum-plot        – positioned host: <svg> + KaTeX overlays
+ *         .quantum-labels    – absolutely positioned KaTeX overlays
  *
  * Slider alignment trick:
- *   The native range thumb sits at  thumb/2  ..  width - thumb/2 .
- *   So a value with fraction p (0..1, exposed as CSS var --p) sits at
- *   left = thumb/2 + p * (100% - thumb).
+ *   The native range thumb is fully styled below so its visible width
+ *   equals --thumb. A value with fraction p (0..1, exposed via --p) sits at
+ *     left = thumb/2 + p * (100% - thumb)
+ *   which exactly tracks the thumb's centre, including at p=0 and p=1.
  */
 
 .quantum-widget {
   --thumb: 1.1rem;
+  --track-height: 6px;
   --accent: #1452aa;
   --surface: #f4f8ff;
   --border: #d4deea;
+  --ink: #1a2e4f;
 
   width: 100%;
   margin: 2rem auto;
@@ -29,7 +32,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--surface);
-  box-shadow: 0 14px 32px rgb(17 36 71 / 10%);
+  box-shadow: 0 4px 14px rgb(17 36 71 / 7%);
   overflow: visible;
 }
 
@@ -42,7 +45,7 @@
 
 .quantum-heading,
 .quantum-energy {
-  color: #1a2e4f;
+  color: var(--ink);
   font-size: 1rem;
   min-height: 1.4em;
 }
@@ -51,18 +54,67 @@
 
 .quantum-slider-track {
   position: relative;
-  padding-top: 2rem;     /* room for value bubble */
-  padding-bottom: 1.6rem; /* room for tick labels */
+  padding-top: 2rem;       /* room for the value bubble + its pointer */
+  padding-bottom: 1.6rem;  /* room for tick labels                    */
 }
 
+/*
+ * Fully custom slider so the visible thumb width equals --thumb on every
+ * browser. Without this, native thumbs vary (~13–16px) and the tick / bubble
+ * positions drift at the extremes.
+ */
 .quantum-slider {
-  position: relative;
-  z-index: 1;
+  appearance: none;
+  -webkit-appearance: none;
   display: block;
   width: 100%;
+  height: var(--thumb);
   margin: 0;
+  padding: 0;
+  background: transparent;
   cursor: pointer;
-  accent-color: var(--accent);
+  position: relative;
+  z-index: 1;
+}
+
+.quantum-slider::-webkit-slider-runnable-track {
+  height: var(--track-height);
+  border-radius: calc(var(--track-height) / 2);
+  background: var(--border);
+}
+
+.quantum-slider::-moz-range-track {
+  height: var(--track-height);
+  border-radius: calc(var(--track-height) / 2);
+  background: var(--border);
+  border: none;
+}
+
+.quantum-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--thumb);
+  height: var(--thumb);
+  margin-top: calc((var(--track-height) - var(--thumb)) / 2);
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.quantum-slider::-moz-range-thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.quantum-slider:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .quantum-slider-value,
@@ -80,16 +132,13 @@
   background: var(--accent);
   color: #fff;
   cursor: grab;
-  pointer-events: auto;
   user-select: none;
   white-space: nowrap;
 }
 
-.quantum-slider-value:active {
-  cursor: grabbing;
-}
+.quantum-slider-value:active { cursor: grabbing; }
 
-.quantum-slider-value::after { /* little pointer toward the thumb */
+.quantum-slider-value::after { /* small pointer toward the thumb */
   content: "";
   position: absolute;
   bottom: -0.3rem;
@@ -164,7 +213,7 @@
 .quantum-tick {
   position: absolute;
   transform: translate(-50%, -50%);
-  color: #1a2e4f;
+  color: var(--ink);
 }
 
 .quantum-axis-title { font-size: 1.1rem; }
@@ -172,11 +221,10 @@
 .quantum-legend-title { font-size: 1.05rem; }
 
 .quantum-tick { font-size: 0.85rem; }
-.quantum-tick-x  { transform: translate(-50%, 0); }       /* anchor below axis */
-.quantum-tick-y  { transform: translate(-100%, -50%); }   /* right-align to axis */
-.quantum-tick-legend { transform: translate(0, -50%); }   /* left-align */
+.quantum-tick-x      { transform: translate(-50%, 0); }      /* below tick   */
+.quantum-tick-y      { transform: translate(-100%, -50%); }  /* right-align  */
+.quantum-tick-legend { transform: translate(0, -50%); }      /* left-align   */
 
-/* Sizing tweaks for narrow screens */
 @media (max-width: 600px) {
   .quantum-widget { --thumb: 1rem; }
   .quantum-tick { font-size: 0.75rem; }

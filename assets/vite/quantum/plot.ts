@@ -96,14 +96,13 @@ export function createPlot(
   const labels = host.append("div").attr("class", "quantum-labels");
   const px = (n: number): string => `${(n / svgWidth) * 100}%`;
   const py = (n: number): string => `${(n / svgHeight) * 100}%`;
-  const addLabel = (className: string, leftSvg: number, topSvg: number, latex: string): HTMLElement => {
+  const addLabel = (className: string, leftSvg: number, topSvg: number, latex: string): void => {
     const div = labels.append("div")
       .attr("class", `quantum-label ${className}`)
       .style("left", px(leftSvg))
       .style("top", py(topSvg))
       .node() as HTMLElement;
     renderTex(div, latex);
-    return div;
   };
 
   // Axis titles (centered on each axis).
