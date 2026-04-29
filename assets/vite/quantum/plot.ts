@@ -6,7 +6,7 @@ export interface PlotHandle {
 }
 
 const MARGIN = { top: 16, right: 84, bottom: 48, left: 56 };
-const N_THRESHOLDS = 18;
+const RASTER_UPSAMPLE = 1;
 
 export function createPlot(
   container: d3.Selection<HTMLElement, unknown, HTMLElement, unknown>,
@@ -36,6 +36,15 @@ export function createPlot(
   const x = d3.scaleLinear().domain([0, 1]).range([0, plotSize]);
   const y = d3.scaleLinear().domain([0, 1]).range([plotSize, 0]);
 
+  const densityImage = plot.append("image")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", plotSize)
+    .attr("height", plotSize)
+    .attr("preserveAspectRatio", "none");
+
+  densityImage.lower();
+
   plot.append("g")
     .attr("transform", `translate(0,${plotSize})`)
     .call(d3.axisBottom(x).ticks(6));
@@ -51,8 +60,6 @@ export function createPlot(
     .attr("text-anchor", "middle").style("font-size", "0.9rem")
     .text("r₂");
 
-  const contourLayer = plot.append("g");
-
   plot.append("line")
     .attr("x1", x(0)).attr("y1", y(0))
     .attr("x2", x(1)).attr("y2", y(1))
@@ -61,12 +68,14 @@ export function createPlot(
 
   const legend = createLegend(svg, plot, plotSize);
 
-  const contourPath = d3.geoPath(
-    d3.geoIdentity()
-      .scale(plotSize / (grid.nGrid - 1))
-      .reflectY(true)
-      .translate([0, plotSize]),
-  );
+  const rasterSize = (grid.nGrid - 1) * RASTER_UPSAMPLE + 1;
+  const rasterCanvas = document.createElement("canvas");
+  rasterCanvas.width = rasterSize;
+  rasterCanvas.height = rasterSize;
+  const rasterContext = rasterCanvas.getContext("2d");
+  if (rasterContext === null) {
+    throw new Error("Unable to initialize density raster context");
+  }
 
   const render = (solution: Solution): void => {
     const maxAbs = Math.max(solution.maxAbs, 1e-12);
@@ -74,22 +83,25 @@ export function createPlot(
       .scaleDiverging<string>(d3.interpolateRdBu)
       .domain([maxAbs, 0, -maxAbs]);
 
-    const values = transposeForContours(solution.psi, grid.nGrid);
-    const step = (2 * maxAbs) / N_THRESHOLDS;
-    const thresholds = d3.range(-maxAbs, maxAbs + step, step);
-    const contours = d3.contours()
-      .size([grid.nGrid, grid.nGrid])
-      .thresholds(thresholds)(Array.from(values));
+    const imageData = rasterContext.createImageData(rasterSize, rasterSize);
+    const data = imageData.data;
+    let pixel = 0;
+    for (let yPixel = 0; yPixel < rasterSize; yPixel += 1) {
+      const r2 = (rasterSize - 1 - yPixel) / RASTER_UPSAMPLE;
+      for (let xPixel = 0; xPixel < rasterSize; xPixel += 1) {
+        const r1 = xPixel / RASTER_UPSAMPLE;
+        const value = sampleBilinear(solution.psi, grid.nGrid, r1, r2);
+        const rgb = d3.rgb(color(value));
+        data[pixel] = rgb.r;
+        data[pixel + 1] = rgb.g;
+        data[pixel + 2] = rgb.b;
+        data[pixel + 3] = 255;
+        pixel += 4;
+      }
+    }
 
-    contourLayer
-      .selectAll<SVGPathElement, d3.ContourMultiPolygon>("path")
-      .data(contours)
-      .join("path")
-      .attr("d", d => contourPath(d) ?? "")
-      .attr("fill", d => color(d.value))
-      .attr("stroke", "#111")
-      .attr("stroke-opacity", 0.08)
-      .attr("stroke-width", 0.35);
+    rasterContext.putImageData(imageData, 0, 0);
+    densityImage.attr("href", rasterCanvas.toDataURL("image/png"));
 
     legend.update(maxAbs, color);
   };
@@ -148,17 +160,25 @@ function createLegend(
   };
 }
 
-// d3.contours expects values in row-major order with x varying fastest.
-// Our psi is stored as psi[i * N + j] with i = r1 index, j = r2 index;
-// to draw r1 along x and r2 along y, we transpose.
-function transposeForContours(psi: Float64Array, nGrid: number): Float64Array {
-  const values = new Float64Array(nGrid * nGrid);
-  let index = 0;
-  for (let j = 0; j < nGrid; j += 1) {
-    for (let i = 0; i < nGrid; i += 1) {
-      values[index] = psi[i * nGrid + j];
-      index += 1;
-    }
-  }
-  return values;
+function sampleBilinear(
+  psi: Float64Array,
+  nGrid: number,
+  x: number,
+  y: number,
+): number {
+  const x0 = Math.floor(x);
+  const y0 = Math.floor(y);
+  const x1 = Math.min(x0 + 1, nGrid - 1);
+  const y1 = Math.min(y0 + 1, nGrid - 1);
+  const tx = x - x0;
+  const ty = y - y0;
+
+  const q00 = psi[x0 * nGrid + y0];
+  const q10 = psi[x1 * nGrid + y0];
+  const q01 = psi[x0 * nGrid + y1];
+  const q11 = psi[x1 * nGrid + y1];
+
+  const top = q00 + tx * (q10 - q00);
+  const bottom = q01 + tx * (q11 - q01);
+  return top + ty * (bottom - top);
 }
