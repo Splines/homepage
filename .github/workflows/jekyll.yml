@@ -1,3 +1,4 @@
+# see also https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/
 name: Deploy Jekyll to Cloudflare Pages
 
 on:
@@ -52,9 +53,11 @@ jobs:
           name: built-site
           path: ./_site
 
+      # https://github.com/cloudflare/wrangler-action#deploy-your-pages-site-production--preview
       - name: Deploy to Cloudflare Pages
         id: deployment
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages publish ./_site --project-name=splines-homepage
