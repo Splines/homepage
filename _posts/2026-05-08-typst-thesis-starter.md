@@ -3,7 +3,7 @@ layout: page
 title: "Typst Thesis Starter"
 code: true
 excerpt: >
-  Spoiler: it was an awesome experience. Here, you can read my Thesis, and find out how I solved some challenges along the way.
+  A reusable template repository for writing your thesis in Typst. Based on the design of my Physics Bachelor Thesis. Fully customizable and ready to use.
 ---
 
 See the related [**GitHub repo**](https://github.com/Splines/typst-thesis-starter).
@@ -30,7 +30,6 @@ How does it work? Well, it's pretty simple: the main `thesis.typ` file makes use
 )
 
 #include "content/intro.typ"
-// and more Typst files in the content/ folder
 #bibliography("literature.yml")
 ```
 
