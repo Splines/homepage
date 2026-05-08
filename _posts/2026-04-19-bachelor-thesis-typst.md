@@ -24,6 +24,8 @@ This is my first bigger document I've ever written in [Typst](https://github.com
 
 I didn't like the [LaTeX template](https://physik.uni-heidelberg.de/downloads?lang=en#infoarea-398) offered by our university too much, so I redesigned my very own in Typst. For sure, there were some challenges to overcome, but overall it felt so much easier and more intuitive to do than in LaTeX. I've been using LaTeX intensively for more than 3 years. Its typesetting looks gorgeous and I think TeX revolutionized the scientific world, just like Gutenberg did with his letterpress printing. And while TeX will remain crucial for many years to come, there's no shame in trying out new things. Typst is finally a competitor that can stand up against LaTeX and is so much easier to use.
 
+Edit: In case you want to make use of this template for your own thesis, check out my [Typst Thesis Starter]({% link _posts/2026-05-08-typst-thesis-starter.md %}).
+
 ## Typst Packages
 
 Here I've listed all packages from the [Typst Universe](https://typst.app/universe/) I've been using in my thesis:
@@ -42,7 +44,7 @@ Here I've listed all packages from the [Typst Universe](https://typst.app/univer
 
 - [cetz](https://typst.app/universe/package/cetz) as drawing library similar to TikZ. Used for only one graphic (Figure 4.3). See more on drawing plots later.
 
-- [ctheorems](https://typst.app/universe/package/ctheorems) for theorem and definition boxes. I modified its source code to have a global theorem counter.
+- [ctheorems](https://typst.app/universe/package/ctheorems) for theorem and definition boxes. I modified its source code to have a global theorem counter. Edit: A user on reddit [pointed out](https://www.reddit.com/r/typst/comments/1sq3gsh/comment/oh5m13t) that ctheorems is no longer actively maintained and can be replaced by other packages like [theorion](https://typst.app/universe/package/theorion).
 
 - [booktabs](https://typst.app/universe/package/booktabs) to get the look and feel of tables typeset with LaTeX's Booktabs package.
 
