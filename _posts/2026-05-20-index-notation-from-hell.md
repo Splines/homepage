@@ -3,9 +3,11 @@ layout: page
 title: "Index notation from hell — and how to make it more fun"
 katex:
   enabled: true
+  macros:
+    \squaree: "{\\scriptstyle \\square}"
 custom_css: /assets/blog/2026-index-notation-from-hell/notation-comparison.css
 excerpt: >
-  TODO Excerpt
+  Annoyed by 1000 indices in your calculation? Let's introduce a more playful notation.
 ---
 
 I'm currently taking a course in General Relativity. One major, quite technical part of it is index notation, which can quickly get out of hand. In this harmless example, let's consider how the connection coefficients $\Gamma^\nu_{\mu\lambda}$ transform under a smooth change of coordinates $x^\mu \rightarrow x'^\mu(x)$:
@@ -23,7 +25,7 @@ $$
   \frac{\partial^2 x'^\nu}{\partial x^\rho \partial x^\gamma}
 $$
 
-We use greek letters to indicate the four dimensions ($0$,$1$,$2$,$3$) we sum over, in contrast to latin symbols, where one would just some over the spatial dimensions ($1$,$2$,$3$). The beauty of **Einstein's summation notation** is that we can leave out the summation symbols $\sum$; whenever we have a repeated index in one summand, we implicitly know that we have to sum over it. In the example above, such summation indices are $\rho$, $\gamma$ and $\sigma$.
+We use greek letters to indicate the four dimensions ($0$,$1$,$2$,$3$) we sum over, in contrast to latin symbols, where one would just some over the spatial dimensions ($1$,$2$,$3$). The beauty of *Einstein's summation notation* is that we can leave out the summation symbols $\sum$; whenever we have a repeated index in one summand, we implicitly know that we have to sum over it. In the example above, such summation indices are $\rho$, $\gamma$ and $\sigma$.
 
 ## Fresh indices
 
@@ -54,7 +56,7 @@ To not clash with existing notation, we should avoid using symbols like $\nabla$
 $$
 \circ
 \:\: \bullet
-\:\: \square
+\:\: \squaree
 \:\: \blacksquare
 \:\: \sim
 \:\: \alpha
@@ -72,6 +74,8 @@ $$
 $$
 
 The $\alpha$ should be understood as a placeholder for any greek latter. I don't want to ban them, just enrich the palette we can use. In the new notation used above, I find a lot easier to identify where the given indices $\bullet$ and $\circ$ occur on the right side and where we just have a sum with $\sim$. And it's just more fun to draw those basic shapes as indices.
+
+### Example: Covariant Derivative
 
 Let's see both notations in action to derive the expression of the covariant derivative. On wider screens, the usual notation sits on the left and the new symbols on the right:
 
@@ -135,3 +139,131 @@ $$
 </div>
 </div>
 
+## Derivatives
+
+Additionally, I wanted to reduce the effort of writing many derivatives with index notation, while also improving readability and clarity. Here is my suggestion:
+$$
+\frac{\partial x'^\bullet}{\partial x^\circ} =: \frac{\bullet^\prime}{\circ},
+\qquad
+\frac{\partial^2 x'^\bullet}{\partial x^\circ\partial x^\square} =: \frac{\bullet^\prime}{\circ \square}
+$$
+
+In particular,
+$$
+\frac{\circ^\prime}{\sim :}
+=
+\frac{\partial^2 x'^\circ}{\partial x^\sim\partial x^:}
+$$
+
+Can one confuse this with a regular fraction? I don't think so as we use indices in the nominator and denominator. Out of the context, it is clear what we mean.
+
+Now let's derive the transformation law from the fact that $\nabla_\mu V^\nu$ is a $(1,1)$-tensor.
+
+<div class="notation-comparison" markdown="1">
+<div class="notation-comparison__head">Only greek letters</div>
+<div class="notation-comparison__head">With new symbols and derivative shorthand</div>
+
+<div class="notation-comparison__cell" data-label="Only greek letters">
+$$
+\begin{align*}
+\nabla'_\mu V'^\nu
+&= \partial'_\mu V'^\nu + \Gamma'^\nu_{\mu\lambda}V'^\lambda\\
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \partial_\rho\!\left(\frac{\partial x'^\nu}{\partial x^\alpha}V^\alpha\right)
+ + \Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}V^\alpha\\
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial^2 x'^\nu}{\partial x^\rho\partial x^\alpha}V^\alpha\\
+&\quad + \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\alpha}\partial_\rho V^\alpha
+ + \Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}V^\alpha
+\end{align*}
+$$
+</div>
+
+<div class="notation-comparison__cell" data-label="With new symbols and derivative shorthand">
+$$
+\begin{align*}
+\nabla'_\bullet V'^\circ
+&= \partial'_\bullet V'^\circ + \Gamma'^\circ_{\bullet\square}V'^\square\\
+&= \frac{\sim}{\bullet^\prime}\partial_\sim\!\left(\frac{\circ^\prime}{:}V^:\right)
+ + \Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}V^:\\
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\sim :}V^:\\
+&\quad + \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}\partial_\sim V^:
+ + \Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}V^:
+\end{align*}
+$$
+</div>
+
+<div class="notation-comparison__bridge">
+Now enforce the tensor transformation law for $\nabla V$ and expand $\nabla_\sim V^:$ once more.
+</div>
+
+<div class="notation-comparison__cell" data-label="Only greek letters">
+$$
+\begin{align*}
+\nabla'_\mu V'^\nu
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\alpha}\nabla_\rho V^\alpha\\
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\alpha}
+   \left(\partial_\rho V^\alpha + \Gamma^\alpha_{\rho\gamma}V^\gamma\right)\\
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\alpha}\partial_\rho V^\alpha\\
+&\quad + \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\sigma}\Gamma^\sigma_{\rho\alpha}V^\alpha
+\end{align*}
+$$
+</div>
+
+<div class="notation-comparison__cell" data-label="With new symbols and derivative shorthand">
+$$
+\begin{align*}
+\nabla'_\bullet V'^\circ
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}\nabla_\sim V^:\\
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}
+   \left(\partial_\sim V^: + \Gamma^:_{\sim\alpha}V^\alpha\right)\\
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}\partial_\sim V^: + \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\alpha}\Gamma^\alpha_{\sim:}V^:
+\end{align*}
+$$
+</div>
+
+<div class="notation-comparison__bridge">
+The $\partial V$ terms are exactly the same on both sides. Cancel them, use that this holds for arbitrary $V$, then multiply by the inverse Jacobian.
+</div>
+
+<div class="notation-comparison__cell" data-label="Only greek letters">
+$$
+\begin{align*}
+\Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\sigma}\Gamma^\sigma_{\rho\alpha}
+ - \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial^2 x'^\nu}{\partial x^\rho\partial x^\alpha}\\
+\Rightarrow\qquad
+\Gamma'^\nu_{\mu\lambda}
+&= \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x^\gamma}{\partial x'^\lambda}
+   \frac{\partial x'^\nu}{\partial x^\sigma}\Gamma^\sigma_{\rho\gamma}\\
+&\quad - \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x^\gamma}{\partial x'^\lambda}
+   \frac{\partial^2 x'^\nu}{\partial x^\rho\partial x^\gamma}
+\end{align*}
+$$
+</div>
+
+<div class="notation-comparison__cell" data-label="With new symbols and derivative shorthand">
+$$
+\begin{align*}
+\Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\alpha}\Gamma^\alpha_{\sim:} - \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\sim:}\\
+\end{align*}
+$$
+
+$$
+\begin{aligned}
+\Gamma'^\circ_{\bullet\square}
+&= \frac{\sim}{\bullet^\prime}\frac{:}{\square^\prime}\frac{\circ^\prime}{\alpha}\Gamma^\alpha_{\sim:} - \frac{\sim}{\bullet^\prime}\frac{:}{\square^\prime}\frac{\circ^\prime}{\sim:}
+\end{aligned}
+$$
+</div>
+</div>
