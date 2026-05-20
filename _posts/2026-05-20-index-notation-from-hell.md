@@ -76,32 +76,32 @@ The $\alpha$ should be understood as a placeholder for any greek latter. I don't
 Let's see both notations in action to derive the expression of the covariant derivative. On wider screens, the usual notation sits on the left and the new symbols on the right:
 
 <div class="notation-comparison" markdown="1">
-<div class="notation-comparison__head">The "old" way using only greek letters</div>
-<div class="notation-comparison__head">The "new" way</div>
+<div class="notation-comparison__head">Only greek letters</div>
+<div class="notation-comparison__head">With new symbols</div>
 
-<div class="notation-comparison__cell" data-label='The "old" way using only greek letters'>
+<div class="notation-comparison__cell" data-label="Only greek letters">
 $$
 \begin{align*}
 \bigl(V = V^\nu \partial_\nu\bigr)
-&\Rightarrow \nabla_\mu V\\
+\Rightarrow \nabla_\mu V
 &= \nabla_\mu(V^\nu \partial_\nu)\\
 &= (\partial_\mu V^\nu) \partial_\nu + V^\nu \partial_\mu \partial_\nu\\
 \bigl(\partial_\mu \partial_\nu = \Gamma^\alpha_{\mu \nu} \partial_\alpha\bigr)
-&\Rightarrow \nabla_\mu V\\
+\Rightarrow \nabla_\mu V
 &= (\partial_\mu V^\nu) \partial_\nu + V^\nu \Gamma^\alpha_{\mu \nu} \partial_\alpha\\
 &= (\partial_\mu V^\beta + \Gamma^\beta_{\mu \nu} V^\nu) \partial_\beta
 \end{align*}
 $$
 </div>
-<div class="notation-comparison__cell" data-label='The "new" way'>
+<div class="notation-comparison__cell" data-label="With new symbols">
 $$
 \begin{align*}
 \bigl(V = V^\circ \partial_\circ\bigr)
-&\Rightarrow \nabla_\bullet V\\
+\Rightarrow \nabla_\bullet V
 &= \nabla_\bullet(V^\circ \partial_\circ)\\
 &= (\partial_\bullet V^\circ) \partial_\circ + V^\circ \partial_\bullet \partial_\circ\\
 \bigl(\partial_\bullet \partial_\circ = \Gamma^\sim_{\bullet \circ} \partial_\sim\bigr)
-&\Rightarrow \nabla_\bullet V\\
+\Rightarrow \nabla_\bullet V
 &= (\partial_\bullet V^\circ) \partial_\circ + V^\circ \Gamma^\sim_{\bullet \circ} \partial_\sim\\
 &= (\partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ) \partial_:
 \end{align*}
@@ -109,10 +109,10 @@ $$
 </div>
 
 <div class="notation-comparison__bridge">
-In component form, we then read off the same formula after one last dummy-index rename.
+In component form, we read off the same formula after a dummy index rename.
 </div>
 
-<div class="notation-comparison__cell" data-label='The "old" way using only greek letters'>
+<div class="notation-comparison__cell" data-label="Only greek letters">
 $$
 \begin{align*}
 (\nabla_\mu V)^\beta = \nabla_\mu V^\beta
@@ -123,7 +123,7 @@ $$
 $$
 </div>
 
-<div class="notation-comparison__cell" data-label='The "new" way'>
+<div class="notation-comparison__cell" data-label="With new symbols">
 $$
 \begin{align*}
 (\nabla_\bullet V)^: = \nabla_\bullet V^:
