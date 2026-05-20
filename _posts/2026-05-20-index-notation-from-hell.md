@@ -94,9 +94,36 @@ $$
 Therefore, in component form, we find (while renaming the index $:$ to $\circ$ to make this "input"-index more prominent in terms of size):
 $$
 \begin{align*}
-(\nabla_\bullet V)^:
+(\nabla_\bullet V)^: = \nabla_\bullet V^:
 &= \partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ\\
 \Rightarrow \nabla_\bullet V^\circ
 &= \partial_\bullet V^\circ + \Gamma^\circ_{\bullet \sim} V^\sim
 \end{align*}
 $$
+
+The "old" way using only greek letters:
+
+$$
+\begin{align*}
+\bigl(V = V^\nu \partial_\nu\bigr)
+&\Rightarrow
+\nabla_\mu V
+= \nabla_\mu(V^\nu \partial_\nu)
+= (\partial_\mu V^\nu) \partial_\nu + V^\nu \partial_\mu \partial_\nu\\
+\bigl(\partial_\mu \partial_\nu = \Gamma^\alpha_{\mu \nu} \partial_\alpha\bigr)
+&\Rightarrow
+\nabla_\mu V = (\partial_\mu V^\nu) \partial_\nu + V^\nu \Gamma^\alpha_{\mu \nu} \partial_\alpha
+= (\partial_\mu V^\beta + \Gamma^\beta_{\mu \nu} V^\nu) \partial_\beta
+\end{align*}
+$$
+
+Therefore, in component form, we find (while renaming the index $\beta$ to $\nu$):
+$$
+\begin{align*}
+(\nabla_\mu V)^\beta = \nabla_\mu V^\beta
+&= \partial_\mu V^\beta + \Gamma^\beta_{\mu \nu} V^\nu\\
+\Rightarrow \nabla_\mu V^\nu
+&= \partial_\mu V^\nu + \Gamma^\nu_{\mu \alpha} V^\alpha
+\end{align*}
+$$
+
