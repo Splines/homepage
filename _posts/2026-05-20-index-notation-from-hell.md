@@ -79,23 +79,23 @@ The new way:
 
 $$
 \begin{align*}
-V = V^\circ \partial_\circ
+\bigl(V = V^\circ \partial_\circ\bigr)
 &\Rightarrow
-\nabla_{\partial_\bullet}(V)
-= \nabla_{\partial_\bullet}(V^\circ \partial_\circ)
+\nabla_\bullet V
+= \nabla_\bullet(V^\circ \partial_\circ)
 = (\partial_\bullet V^\circ) \partial_\circ + V^\circ \partial_\bullet \partial_\circ\\
-\nabla_{\partial_\bullet} \partial_\circ =: \partial_\bullet \partial_\circ = \Gamma^\sim_{\bullet \circ} \partial_\sim
+\bigl(\partial_\bullet \partial_\circ = \Gamma^\sim_{\bullet \circ} \partial_\sim\bigr)
 &\Rightarrow
-\nabla_{\partial_\bullet}(V) = (\partial_\bullet V^\circ) \partial_\circ + V^\circ \Gamma^\sim_{\bullet \circ} \partial_\sim
+\nabla_\bullet V = (\partial_\bullet V^\circ) \partial_\circ + V^\circ \Gamma^\sim_{\bullet \circ} \partial_\sim
 = (\partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ) \partial_:
 \end{align*}
 $$
 
-Therefore, in component form, we find:
+Therefore, in component form, we find (while renaming the index $:$ to $\circ$ to make this "input"-index more prominent in terms of size):
 $$
 \begin{align*}
 (\nabla_\bullet V)^:
-&:= \partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ\\
+&= \partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ\\
 \Rightarrow \nabla_\bullet V^\circ
 &= \partial_\bullet V^\circ + \Gamma^\circ_{\bullet \sim} V^\sim
 \end{align*}
