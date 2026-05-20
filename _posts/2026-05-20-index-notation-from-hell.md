@@ -5,6 +5,7 @@ katex:
   enabled: true
   macros:
     \squaree: "{\\scriptstyle \\square}"
+    \blacksquaree: "{\\scriptstyle \\blacksquare}"
 custom_css: /assets/blog/2026-index-notation-from-hell/notation-comparison.css
 excerpt: >
   Annoyed by 1000 indices in your calculation? Let's introduce a more playful notation.
@@ -57,7 +58,7 @@ $$
 \circ
 \:\: \bullet
 \:\: \squaree
-\:\: \blacksquare
+\:\: \blacksquaree
 \:\: \sim
 \:\: \alpha
 \:\: :
@@ -172,10 +173,9 @@ $$
    \partial_\rho\!\left(\frac{\partial x'^\nu}{\partial x^\alpha}V^\alpha\right)
  + \Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}V^\alpha\\
 &= \frac{\partial x^\rho}{\partial x'^\mu}
-   \frac{\partial^2 x'^\nu}{\partial x^\rho\partial x^\alpha}V^\alpha\\
-&\quad + \frac{\partial x^\rho}{\partial x'^\mu}
-   \frac{\partial x'^\nu}{\partial x^\alpha}\partial_\rho V^\alpha
- + \Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}V^\alpha
+   \frac{\partial^2 x'^\nu}{\partial x^\rho\partial x^\alpha}V^\alpha + \frac{\partial x^\rho}{\partial x'^\mu}
+   \frac{\partial x'^\nu}{\partial x^\alpha}\partial_\rho V^\alpha\\
+   &\quad + \Gamma'^\nu_{\mu\lambda}\frac{\partial x'^\lambda}{\partial x^\alpha}V^\alpha
 \end{align*}
 $$
 </div>
@@ -187,9 +187,8 @@ $$
 &= \partial'_\bullet V'^\circ + \Gamma'^\circ_{\bullet\square}V'^\square\\
 &= \frac{\sim}{\bullet^\prime}\partial_\sim\!\left(\frac{\circ^\prime}{:}V^:\right)
  + \Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}V^:\\
-&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\sim :}V^:\\
-&\quad + \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}\partial_\sim V^:
- + \Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}V^:
+&= \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{\sim :}V^: + \frac{\sim}{\bullet^\prime}\frac{\circ^\prime}{:}\partial_\sim V^:\\
+&\quad +\Gamma'^\circ_{\bullet\square}\frac{\square^\prime}{:}V^:
 \end{align*}
 $$
 </div>
