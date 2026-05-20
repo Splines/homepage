@@ -14,12 +14,7 @@
   display: none;
 }
 
-// display:flex suppresses the anonymous block boxes that \n text-nodes
-// between the opening tag and the <span class="katex-display"> would otherwise
-// create, which added ~2em of spurious empty space at the bottom of each card.
 .notation-comparison__cell {
-  display: flex;
-  flex-direction: column;
   padding: 0.9em 0.95em;
   border: 1px solid #decebc;
   border-radius: 10px;
@@ -31,10 +26,6 @@
     content: attr(data-label);
     display: block;
     margin-bottom: 0.7em;
-    font-family: v.$serif-font;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #88593a;
   }
 
   .katex-display {
@@ -42,6 +33,14 @@
     overflow-x: auto;
     padding-bottom: 0.15em;
   }
+}
+
+.notation-comparison__head,
+.notation-comparison__cell::before {
+  font-family: v.$serif-font;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #88593a;
 }
 
 .notation-comparison__bridge {
@@ -63,10 +62,6 @@
   .notation-comparison__head {
     display: block;
     text-align: center;
-    font-family: v.$serif-font;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #88593a;
     margin-bottom: 0.15em;
   }
 
