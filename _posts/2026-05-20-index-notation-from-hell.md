@@ -3,6 +3,7 @@ layout: page
 title: "Index notation from hell — and how to make it more fun"
 katex:
   enabled: true
+custom_css: /assets/blog/2026-index-notation-from-hell/notation-comparison.css
 excerpt: >
   TODO Excerpt
 ---
@@ -23,7 +24,6 @@ $$
 $$
 
 We use greek letters to indicate the four dimensions ($0$,$1$,$2$,$3$) we sum over, in contrast to latin symbols, where one would just some over the spatial dimensions ($1$,$2$,$3$). The beauty of **Einstein's summation notation** is that we can leave out the summation symbols $\sum$; whenever we have a repeated index in one summand, we implicitly know that we have to sum over it. In the example above, such summation indices are $\rho$, $\gamma$ and $\sigma$.
-
 
 ## Fresh indices
 
@@ -73,51 +73,46 @@ $$
 
 The $\alpha$ should be understood as a placeholder for any greek latter. I don't want to ban them, just enrich the palette we can use. In the new notation used above, I find a lot easier to identify where the given indices $\bullet$ and $\circ$ occur on the right side and where we just have a sum with $\sim$. And it's just more fun to draw those basic shapes as indices.
 
-Let's see the new notation in action to derive the expression of the covariant derivative. On the left side with only greek letters, on the right side with the new symbols:
+Let's see both notations in action to derive the expression of the covariant derivative. On wider screens, the usual notation sits on the left and the new symbols on the right:
 
-The new way:
+<div class="notation-comparison" markdown="1">
+<div class="notation-comparison__head">The "old" way using only greek letters</div>
+<div class="notation-comparison__head">The "new" way</div>
 
-$$
-\begin{align*}
-\bigl(V = V^\circ \partial_\circ\bigr)
-&\Rightarrow
-\nabla_\bullet V
-= \nabla_\bullet(V^\circ \partial_\circ)
-= (\partial_\bullet V^\circ) \partial_\circ + V^\circ \partial_\bullet \partial_\circ\\
-\bigl(\partial_\bullet \partial_\circ = \Gamma^\sim_{\bullet \circ} \partial_\sim\bigr)
-&\Rightarrow
-\nabla_\bullet V = (\partial_\bullet V^\circ) \partial_\circ + V^\circ \Gamma^\sim_{\bullet \circ} \partial_\sim
-= (\partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ) \partial_:
-\end{align*}
-$$
-
-Therefore, in component form, we find (while renaming the index $:$ to $\circ$ to make this "input"-index more prominent in terms of size):
-$$
-\begin{align*}
-(\nabla_\bullet V)^: = \nabla_\bullet V^:
-&= \partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ\\
-\Rightarrow \nabla_\bullet V^\circ
-&= \partial_\bullet V^\circ + \Gamma^\circ_{\bullet \sim} V^\sim
-\end{align*}
-$$
-
-The "old" way using only greek letters:
-
+<div class="notation-comparison__cell" data-label='The "old" way using only greek letters'>
 $$
 \begin{align*}
 \bigl(V = V^\nu \partial_\nu\bigr)
-&\Rightarrow
-\nabla_\mu V
-= \nabla_\mu(V^\nu \partial_\nu)
-= (\partial_\mu V^\nu) \partial_\nu + V^\nu \partial_\mu \partial_\nu\\
+&\Rightarrow \nabla_\mu V\\
+&= \nabla_\mu(V^\nu \partial_\nu)\\
+&= (\partial_\mu V^\nu) \partial_\nu + V^\nu \partial_\mu \partial_\nu\\
 \bigl(\partial_\mu \partial_\nu = \Gamma^\alpha_{\mu \nu} \partial_\alpha\bigr)
-&\Rightarrow
-\nabla_\mu V = (\partial_\mu V^\nu) \partial_\nu + V^\nu \Gamma^\alpha_{\mu \nu} \partial_\alpha
-= (\partial_\mu V^\beta + \Gamma^\beta_{\mu \nu} V^\nu) \partial_\beta
+&\Rightarrow \nabla_\mu V\\
+&= (\partial_\mu V^\nu) \partial_\nu + V^\nu \Gamma^\alpha_{\mu \nu} \partial_\alpha\\
+&= (\partial_\mu V^\beta + \Gamma^\beta_{\mu \nu} V^\nu) \partial_\beta
 \end{align*}
 $$
+</div>
+<div class="notation-comparison__cell" data-label='The "new" way'>
+$$
+\begin{align*}
+\bigl(V = V^\circ \partial_\circ\bigr)
+&\Rightarrow \nabla_\bullet V\\
+&= \nabla_\bullet(V^\circ \partial_\circ)\\
+&= (\partial_\bullet V^\circ) \partial_\circ + V^\circ \partial_\bullet \partial_\circ\\
+\bigl(\partial_\bullet \partial_\circ = \Gamma^\sim_{\bullet \circ} \partial_\sim\bigr)
+&\Rightarrow \nabla_\bullet V\\
+&= (\partial_\bullet V^\circ) \partial_\circ + V^\circ \Gamma^\sim_{\bullet \circ} \partial_\sim\\
+&= (\partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ) \partial_:
+\end{align*}
+$$
+</div>
 
-Therefore, in component form, we find (while renaming the index $\beta$ to $\nu$):
+<div class="notation-comparison__bridge">
+In component form, we then read off the same formula after one last dummy-index rename.
+</div>
+
+<div class="notation-comparison__cell" data-label='The "old" way using only greek letters'>
 $$
 \begin{align*}
 (\nabla_\mu V)^\beta = \nabla_\mu V^\beta
@@ -126,4 +121,17 @@ $$
 &= \partial_\mu V^\nu + \Gamma^\nu_{\mu \alpha} V^\alpha
 \end{align*}
 $$
+</div>
+
+<div class="notation-comparison__cell" data-label='The "new" way'>
+$$
+\begin{align*}
+(\nabla_\bullet V)^: = \nabla_\bullet V^:
+&= \partial_\bullet V^: + \Gamma^:_{\bullet \circ} V^\circ\\
+\Rightarrow \nabla_\bullet V^\circ
+&= \partial_\bullet V^\circ + \Gamma^\circ_{\bullet \sim} V^\sim
+\end{align*}
+$$
+</div>
+</div>
 

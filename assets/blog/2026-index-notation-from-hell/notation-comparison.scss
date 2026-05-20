@@ -1,0 +1,88 @@
+---
+---
+
+@use "variables" as v;
+
+.notation-comparison {
+  margin: 1.4em -4% 1.8em;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.85em;
+}
+
+.notation-comparison__head {
+  display: none;
+}
+
+// display:flex suppresses the anonymous block boxes that \n text-nodes
+// between the opening tag and the <span class="katex-display"> would otherwise
+// create, which added ~2em of spurious empty space at the bottom of each card.
+.notation-comparison__cell {
+  display: flex;
+  flex-direction: column;
+  padding: 0.9em 0.95em;
+  border: 1px solid #decebc;
+  border-radius: 10px;
+  background: #fffaf5cc;
+  box-shadow: 0 0.1em 0.2em #00000010;
+
+  // Mobile: show column label above the equation
+  &::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.7em;
+    font-family: v.$serif-font;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #88593a;
+  }
+
+  .katex-display {
+    margin: 0;
+    overflow-x: auto;
+    padding-bottom: 0.15em;
+  }
+}
+
+.notation-comparison__bridge {
+  grid-column: 1 / -1;
+  padding: 0.5em 0;
+  text-align: center;
+  font-family: v.$serif-font;
+  font-size: 1rem;
+  color: #6e4d34;
+}
+
+@media (min-width: 820px) {
+  .notation-comparison {
+    margin-left: -6%;
+    margin-right: -6%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notation-comparison__head {
+    display: block;
+    text-align: center;
+    font-family: v.$serif-font;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #88593a;
+    margin-bottom: 0.15em;
+  }
+
+  .notation-comparison__cell {
+    &::before {
+      display: none;
+    }
+
+    .katex-display {
+      font-size: 0.88em;
+    }
+  }
+
+  .notation-comparison__bridge {
+    max-width: 34em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
