@@ -1,0 +1,102 @@
+---
+---
+
+@use "variables" as v;
+
+.notation-comparison {
+  margin: 1.4em -4% 1.8em;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 0.85em;
+  row-gap: 0;
+}
+
+.notation-comparison__head {
+  display: none;
+}
+
+.notation-comparison__cell {
+  padding: 0.9em 0.95em;
+  border: 1px solid #decebc;
+  border-radius: 10px;
+  background: #fffaf5cc;
+  box-shadow: 0 0.1em 0.2em #00000010;
+
+  // Mobile: show column label above the equation
+  &::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.7em;
+  }
+
+  .katex-display {
+    margin: 0;
+    overflow-x: auto;
+    padding-bottom: 0.15em;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.notation-comparison__head,
+.notation-comparison__cell::before {
+  font-family: v.$serif-font;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #88593a;
+}
+
+.notation-comparison__bridge {
+  grid-column: 1 / -1;
+  margin-top: 0.55em;
+  padding: 0.5em 0;
+  text-align: center;
+  font-family: v.$serif-font;
+  font-size: 1rem;
+  color: #6e4d34;
+}
+
+.notation-comparison__bridge + .notation-comparison__cell,
+.notation-comparison__bridge + .notation-comparison__cell + .notation-comparison__cell {
+  margin-top: 0.55em;
+}
+
+@media (max-width: 819.98px) {
+  .notation-comparison__cell + .notation-comparison__cell {
+    margin-top: 0.55em;
+  }
+}
+
+@media (min-width: 820px) {
+  .notation-comparison {
+    margin-left: -6%;
+    margin-right: -6%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notation-comparison__head {
+    display: block;
+    text-align: center;
+    margin-bottom: 0.15em;
+  }
+
+  .notation-comparison__cell {
+    &::before {
+      display: none;
+    }
+
+    .katex-display {
+      font-size: 0.88em;
+    }
+  }
+
+  .notation-comparison__bridge {
+    max-width: 34em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

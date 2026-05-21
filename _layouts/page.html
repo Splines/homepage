@@ -12,6 +12,10 @@
   <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/page.css' | absolute_url }}" rel="stylesheet">
 
+  {% if page.custom_css %}
+  <link href="{{ page.custom_css | absolute_url }}" rel="stylesheet">
+  {% endif %}
+
   {% if page.katex.enabled %}
   <link href="{{ '/assets/katex/katex.min.css' | absolute_url }}" rel="stylesheet">
   {% endif %}
