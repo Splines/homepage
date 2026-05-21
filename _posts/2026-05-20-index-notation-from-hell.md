@@ -1,6 +1,8 @@
 ---
 layout: page
 title: "Index notation from hell — and how to make it more fun"
+draft: true
+permalink: /blog/drafts/d040284e9b03
 katex:
   enabled: true
   macros:
