@@ -302,3 +302,5 @@ Now let's derive how the connection coefficients transform under a smooth change
   $$
   </div>
 </div>
+
+I'm curious to know what you think about this "enhancement" of an existing notation. It may take a bit of getting used to, but I find it easier and much more fun to write and read. I'm also happy to learn about edge cases where this notation might not work well in practice. If you have any suggestions for improvements, please let me know!
