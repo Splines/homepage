@@ -1,8 +1,6 @@
 ---
 layout: page
 title: "Index notation from hell — and how to make it more fun"
-draft: true
-permalink: /blog/drafts/d040284e9b03
 katex:
   enabled: true
   macros:
@@ -10,7 +8,7 @@ katex:
     \blacksquaree: "{\\scriptstyle \\blacksquare}"
 custom_css: /assets/blog/2026-index-notation-from-hell/notation-comparison.css
 excerpt: >
-  Annoyed by 1000 indices in your calculation? Let's introduce a more playful notation.
+  Annoyed by 1000 indices in your calculation? Let's introduce a more playful notation based on shapes. The covariant derivative serves as an example.
 ---
 
 I'm currently taking a course in General Relativity. One major, quite technical part of it is index notation, which can quickly get out of hand. In this harmless example, let's consider how the connection coefficients $\Gamma^\nu_{\mu\lambda}$ transform under a smooth change of coordinates $x^\mu \rightarrow x'^\mu(x)$:
@@ -34,10 +32,10 @@ We use greek letters to indicate the four dimensions ($0$,$1$,$2$,$3$) we sum ov
 
 However, with all these greek letters and their scrollwork, I personally find it hard to keep track of the overall structure of the formula and to identify where exactly one variable occurs again in another part. So let's make this better. I was motivated by Bret Victor's thought-provoking talk ["The Humane Representation of Thought"](https://dynamicland.org/2014/CDG_research_agendas/) where he states:
 
-> Leibniz was the UI designer of the 17th century. He was obsessed with notation, always trying out different notations, always talking with his friends about notation. Because he realized that a lot of the power in an idea lies in the form in which it's expressed, because that's what allows people to think it. ~ Bret Victor
+> Leibniz was the UI designer of the 17<sup>th</sup> century. He was obsessed with notation, always trying out different notations, always talking with his friends about notation. Because he realized that a lot of the power in an idea lies in the form in which it's expressed, because that's what allows people to think it. ~ Bret Victor
 
 
-Our "new" notation will look as follows, here on the example of the covariant derivative.
+Our "new" notation will look as follows, using the covariant derivative as an example.
 
 <div class="notation-comparison">
   <div class="notation-comparison__head">Only greek letters</div>
@@ -61,7 +59,7 @@ Our "new" notation will look as follows, here on the example of the covariant de
 
 </div>
 
-The *constraints* for the new notation are as follows:
+The *constraints* for the new notation are:
 
 - Should feature spatially easily recognizable shapes.
 - Should be quick to write (not take more time to write than greek symbols).
@@ -90,11 +88,11 @@ $$
 \:\: \wedge
 $$
 
-The $\alpha$ should be understood as a placeholder for any greek latter. I don't want to ban them, just enrich the palette we can use. In the above formula, with the new notation, I find easier to identify where the given indices $\bullet$ and $\circ$ occur on the right side and where we just have a summation over $\sim$. And it's just a lot more fun to draw these shapes as indices instead of greek letters.
+The $\alpha$ should be understood as a placeholder for any greek latter. I don't want to ban them, just enrich the palette we can use. In the above formula, with the new notation, I find it easier to identify where the given indices $\bullet$ and $\circ$ occur on the right side and where we just have a summation over $\sim$. And it's just a lot more fun to draw these shapes as indices instead of greek letters.
 
 ### Example: Covariant Derivative
 
-Let's see both notations in action to derive the expression of the covariant derivative. On wider screens, the usual notation sits on the left and the new symbols on the right.
+Let's see both notations in action to derive the expression of the covariant derivative. On wider screens, the usual notation sits on the left and the new symbols on the right. We make use of the Leibniz rule and the definition of the connection coefficients $\Gamma^\alpha_{\mu \nu}$ to expand $\nabla_\mu V$ in terms of partial derivatives and connection coefficients.
 
 <div class="notation-comparison">
   <div class="notation-comparison__head">Only greek letters</div>
@@ -159,7 +157,7 @@ Let's see both notations in action to derive the expression of the covariant der
 
 ## Partial derivatives
 
-Additionally, I wanted to reduce the effort of writing many partial derivatives in index notation, while also improving readability and clarity. Here is my suggestion. It should be clear from the context that this is not a regular fraction since we use _indices_ (with special symbols) as quantities for nominator and denominator.
+Additionally, I wanted to reduce the effort of writing many partial derivatives in index notation, while also improving readability and clarity. Here is my suggestion. It should be clear from the context that this is not a regular fraction since we use _indices_ (with special symbols) as quantities for the nominator and denominator.
 
 <div class="notation-comparison">
   <div class="notation-comparison__head">
@@ -305,4 +303,8 @@ Now let's derive how the connection coefficients transform under a smooth change
   </div>
 </div>
 
-I'm curious to know what you think about this "enhancement" of an existing notation. It may take a bit of getting used to, but I find it easier and much more fun to write and read. I'm also happy to learn about edge cases where this notation might not work well in practice. If you have any suggestions for improvements, please let me know!
+Note how the second derivative is the reason why the connection coefficients do not transform like a tensor.
+
+I'm curious to know what you think about this "enhancement" of an existing notation. Some of my fellow students were quite skeptical and didn't like, saying it wasn't an improvement. But I think it's a fun way to make the notation more intuitive and easier to read as my spatial recognition skills are better for shapes than for letters. I fully agree that it might take some time getting used to.
+
+Even with the new notation, index calculations are still technical and tedious, but at least they are a bit more enjoyable. I'm also happy to learn about edge cases where this notation might not work well in practice. If you have any suggestions for improvements, please let me know!
