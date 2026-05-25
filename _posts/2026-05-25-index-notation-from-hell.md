@@ -1,6 +1,7 @@
 ---
 layout: page
-title: "Index notation from hell — and how to make it more fun"
+title: "Index notation from hell – and how to make it more fun"
+title_on_page: "Index notation from hell –<br>and how to make it more fun"
 katex:
   enabled: true
   macros:
