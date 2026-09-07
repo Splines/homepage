@@ -1,4 +1,7 @@
-require 'execjs'
+# Uses mini_racer (in-process V8) directly rather than ExecJS: ExecJS's Node
+# runtime spawns a fresh `node` per call, and this hook makes one call per code
+# block, so a code-heavy post cost seconds of process-spawn overhead.
+require 'mini_racer'
 require 'cgi'
 
 module Prism
@@ -10,7 +13,8 @@ module Prism
 
     prism_code = File.read(PRISM_CORE_JS)
     prism_code += "\n" + File.read(PRISM_TYPST_JS)
-    JS_CTX = ::ExecJS.compile(prism_code)
+    JS_CTX = MiniRacer::Context.new
+    JS_CTX.eval(prism_code)
 
     # Jekyll wraps code blocks in <pre><code> tags
     CODE_REGEX = /<pre><code(.*?)class="language-(.*?)"(.*?)>(.*?)<\/code><\/pre>/m.freeze

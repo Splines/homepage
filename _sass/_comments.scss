@@ -1,0 +1,81 @@
+@use "variables" as v;
+
+.comments {
+  padding-top: 1.2em;
+}
+
+// Deliberately understated: the gate is a quiet footnote at the end of the article,
+// not a banner. It only needs to be readable and honest, not loud.
+.comments-consent {
+  padding-top: 1.5em;
+  border-top: 1px solid #e6dcd1;
+  text-align: center;
+}
+
+.comments-consent-text {
+  max-width: 33em;
+  margin: 0 auto;
+
+  font-size: 0.8rem;
+  line-height: 1.35rem;
+  color: #6b5646;
+}
+
+.comments-load {
+  margin-top: 1em;
+  padding: 0.35em 1.1em;
+
+  font-family: v.$serif-font;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #88593a;
+
+  background: transparent;
+  border: 1px solid #d9cabc;
+  border-radius: 0.35em;
+  cursor: pointer;
+
+  transition: color 200ms ease-in-out,
+    border-color 200ms ease-in-out,
+    background 200ms ease-in-out;
+
+  &:hover {
+    color: v.$primary;
+    border-color: v.$primary;
+    background: #00000005;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #88593a;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.55;
+  }
+}
+
+.comments-consent-note {
+  margin-top: 0.8em;
+  margin-bottom: 0;
+
+  font-size: 0.72rem;
+  color: #9c8b7d;
+
+  a {
+    color: inherit;
+    text-decoration-color: #d9cabc;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+}
+
+.comments-error {
+  margin-top: 0.8em;
+  margin-bottom: 0;
+  font-size: 0.78rem;
+  color: #8a2f1c;
+}

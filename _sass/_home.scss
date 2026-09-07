@@ -69,3 +69,22 @@ h2 {
 .post-excerpt {
   margin-top: 0.5em;
 }
+.legal-link {
+  margin-top: 0.4em;
+  font-family: v.$normal-font;
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+
+  a {
+    color: #8c7a6b;
+    text-decoration-color: #c9bbae;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+
+  .legal-link-hint {
+    color: #a3958a;
+  }
+}

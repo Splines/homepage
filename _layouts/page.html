@@ -28,24 +28,8 @@
   {% endif %}
 
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
+  {% vite_typescript_tag comments %}
 
-  <!-- Giscus Comments -->
-  <script async
-    crossorigin="anonymous"
-    data-category="Homepage comments"
-    data-category-id="DIC_kwDOOG9Rj84CvIU6"
-    data-emit-metadata="0"
-    data-input-position="top"
-    data-lang="en"
-    data-loading="lazy"
-    data-mapping="og:title"
-    data-reactions-enabled="1"
-    data-repo="splines/homepage"
-    data-repo-id="R_kgDOOG9Rjw"
-    data-strict="1"
-    data-theme="light"
-    src="https://giscus.app/client.js">
-  </script>
 </head>
 
 <body>
@@ -78,19 +62,41 @@
     <i>Back</i>
   </a>
 
-  {% unless site.url contains "localhost" %}
   {% unless page.draft %}
-  <div class="giscus container">
-    <!-- Comments rendered by Giscus -->
-  </div>
+  <section
+    class="container comments"
+    data-comments
+    data-giscus-category="Homepage comments"
+    data-giscus-category-id="DIC_kwDOOG9Rj84CvIU6"
+    data-giscus-emit-metadata="0"
+    data-giscus-input-position="top"
+    data-giscus-lang="en"
+    data-giscus-mapping="og:title"
+    data-giscus-reactions-enabled="1"
+    data-giscus-repo="splines/homepage"
+    data-giscus-repo-id="R_kgDOOG9Rjw"
+    data-giscus-strict="1"
+    data-giscus-theme="light"
+  >
 
-  <a class="return-back" href="/">
-    <svg>
-      <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
-    </svg>
-    <i>Back</i>
-  </a>
-  {% endunless %}
+    <div class="comments-consent">
+      <p class="comments-consent-text">
+        Comments are hosted by
+        <a href="https://giscus.app/" rel="noopener">giscus</a>
+        and GitHub. Loading them sends your IP address and browser data there, and GitHub
+        may set cookies.
+      </p>
+
+      <button type="button" class="comments-load">Load comments</button>
+
+      <p class="comments-consent-note">
+        Applies to this page only &middot;
+        <a href="{{ '/datenschutz/#comments' | relative_url }}">Privacy</a>
+      </p>
+    </div>
+
+    <div class="giscus"></div>
+  </section>
   {% endunless %}
 
   <div class="whitespace-below"></div>
