@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.disabled = true;
     button.textContent = "Loading comments…";
     loadGiscus(section, consent, button, target);
-  }, { once: true });
+  });
 });
 
 /**
