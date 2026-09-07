@@ -18,13 +18,13 @@ collections:
 
 feed:
   excerpt_only: true
-  disable_in_development: true
-  # Posts moved from the built-in `posts` collection to `blog`; point the main
-  # /feed.xml at it and park the (now empty) posts feed out of the way.
   collections:
     blog:
       path: /feed.xml
-  path: /feed/posts.xml
+    # jekyll-feed always emits a `posts` feed
+    # it is empty now, so we "hide" it at a side path here
+    posts:
+      path: /feed/posts.xml
 
 # No theme: https://stackoverflow.com/a/57424621/
 
