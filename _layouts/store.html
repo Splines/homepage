@@ -64,11 +64,17 @@
     </figure>
     {% endif %}
 
+    {% assign dodo_mode = "test" %}
     {% if jekyll.environment == "production" %}
     {% assign dodo_mode = "live" %}
+    {% endif %}
+    {% if site.dodo_force_mode %}
+    {% assign dodo_mode = site.dodo_force_mode %}
+    {% endif %}
+
+    {% if dodo_mode == "live" %}
     {% assign dodo_product = page.dodo_product_id_live %}
     {% else %}
-    {% assign dodo_mode = "test" %}
     {% assign dodo_product = page.dodo_product_id_test %}
     {% endif %}
 
@@ -78,6 +84,15 @@
         <button type="button" class="store-buy" data-buy>{{ page.buy_label | default: "Buy now" }}</button>
         <span class="store-tax-note">plus VAT / sales tax where applicable</span>
       </div>
+
+      {% if dodo_mode == "live" and jekyll.environment != "production" %}
+      <p class="store-checkout-warning">
+        <strong>Live mode forced locally.</strong>
+        This checkout takes <em>real</em> payments and test cards will be declined. Apply
+        your 100% discount code before paying, then comment out
+        <code>dodo_force_mode</code> in <code>_config.yml</code> again.
+      </p>
+      {% endif %}
 
       <p class="store-purchase-note">
         One-time purchase, includes all future updates for life.

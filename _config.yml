@@ -21,6 +21,14 @@ collections:
     output: true
     permalink: /store/:path/
 
+# Forces the Dodo Payments checkout into a given mode ("test" or "live"), overriding the
+# default (`jekyll serve` -> test, production build -> live). Use it to rehearse the live
+# checkout locally; the store page shows a warning banner while it is active.
+#
+# ⚠️ Comment this out again when you are done — otherwise `bin/dev` keeps taking REAL
+# payments, and test cards will be declined. Requires a restart of `bin/dev` to apply.
+# dodo_force_mode: live
+
 feed:
   excerpt_only: true
   disable_in_development: true

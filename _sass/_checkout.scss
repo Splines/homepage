@@ -158,6 +158,26 @@
   }
 }
 
+// Only rendered when `dodo_force_mode` puts a local build into live mode, where a
+// mistaken purchase would be a real charge.
+.store-checkout-warning {
+  margin: 0.9em 0 0;
+  padding: 0.7em 0.9em;
+
+  font-size: 0.78rem;
+  line-height: 1.35rem;
+  color: #7a2718;
+
+  background: #fdf0e6;
+  border: 1px solid #e0a894;
+  border-radius: 0.4em;
+
+  code {
+    font-family: v.$code-font;
+    font-size: 0.95em;
+  }
+}
+
 .store-checkout-status {
   margin: 0.8em 0 0;
   font-size: 0.8rem;
