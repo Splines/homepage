@@ -208,13 +208,6 @@ title_on_page: Datenschutz
       residence, place of work or place of the alleged infringement (Art. 77 GDPR).
     </p>
 
-    {% comment %}
-    Heidelberg is in Baden-Wuerttemberg, so the LfDI BW is the competent authority.
-    NOTE: this authority MOVED on 22 December 2025 from Lautenschlagerstrasse 20 to
-    Heilbronner Strasse 35. Most Impressum/privacy templates online still print the old
-    Lautenschlagerstrasse address -- do not "correct" it back.
-    Verified against baden-wuerttemberg.datenschutz.de on 7 September 2026.
-    {% endcomment %}
     <p>
       The supervisory authority responsible for me, as I am based in Baden-Württemberg, is:
     </p>
@@ -304,14 +297,6 @@ title_on_page: Datenschutz
       and whether the website loads quickly enough.
     </p>
 
-    {% comment %}
-    This script is injected by CLOUDFLARE AT THE EDGE -- it is not in this repository, so
-    do not go looking for it in the source. It is switched on in the Cloudflare dashboard
-    under Web Analytics, and that is also the only place it can be switched off.
-    Because the injection happens after your HTML leaves the build, a click-to-load or
-    consent gate in your own markup CANNOT suppress it. See my notes in the chat about
-    the section 25 TDDDG question before you decide to keep it.
-    {% endcomment %}
     <h3>How it is embedded</h3>
 
     <p>
@@ -388,12 +373,6 @@ title_on_page: Datenschutz
       Corporation.
     </p>
 
-    {% comment %}
-    This matches the click-to-load gate in _layouts/page.html + assets/js/comments.js.
-    If you ever revert to auto-loading the script, this section and the legal basis below
-    MUST be rewritten back to a legitimate-interest description -- a privacy policy that
-    describes something your site does not do is worse than none.
-    {% endcomment %}
     <h3>What happens, and when</h3>
 
     <p>
@@ -507,16 +486,6 @@ title_on_page: Datenschutz
       cannot be ruled out that US authorities may access such data.
     </p>
 
-    {% comment %}
-    Certification status verified on 7 September 2026 against each company's own privacy
-    policy. GitHub, Inc. holds its OWN certification -- it is deliberately NOT covered by
-    the Microsoft Corporation umbrella certification, so do not merge the two into
-    "Microsoft/GitHub".
-    Re-check occasionally at dataprivacyframework.gov: certifications can be withdrawn,
-    and the adequacy decision itself is under legal challenge (a successor to the
-    Schrems cases). If a provider ever drops off the list, delete the sentence naming it
-    -- the Standard Contractual Clauses sentence then carries the transfer on its own.
-    {% endcomment %}
     <p>
       These transfers are safeguarded as follows. Both
       <strong>Cloudflare, Inc.</strong> and <strong>GitHub, Inc.</strong> have
