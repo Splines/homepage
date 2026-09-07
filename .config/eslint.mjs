@@ -2,8 +2,10 @@ import eslint from "@eslint/js";
 import html from "@html-eslint/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
 
-export default [
+export default defineConfig([
   {
     // Globally ignore the following paths
     ignores: [
@@ -13,11 +15,15 @@ export default [
     ],
   },
   {
-    files: ["**/*.js", "**/*.mjs"],
+    files: ["**/*.js", "**/*.mjs", "**/*.ts"],
     plugins: {
       "@stylistic": stylistic,
     },
-    ...eslint.configs.recommended,
+    extends: [
+      eslint.configs.recommended,
+      // tseslint.configs.recommendedTypeChecked,
+      // tseslint.configs.strictTypeChecked,
+    ],
     rules: {
       ...stylistic.configs.customize({
         "indent": 2,
@@ -30,12 +36,24 @@ export default [
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
     languageOptions: {
+      parser: tseslint.parser,
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.browser,
       },
+      parserOptions: {
+        // https://typescript-eslint.io/blog/project-service
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
+  },
+  {
+    // Disable type-checked linting for plain JS config files.
+    // https://typescript-eslint.io/troubleshooting/typed-linting/#how-do-i-disable-type-checked-linting-for-a-file
+    files: ["**/*.js", "**/*.mjs", "**/*.mts"],
+    extends: [tseslint.configs.disableTypeChecked],
   },
   {
     files: ["**/*.html"],
@@ -65,7 +83,7 @@ export default [
         closeStyle: "newline",
         ifAttrsMoreThan: 5,
       }],
-      "@html-eslint/element-newline": ["error", { skip: ["pre", "code"] }, { inline: ["$inline"] }],
+      "@html-eslint/element-newline": ["error", { skip: ["pre", "code"], inline: ["$inline"] }],
       "@html-eslint/id-naming-convention": ["error", "kebab-case"],
       "@html-eslint/indent": ["error", 2, { tagChildrenIndent: { html: 0 } }],
       "@html-eslint/sort-attrs": "error",
@@ -77,4 +95,4 @@ export default [
       }],
     },
   },
-];
+]);

@@ -22,7 +22,8 @@ or short:
 jekyll s -Il
 ```
 
-Then, access on [`localhost:4000`](http://localhost:4000) instead of `127.0.0.1:4000` to avoid local CORS errors.
+The site is then reachable at both [`localhost:4000`](http://localhost:4000) and `127.0.0.1:4000`
+(on-site assets use `relative_url`, so no host-mismatch / CORS issues).
 
 ## How to publish drafts for others to review
 
