@@ -86,6 +86,16 @@ to JavaScript in their [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) pr
 
 <div class="doc-panel" data-doc-panel="manual" hidden markdown="1">
 
+## Installation
+
+1. Download the `TypstRider.zip` (it is sent to you by email after checkout).
+2. In Cavalry navigate to `Scripts > Show Scripts Folder`.
+3. Drag the `TypstRider.zip` into the Scripts folder and unzip its contents in-place.<br>
+The `TypstRider.js` file should be in the root of the Scripts folder, and the `typstrider_assets` folder should be alongside it. If you want to, you can delete the `TypstRider.zip` now.
+4. In Cavalry navigate to `Scripts > TypstRider`.
+
+Upon first use, you may be asked to allow network access. This is needed for downloading packages from the Typst Universe the first time you use them. After that, everything runs locally. You might also want to click on the "Reset" button of TypstRider to ensure that the settings are in a clean state.
+
 ## Examples
 
 If you're new to Typst, their [Getting Started](https://typst.app/docs/tutorial/)
