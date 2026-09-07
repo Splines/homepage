@@ -10,6 +10,8 @@ youtube_id: "JHCOSNE2JkU"
 video_title: "TypstRider teaser"
 price: "18 €"
 buy_label: "Buy"
+dodo_product_id_test: "pdt_0Nn1eRhajGZz1V6UUPx8F"
+dodo_product_id_live: "pdt_0Nn7F12p1FYerNKuKB3JS"
 ---
 
 <div class="doc-panel" data-doc-panel="overview" markdown="1">

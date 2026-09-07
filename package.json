@@ -10,5 +10,8 @@
     "typescript-eslint": "^8.59.1",
     "vite": "^8.2.2",
     "vite-plugin-ruby": "^5.2.3"
+  },
+  "dependencies": {
+    "dodopayments-checkout": "1.9.9"
   }
 }

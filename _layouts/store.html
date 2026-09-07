@@ -21,6 +21,10 @@
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
   {% vite_typescript_tag store %}
   {% vite_typescript_tag comments %}
+
+  {% if page.dodo_product_id_test or page.dodo_product_id_live %}
+  {% vite_typescript_tag checkout %}
+  {% endif %}
 </head>
 
 <body>
@@ -60,17 +64,55 @@
     </figure>
     {% endif %}
 
-    <div class="store-purchase">
+    {% if jekyll.environment == "production" %}
+    {% assign dodo_mode = "live" %}
+    {% assign dodo_product = page.dodo_product_id_live %}
+    {% else %}
+    {% assign dodo_mode = "test" %}
+    {% assign dodo_product = page.dodo_product_id_test %}
+    {% endif %}
+
+    <div class="store-purchase" data-dodo-mode="{{ dodo_mode }}" data-dodo-product="{{ dodo_product }}">
       <div class="store-purchase-main">
         <span class="store-price">{{ page.price }}</span>
         <button type="button" class="store-buy" data-buy>{{ page.buy_label | default: "Buy now" }}</button>
         <span class="store-tax-note">plus VAT / sales tax where applicable</span>
       </div>
+
       <p class="store-purchase-note">
         One-time purchase, includes all future updates for life.
         <br>
         A download link is sent to you by email after checkout.
       </p>
+
+      <p class="store-checkout-consent" data-checkout-notice>
+        Payments are processed by
+        <a href="https://dodopayments.com" rel="noopener">Dodo Payments</a>,
+        the merchant of record. Pressing &ldquo;{{ page.buy_label | default: "Buy now" }}&rdquo;
+        loads a checkout frame from dodopayments.com and sends your IP address there.
+      </p>
+
+      <div class="store-checkout" data-checkout>
+        <div class="store-checkout-clip">
+          <div class="store-checkout-inner">
+            <div class="store-checkout-head">
+              <span class="store-checkout-title">Checkout</span>
+              <button type="button" class="store-checkout-close" data-checkout-close>Cancel</button>
+            </div>
+
+            <div class="store-checkout-frame" data-checkout-frame>
+              <div class="store-checkout-spinner" data-checkout-spinner>
+                <span class="store-checkout-spinner-ring" aria-hidden="true"></span>
+                <span class="store-checkout-spinner-label" role="status">Loading secure checkout&hellip;</span>
+              </div>
+
+              <div id="dodo-inline-checkout"></div>
+            </div>
+
+            <p class="store-checkout-status" data-checkout-status hidden></p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
