@@ -65,3 +65,4 @@ task = lambda { |doc|
 
 Jekyll::Hooks.register(:blog, :post_convert, &task)
 Jekyll::Hooks.register(:pages, :post_convert, &task)
+Jekyll::Hooks.register(:store, :post_convert, &task)

@@ -15,6 +15,11 @@ collections:
   blog:
     output: true
     permalink: /blog/:path/
+  # Store products live in `_store/<slug>/` and bundle their assets with them.
+  # See also _plugins/store_bundles.rb.
+  store:
+    output: true
+    permalink: /store/:path/
 
 feed:
   excerpt_only: true

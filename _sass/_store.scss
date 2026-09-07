@@ -1,0 +1,240 @@
+@use "variables" as v;
+
+// The demo video, intentionally a touch wider than the text column, echoing the
+// oversized figures used in the blog posts.
+.store-video {
+  position: relative;
+  display: flex;
+  aspect-ratio: 16 / 9;
+  margin: 1.8em 0;
+  overflow: hidden;
+
+  border-radius: 6px;
+  box-shadow: 0 0.1em 0.2em #00000015;
+  background: #f1e7de;
+
+  @media (min-width: 720px) {
+    margin-left: -9%;
+    margin-right: -9%;
+  }
+
+  @media (min-width: 1000px) {
+    margin-left: -15%;
+    margin-right: -15%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+// Override the global `_page.scss` image styling for the poster.
+.store-video-poster {
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.store-video-empty {
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-family: v.$serif-font;
+    color: #8c7a6b;
+  }
+}
+
+// Consent bar pinned to the lower edge of the poster. Nothing is requested from
+// YouTube until the button is pressed.
+.store-video-gate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 0.9em;
+  padding: 1.5em 1.1em 0.9em;
+
+  background: linear-gradient(to top, #000000e0 0%, #000000cc 45%, #0000006b 80%, #00000000 100%);
+}
+
+.store-video-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-shrink: 0;
+  padding: 0.5em 1.1em;
+
+  font-family: v.$serif-font;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff7f0;
+
+  background: v.$primary;
+  border: 2px solid #fff7f0;
+  border-radius: 0.4em;
+  box-shadow: 0 0.15em 0.5em #00000059;
+  cursor: pointer;
+  transition: background 150ms ease-in-out, transform 150ms ease-in-out;
+
+  &:hover {
+    background: #6b4c34;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff7f0;
+    outline-offset: 2px;
+  }
+}
+
+.store-video-play-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.42em 0 0.42em 0.72em;
+  border-color: transparent transparent transparent #fff7f0;
+}
+
+.store-video-consent {
+  flex: 1 1 16em;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.2rem;
+  color: #f0e6dc;
+}
+
+// Price + buy button.
+.store-purchase {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7em;
+
+  margin: 1.6em 0 2.4em;
+  padding: 1.1em 1.3em;
+
+  border: 2px solid v.$primary;
+  border-radius: 0.6em;
+  background: #00000006;
+}
+
+.store-purchase-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7em 1em;
+}
+
+.store-price {
+  display: inline-flex;
+  align-items: center;
+
+  font-family: v.$serif-font;
+  font-weight: 700;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: v.$primary;
+
+  // Optical alignment: the serif numerals sit high in their line box, so nudge
+  // them down to line up with the button's text.
+  transform: translateY(0.06em);
+}
+
+.store-buy {
+  padding: 0.55em 1.4em;
+
+  font-family: v.$serif-font;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff7f0;
+
+  background: v.$primary;
+  border: 1px solid v.$primary;
+  border-radius: 0.4em;
+  cursor: pointer;
+  transition: background 150ms ease-in-out, transform 150ms ease-in-out;
+
+  &:hover {
+    background: #6b4c34;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid v.$primary;
+    outline-offset: 2px;
+  }
+}
+
+.store-purchase-note {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.35rem;
+  color: #6b5646;
+}
+
+// Overview / Manual / Releases switcher.
+.doc-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 1.8em;
+}
+
+.doc-tab {
+  padding: 0.4em 1em;
+
+  font-family: v.$serif-font;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #88593a;
+
+  background: transparent;
+  border: 1px solid #d9cabc;
+  border-radius: 0.35em;
+  cursor: pointer;
+  transition: color 200ms ease-in-out,
+    border-color 200ms ease-in-out,
+    background 200ms ease-in-out;
+
+  &:hover {
+    color: v.$primary;
+    border-color: v.$primary;
+    background: #00000005;
+  }
+
+  &:focus-visible {
+    outline: 2px solid v.$primary;
+    outline-offset: 2px;
+  }
+
+  &[aria-selected="true"] {
+    color: #fff7f0;
+    background: v.$primary;
+    border-color: v.$primary;
+  }
+}
+
+.store-disclaimer {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #5a4636;
+}
+
+.doc-content h2:first-child {
+  padding-top: 0;
+}

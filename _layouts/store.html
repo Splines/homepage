@@ -1,0 +1,96 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>{{ page.title }} – {{ site.title }}</title>
+  {% vite_client_tag %}
+  <meta content="{{ page.title }}" property="og:title">
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
+
+  {% if page.code %}
+  <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
+  <script defer src="{{ '/assets/js/code.js' | relative_url }}"></script>
+  {% endif %}
+
+  <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
+  {% vite_typescript_tag store %}
+</head>
+
+<body>
+  <article class="container store">
+
+    <header>
+      <h1>{{ page.title_on_page | default: page.title }}</h1>
+      {% if page.tagline %}
+      <p>{{ page.tagline }}</p>
+      {% endif %}
+    </header>
+
+    <hr class="header-content-separator">
+
+    {% if page.preview_image %}
+    <figure class="store-video" data-video data-video-id="{{ page.youtube_id }}" data-video-title="{{ page.video_title | default: page.title | xml_escape }}">
+      <img class="store-video-poster" alt="{{ page.preview_alt | default: page.title | xml_escape }}" src="{{ page.url | append: page.preview_image | relative_url }}">
+
+      {% if page.youtube_id and page.youtube_id != "" %}
+      <div class="store-video-gate">
+        <button type="button" class="store-video-play" data-video-play>
+          <span class="store-video-play-icon" aria-hidden="true"></span>
+          Play teaser
+        </button>
+        <p class="store-video-consent">
+          Loads the video from YouTube (Google), which then receives your IP address and
+          may set cookies.
+          <br>
+          Embedded via youtube-nocookie.com.
+        </p>
+      </div>
+      {% endif %}
+    </figure>
+    {% else %}
+    <figure class="store-video store-video-empty">
+      <span>Demo video coming soon</span>
+    </figure>
+    {% endif %}
+
+    <div class="store-purchase">
+      <div class="store-purchase-main">
+        <span class="store-price">{{ page.price }}</span>
+        <button type="button" class="store-buy" data-buy>{{ page.buy_label | default: "Buy now" }}</button>
+      </div>
+      <p class="store-purchase-note">
+        One-time purchase, includes all future updates for life.
+        <br>
+        A download link is sent to you by email after checkout.
+      </p>
+    </div>
+
+    <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
+      <button type="button" class="doc-tab" aria-selected="true" data-doc-target="overview">Overview</button>
+      <button type="button" class="doc-tab" aria-selected="false" data-doc-target="manual">Manual</button>
+      <button type="button" class="doc-tab" aria-selected="false" data-doc-target="releases">Releases</button>
+    </nav>
+
+    <div class="doc-content">
+      {{ content }}
+    </div>
+
+  </article>
+
+  <a class="return-back" href="/">
+    <svg>
+      <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
+    </svg>
+    <i>Back</i>
+  </a>
+
+  <div class="whitespace-below"></div>
+</body>
+
+</html>
