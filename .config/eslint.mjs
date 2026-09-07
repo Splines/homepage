@@ -1,3 +1,4 @@
+import css from "@eslint/css";
 import eslint from "@eslint/js";
 import html from "@html-eslint/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
@@ -10,6 +11,10 @@ export default defineConfig([
     // Globally ignore the following paths
     ignores: [
       "node_modules/",
+      "vendor/", // vendored JS (prism, katex, ...)
+      "assets/katex/", // vendored KaTeX CSS + fonts
+      "_site/", // Jekyll build output
+      ".jekyll-cache/", // Jekyll + Vite build cache
       "tmp/",
       "notes/",
     ],
@@ -93,6 +98,21 @@ export default defineConfig([
         disallowTabs: true,
         disallowInAssignment: true,
       }],
+    },
+  },
+  {
+    files: ["**/*.css"],
+    plugins: { css },
+    language: "css/css",
+    extends: [css.configs.recommended],
+    rules: {
+      "css/use-baseline": ["error", {
+        allowSelectors: ["nesting"],
+        // `scrollbar-width` is only "newly" baseline; hiding the scrollbar is a
+        // progressive enhancement here, so a visible one is an acceptable fallback.
+        allowProperties: ["user-select", "zoom", "resize", "scrollbar-width"],
+      }],
+      "css/no-invalid-properties": ["error", { allowUnknownVariables: true }],
     },
   },
 ]);

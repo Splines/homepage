@@ -1,7 +1,7 @@
 {
     "editor.formatOnSave": false, // autosave configured via options below
     //////////////////////////////////////
-    // ESLint: JS, HTML
+    // ESLint
     //////////////////////////////////////
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
@@ -14,8 +14,9 @@
       "javascript",
       "typescript",
       "html",
+      "css",
     ],
-    "[javascript,typescript,html]": {
+    "[javascript,typescript,html,css]": {
         "editor.formatOnSave": false,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.indentSize": 2,
