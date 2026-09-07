@@ -1,5 +1,8 @@
 ---
 layout: page
+date: 2026-04-19
+slug: bachelor-thesis-typst
+permalink: /blog/2026/bachelor-thesis-typst/
 title: "I wrote my Physics Bachelor Thesis in Typst"
 title_on_page: "I wrote my Physics Bachelor Thesis in Typst"
 code: true
@@ -8,23 +11,23 @@ excerpt: >
 ---
 
 <figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/thesis-overview.jpg' | relative_url }}" />
+  <img src="{{'/blog/2026/bachelor-thesis-typst/thesis-overview.jpg' | relative_url }}" />
 </figure>
 
 This is my first bigger document I've ever written in [Typst](https://github.com/typst/typst), a markup-based typesetting system as modern alternative to LaTeX. After several months of work, I handed in my Bachelor Thesis in Physics at Heidelberg University on the 1st of April (no April Fool's joke). If you want to give Typst a try in your browser, there is a [Typst Playground](https://typst.app/play).
 
 <object
-  data="/assets/blog/2026-bachelor-thesis-typst/prime-refine.pdf#view=FitV&navpanes=0"
+  data="/blog/2026/bachelor-thesis-typst/prime-refine.pdf#view=FitV&navpanes=0"
   type="application/pdf"
   width="100%" height="1000px">
     <p>
-      Unable to display the PDF file (most likely since you're on a mobile device). <a href="/assets/blog/2026-bachelor-thesis-typst/prime-refine.pdf">Download the Thesis PDF</a> instead.
+      Unable to display the PDF file (most likely since you're on a mobile device). <a href="/blog/2026/bachelor-thesis-typst/prime-refine.pdf">Download the Thesis PDF</a> instead.
     </p>
 </object>
 
 I didn't like the [LaTeX template](https://physik.uni-heidelberg.de/downloads?lang=en#infoarea-398) offered by our university too much, so I redesigned my very own in Typst. For sure, there were some challenges to overcome, but overall it felt so much easier and more intuitive to do than in LaTeX. I've been using LaTeX intensively for more than 3 years. Its typesetting looks gorgeous and I think TeX revolutionized the scientific world, just like Gutenberg did with his letterpress printing. And while TeX will remain crucial for many years to come, there's no shame in trying out new things. Typst is finally a competitor that can stand up against LaTeX and is so much easier to use.
 
-Edit: In case you want to make use of this template for your own thesis, check out my [Typst Thesis Starter]({% link _posts/2026-05-08-typst-thesis-starter.md %}).
+Edit: In case you want to make use of this template for your own thesis, check out my [Typst Thesis Starter]({% link _blog/2026/typst-thesis-starter/index.md %}).
 
 ## Typst Packages
 
@@ -204,15 +207,15 @@ While Typst also supports [BibLaTeX](https://typst.app/docs/reference/model/bibl
 For my Thesis defense (also called "colloquium"), I copied over some formulas from my Typst document to PowerPoint. For this purpose, I've developed [PPTypst](https://github.com/splines/pptypst), a PowerPoint plugin that lets you insert and edit (!) Typst equations directly in PowerPoint. Here is how some of my slides looked like.
 
 <figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-1.jpg' | relative_url }}" />
+  <img src="{{'/blog/2026/bachelor-thesis-typst/colloque-1.jpg' | relative_url }}" />
 </figure>
 
 <figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-2.jpg' | relative_url }}" />
+  <img src="{{'/blog/2026/bachelor-thesis-typst/colloque-2.jpg' | relative_url }}" />
 </figure>
 
 <figure class="image clickable">
-  <img src="{{'/assets/blog/2026-bachelor-thesis-typst/colloque-3.jpg' | relative_url }}" />
+  <img src="{{'/blog/2026/bachelor-thesis-typst/colloque-3.jpg' | relative_url }}" />
 </figure>
 
 ## Final words

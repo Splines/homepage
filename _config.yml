@@ -5,16 +5,28 @@ description: >-
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: https://splines.me
-permalink: /blog/:year/:title
 
 collections:
   pages:
     output: true
     permalink: /:path/
+  # Blog posts live in `_blog/<year>/<slug>/` as page bundles: the Markdown file
+  # (index.md) sits right next to the images/videos/etc. it references. Each post
+  # sets its own `permalink` in front matter; this `/blog/:path/` template is what
+  # governs the co-located asset files, so they land at `/blog/<year>/<slug>/…`.
+  blog:
+    output: true
+    permalink: /blog/:path/
 
 feed:
   excerpt_only: true
   disable_in_development: true
+  # Posts moved from the built-in `posts` collection to `blog`; point the main
+  # /feed.xml at it and park the (now empty) posts feed out of the way.
+  collections:
+    blog:
+      path: /feed.xml
+  path: /feed/posts.xml
 
 # No theme: https://stackoverflow.com/a/57424621/
 

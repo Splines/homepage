@@ -4,7 +4,7 @@
 # https://euandre.org/til/2020/08/13/anchor-headers-and-code-lines-in-jekyll.html
 Jekyll::Hooks.register :documents, :post_render do |doc|
   if doc.output_ext != ".html"
-    return
+    next
   end
 
   doc.output = doc.output.gsub(

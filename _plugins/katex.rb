@@ -32,5 +32,5 @@ pre_render_task = lambda { |doc, _|
   end
 }
 
-Jekyll::Hooks.register(:posts, :pre_render, &pre_render_task)
+Jekyll::Hooks.register(:blog, :pre_render, &pre_render_task)
 Jekyll::Hooks.register(:pages, :pre_render, &pre_render_task)

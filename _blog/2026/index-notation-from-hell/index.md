@@ -1,5 +1,8 @@
 ---
 layout: page
+date: 2026-05-25
+slug: index-notation-from-hell
+permalink: /blog/2026/index-notation-from-hell/
 title: "Index notation from hell – and how to make it more fun"
 title_on_page: "Index notation from hell –<br>and how to make it more fun"
 katex:
@@ -7,7 +10,7 @@ katex:
   macros:
     \squaree: "{\\scriptstyle \\square}"
     \blacksquaree: "{\\scriptstyle \\blacksquare}"
-custom_css: /assets/blog/2026-index-notation-from-hell/notation-comparison.css
+custom_css: /blog/2026/index-notation-from-hell/notation-comparison.css
 excerpt: >
   Annoyed by 1000 indices in your calculation? Let's introduce a more playful notation based on shapes. The covariant derivative serves as an example.
 ---

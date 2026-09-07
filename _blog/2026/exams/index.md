@@ -1,5 +1,8 @@
 ---
 layout: page
+date: 2026-01-22
+slug: exams
+permalink: /blog/2026/exams/
 title: "Oh, my beloved exams"
 excerpt: >
   A rant about exams & competition. Not scientifically grounded, but unlike exams: human.

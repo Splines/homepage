@@ -35,7 +35,8 @@ permalink: /404.html
 
     <div class="post-list">
 
-      {% for post in site.posts %}
+      {% assign posts = site.blog | sort: "date" | reverse %}
+      {% for post in posts %}
       {% unless post.draft %}
       <div class="post-card">
         <a class="post-card-link" href="{{ post.url | relative_url }}"></a>
