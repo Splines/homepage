@@ -8,8 +8,8 @@
   <meta charset="utf-8" content="width=device-width" name="viewport">
   <title>{{ page.title }}</title>
   {% vite_client_tag %}
-  <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/home.css' | absolute_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/home.css' | relative_url }}" rel="stylesheet">
 </head>
 
 <body>
@@ -17,8 +17,7 @@
 
     <header>
       <div class="header-vertical">
-        <img src="{{ '/assets/images/splines.jpg' | absolute_url }}" alt="Me on top of a hill"
-             class="header-avatar">
+        <img class="header-avatar" alt="Me on top of a hill" src="{{ '/assets/images/splines.jpg' | relative_url }}">
         <h1>{{ page.title }}</h1>
       </div>
     </header>
