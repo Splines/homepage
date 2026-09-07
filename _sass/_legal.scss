@@ -1,0 +1,99 @@
+@use "variables" as v;
+
+// Styles for legal pages (Impressum, and later e.g. privacy policy / terms).
+
+.legal {
+  h2 {
+    padding-top: 1em;
+    margin-bottom: 0.2em;
+    font-size: 1.35rem;
+  }
+
+  h3 {
+    margin-top: 0.5em;
+  }
+
+  p,
+  li {
+    font-size: 0.95rem;
+    line-height: 1.55rem;
+  }
+
+  ul,
+  ol {
+    margin-top: 0.4em;
+    margin-bottom: 0.9em;
+    padding-left: 1.2em;
+  }
+
+  li {
+    margin-bottom: 0.35em;
+  }
+}
+
+// A postal address / contact block.
+.legal-address {
+  margin: 0.6em 0 1em;
+  padding: 0.9em 1.1em;
+  border-left: 3px solid v.$primary;
+  border-radius: 0 0.4em 0.4em 0;
+  background: #00000006;
+
+  font-family: v.$normal-font;
+  font-size: 0.95rem;
+  line-height: 1.55rem;
+  font-style: normal;
+}
+
+.legal-intro {
+  font-size: 0.9rem;
+  color: #6b5646;
+  font-style: italic;
+}
+
+.legal-updated {
+  margin-top: 2.5em;
+  font-size: 0.85rem;
+  color: #6b5646;
+}
+
+// Art. 21 (4) GDPR requires the right to object to be presented "clearly and
+// separately from any other information", hence the visual callout.
+.legal-callout {
+  margin: 1.2em 0;
+  padding: 1em 1.2em;
+  border: 2px solid v.$primary;
+  border-radius: 0.5em;
+  background: #00000006;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0.4em;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Table of contents at the top of a long legal page.
+.legal-toc {
+  margin: 1.5em 0 0.5em;
+
+  ol {
+    padding-left: 1.3em;
+  }
+
+  li {
+    margin-bottom: 0.15em;
+  }
+
+  a {
+    color: #6b5646;
+    text-decoration-color: #c9bbae;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+}
