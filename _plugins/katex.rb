@@ -33,7 +33,7 @@ end
 
 pre_render_task = lambda { |doc, _|
   if doc.data['katex'] && doc.data['katex']['enabled']
-    doc.content = Katex.process(doc.content, doc.data['katex']['macros'] || [])
+    doc.content = Katex.process(doc.content, doc.data['katex']['macros'] || {})
   end
 }
 
