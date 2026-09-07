@@ -1,5 +1,5 @@
 # https://gist.github.com/jackwillis/e4842a6d6fbc6ed438e813d2d2753eb8
-#
+
 # Uses mini_racer (in-process V8) directly rather than ExecJS: ExecJS's Node
 # runtime spawns a fresh `node` per call, and this hook makes one call per math
 # expression, so a math-heavy post cost seconds of process-spawn overhead.
