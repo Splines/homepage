@@ -20,6 +20,7 @@
 
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
   {% vite_typescript_tag store %}
+  {% vite_typescript_tag comments %}
 </head>
 
 <body>
@@ -90,6 +91,41 @@
     </svg>
     <i>Back</i>
   </a>
+
+  <section
+    class="container comments"
+    data-comments
+    data-giscus-category="Homepage comments"
+    data-giscus-category-id="DIC_kwDOOG9Rj84CvIU6"
+    data-giscus-emit-metadata="0"
+    data-giscus-input-position="top"
+    data-giscus-lang="en"
+    data-giscus-mapping="og:title"
+    data-giscus-reactions-enabled="1"
+    data-giscus-repo="splines/homepage"
+    data-giscus-repo-id="R_kgDOOG9Rjw"
+    data-giscus-strict="1"
+    data-giscus-theme="light"
+  >
+
+    <div class="comments-consent">
+      <p class="comments-consent-text">
+        Comments are hosted by
+        <a href="https://giscus.app/" rel="noopener">giscus</a>
+        and GitHub. Loading them sends your IP address and browser data there, and GitHub
+        may set cookies.
+      </p>
+
+      <button type="button" class="comments-load">Load comments</button>
+
+      <p class="comments-consent-note">
+        Applies to this page only &middot;
+        <a href="{{ '/datenschutz/#comments' | relative_url }}">Privacy</a>
+      </p>
+    </div>
+
+    <div class="giscus"></div>
+  </section>
 
   <div class="whitespace-below"></div>
 </body>
