@@ -19,9 +19,18 @@ feed:
 # No theme: https://stackoverflow.com/a/57424621/
 
 plugins:
+  - jekyll/vite
   - jekyll-feed
 
 exclude:
+  - bin/
+  - config/
+  - tmp/
+  - assets/vite/ # Vite source dir; the compiled bundle is emitted to /vite
+  - vite.config.mts
+  - Rakefile
+  - package.json
+  - package-lock.json
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/

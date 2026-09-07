@@ -64,6 +64,16 @@
       "editor.wordWrap": "wordWrapColumn",
       "editor.wordWrapColumn": 75,
     },
+    "remote.portsAttributes": {
+      "3036": {
+        "label": "Vite",
+        "onAutoForward": "ignore"
+      },
+      "4000": {
+        "label": "Jekyll",
+        "onAutoForward": "openBrowserOnce"
+      }
+    },
     //////////////////////////////////////
     // Git
     //////////////////////////////////////
