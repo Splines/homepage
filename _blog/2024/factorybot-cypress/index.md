@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2024-06-26
-slug: factorybot-cypress
-permalink: /blog/2024/factorybot-cypress/
 title: "Rails FactoryBot in Cypress"
 code: true
 excerpt: >

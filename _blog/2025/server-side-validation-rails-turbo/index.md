@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2025-09-08
-slug: server-side-validation-rails-turbo
-permalink: /blog/2025/server-side-validation-rails-turbo/
 title: "Inline server-side form validation with Turbo"
 code: true
 excerpt: >

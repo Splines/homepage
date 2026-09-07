@@ -10,10 +10,8 @@ collections:
   pages:
     output: true
     permalink: /:path/
-  # Blog posts live in `_blog/<year>/<slug>/` as page bundles: the Markdown file
-  # (index.md) sits right next to the images/videos/etc. it references. Each post
-  # sets its own `permalink` in front matter; this `/blog/:path/` template is what
-  # governs the co-located asset files, so they land at `/blog/<year>/<slug>/…`.
+  # Blog posts live in `_blog/<year>/<slug>/` and bundle their assets with them.
+  # See also _plugins/blog_bundles.rb.
   blog:
     output: true
     permalink: /blog/:path/

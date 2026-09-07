@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2026-05-25
-slug: index-notation-from-hell
-permalink: /blog/2026/index-notation-from-hell/
 title: "Index notation from hell – and how to make it more fun"
 title_on_page: "Index notation from hell –<br>and how to make it more fun"
 katex:

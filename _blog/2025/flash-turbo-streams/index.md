@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2025-09-28
-slug: flash-turbo-streams
-permalink: /blog/2025/flash-turbo-streams/
 title: "Rails Flash messages via Turbo Streams"
 title_on_page: "Rails Flash messages<br>via Turbo Streams"
 code: true

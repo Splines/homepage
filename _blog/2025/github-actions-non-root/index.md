@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2025-11-04
-slug: github-actions-non-root
-permalink: /blog/2025/github-actions-non-root/
 title: "GitHub Actions with non-root Docker user"
 title_on_page: "GitHub Actions<br>with non-root Docker user"
 code: true

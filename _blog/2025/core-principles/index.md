@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2025-09-18
-slug: core-principles
-permalink: /blog/2025/core-principles/
 title: "My core principles"
 excerpt: >
   What I firmly believe in.

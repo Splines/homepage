@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2026-05-08
-slug: typst-thesis-starter
-permalink: /blog/2026/typst-thesis-starter/
 title: "Typst Thesis Starter"
 code: true
 excerpt: >

@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2025-09-27
-slug: jacobi-total-time-derivative
-permalink: /blog/2025/jacobi-total-time-derivative/
 title: "Jacobi and the total time derivative"
 katex:
   enabled: true

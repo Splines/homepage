@@ -1,8 +1,6 @@
 ---
 layout: page
 date: 2026-04-19
-slug: bachelor-thesis-typst
-permalink: /blog/2026/bachelor-thesis-typst/
 title: "I wrote my Physics Bachelor Thesis in Typst"
 title_on_page: "I wrote my Physics Bachelor Thesis in Typst"
 code: true
