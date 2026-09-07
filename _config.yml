@@ -18,6 +18,7 @@ collections:
 
 feed:
   excerpt_only: true
+  disable_in_development: true
   collections:
     blog:
       path: /feed.xml
