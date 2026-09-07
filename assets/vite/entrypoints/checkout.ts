@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let opened = false;
   let readyTimer = 0;
+  let sweepTimer = 0;
 
   /** Swaps the spinner for the payment frame once the frame has painted. */
   const reveal = (): void => {
@@ -66,15 +67,26 @@ document.addEventListener("DOMContentLoaded", () => {
     frame.dataset.ready = "";
   };
 
+  /**
+   * Collapses the panel.
+   *
+   * Once collapsed, the checkout panel is removed from the DOM.
+   */
+  const collapse = (): void => {
+    delete panel.dataset.open;
+    sweepTimer = window.setTimeout(() => frame.replaceChildren(), EXPAND_MS);
+  };
+
   button.addEventListener("click", () => {
     if (opened) return;
     opened = true;
 
+    window.clearTimeout(sweepTimer);
     button.disabled = true;
     notice.hidden = true;
     spinner.hidden = false;
     delete frame.dataset.ready;
-    expand(panel);
+    panel.dataset.open = "";
 
     readyTimer = window.setTimeout(reveal, READY_FALLBACK_MS);
 
@@ -87,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       opened = false;
       button.disabled = false;
       notice.hidden = false;
-      collapse(panel);
+      collapse();
       show(status, "The checkout could not be opened. Please try again.");
     }
   });
@@ -95,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   closeButton.addEventListener("click", () => {
     window.clearTimeout(readyTimer);
     DodoPayments.Checkout.close();
-    collapse(panel);
+    collapse();
     hide(status);
     button.disabled = false;
     notice.hidden = false;
@@ -155,18 +167,6 @@ function onCheckoutEvent(
     onReady();
     show(status, "This checkout expired. Please reload the page and try again.");
   }
-}
-
-function expand(panel: HTMLElement): void {
-  panel.dataset.open = "";
-}
-
-function collapse(panel: HTMLElement): void {
-  delete panel.dataset.open;
-  window.setTimeout(() => {
-    const container = document.getElementById(CONTAINER_ID);
-    if (container) container.replaceChildren();
-  }, EXPAND_MS);
 }
 
 function show(element: HTMLElement, message: string): void {
