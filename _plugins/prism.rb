@@ -59,5 +59,5 @@ task = lambda { |doc|
     doc.content = Prism.process(doc.content)
 }
 
-Jekyll::Hooks.register(:posts, :post_convert, &task)
+Jekyll::Hooks.register(:blog, :post_convert, &task)
 Jekyll::Hooks.register(:pages, :post_convert, &task)

@@ -5,27 +5,29 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" content="width=device-width" name="viewport">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>{{ page.title }}</title>
+  {% vite_client_tag %}
   <!-- for Giscus mapping between blog post and GitHub Discussion -->
   <meta content="{{ page.title }}" property="og:title">
-  <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/page.css' | absolute_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/page.css' | relative_url }}" rel="stylesheet">
 
   {% if page.custom_css %}
-  <link href="{{ page.custom_css | absolute_url }}" rel="stylesheet">
+  <link href="{{ page.custom_css | relative_url }}" rel="stylesheet">
   {% endif %}
 
   {% if page.katex.enabled %}
-  <link href="{{ '/assets/katex/katex.min.css' | absolute_url }}" rel="stylesheet">
+  <link href="{{ '/assets/katex/katex.min.css' | relative_url }}" rel="stylesheet">
   {% endif %}
 
   {% if page.code %}
-  <link href="{{ '/assets/css/code.css' | absolute_url }}" rel="stylesheet">
-  <script defer src="{{ '/assets/js/code.js' | absolute_url }}"></script>
+  <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
+  <script defer src="{{ '/assets/js/code.js' | relative_url }}"></script>
   {% endif %}
 
-  <script defer src="{{ '/assets/js/image-modal.js' | absolute_url }}"></script>
+  <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
 
   <!-- Giscus Comments -->
   <script async
@@ -52,7 +54,7 @@
     <header>
       <h1>{{ page.title_on_page | default: page.title }}</h1>
       <p>
-        written by <a href="{{ '/' | absolute_url }}">{{ site.author }}</a>
+        written by <a href="{{ '/' | relative_url }}">{{ site.author }}</a>
         <br>
         published
         <time datetime="{{ page.date | date: '%Y-%m-%d' }}">

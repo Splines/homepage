@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2024-06-26
 title: "Rails FactoryBot in Cypress"
 code: true
 excerpt: >

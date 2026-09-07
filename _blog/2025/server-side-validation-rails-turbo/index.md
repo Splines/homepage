@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2025-09-08
 title: "Inline server-side form validation with Turbo"
 code: true
 excerpt: >
@@ -207,7 +208,7 @@ end
 With this in place, your error messages that come from the server can look like this. Nice!
 
 <figure class="image clickable">
-  <img src="{{'/assets/blog/2025-server-side-validation-rails-turbo/error-on-title-field.png' | relative_url }}"
+  <img src="{{'/blog/2025/server-side-validation-rails-turbo/error-on-title-field.png' | relative_url }}"
     alt="Error message shown on the title field of the events form"/>
 </figure>
 

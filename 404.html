@@ -3,21 +3,15 @@ title: 404 – Not Found
 permalink: /404.html
 ---
 
-<head>
-  <meta charset="utf-8" content="width=device-width" name="viewport">
-  <title>{{ page.title }}</title>
-  <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/home.css' | absolute_url }}" rel="stylesheet">
-</head>
-
 <!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" content="width=device-width" name="viewport">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>{{ page.title }}</title>
-  <link href="{{ '/assets/css/main.css' | absolute_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/home.css' | absolute_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/home.css' | relative_url }}" rel="stylesheet">
 </head>
 
 <body>
@@ -35,7 +29,8 @@ permalink: /404.html
 
     <div class="post-list">
 
-      {% for post in site.posts %}
+      {% assign posts = site.blog | sort: "date" | reverse %}
+      {% for post in posts %}
       {% unless post.draft %}
       <div class="post-card">
         <a class="post-card-link" href="{{ post.url | relative_url }}"></a>

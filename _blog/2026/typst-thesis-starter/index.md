@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2026-05-08
 title: "Typst Thesis Starter"
 code: true
 excerpt: >
@@ -8,11 +9,11 @@ excerpt: >
 
 See the related [**GitHub repo**](https://github.com/Splines/typst-thesis-starter).
 
-In a previous [post]({% link _posts/2026-04-19-bachelor-thesis-typst.md %}), I uploaded my Physics Bachelor Thesis written in Typst. Some people addressed me with the inquiry to upload the source code. Instead of doing that (sorry), I extracted a reusable template repository out of my thesis, such that you can base your work on it and get started right away.
+In a previous [post]({% link _blog/2026/bachelor-thesis-typst/index.md %}), I uploaded my Physics Bachelor Thesis written in Typst. Some people addressed me with the inquiry to upload the source code. Instead of doing that (sorry), I extracted a reusable template repository out of my thesis, such that you can base your work on it and get started right away.
 
 <figure class="image">
   <a href="https://github.com/Splines/typst-thesis-starter">
-    <img src="{{'/assets/blog/2026-typst-thesis-starter/typst-thesis-starter.jpg' | relative_url }}" />
+    <img src="{{'/blog/2026/typst-thesis-starter/typst-thesis-starter.jpg' | relative_url }}" />
   </a>
 </figure>
 

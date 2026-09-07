@@ -1,8 +1,3 @@
----
----
-
-@use "variables" as v;
-
 .notation-comparison {
   margin: 1.4em -4% 1.8em;
   display: grid;
@@ -22,7 +17,6 @@
   background: #fffaf5cc;
   box-shadow: 0 0.1em 0.2em #00000010;
 
-  // Mobile: show column label above the equation
   &::before {
     content: attr(data-label);
     display: block;
@@ -35,7 +29,6 @@
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
-    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
       display: none;
@@ -45,7 +38,7 @@
 
 .notation-comparison__head,
 .notation-comparison__cell::before {
-  font-family: v.$serif-font;
+  font-family: "Vermiglione", serif;
   font-size: 1rem;
   font-weight: 500;
   color: #88593a;
@@ -56,26 +49,28 @@
   margin-top: 0.55em;
   padding: 0.5em 0;
   text-align: center;
-  font-family: v.$serif-font;
+  font-family: "Vermiglione", serif;
   font-size: 1rem;
   color: #6e4d34;
+
+  /* First one or two equations following a bridge line. */
+  & + .notation-comparison__cell,
+  & + .notation-comparison__cell + .notation-comparison__cell {
+    margin-top: 0.55em;
+  }
 }
 
-.notation-comparison__bridge + .notation-comparison__cell,
-.notation-comparison__bridge + .notation-comparison__cell + .notation-comparison__cell {
-  margin-top: 0.55em;
-}
-
+/* Mobile: single column, per-cell label shown via ::before. */
 @media (max-width: 819.98px) {
   .notation-comparison__cell + .notation-comparison__cell {
     margin-top: 0.55em;
   }
 }
 
+/* Desktop: two columns with a shared header row. */
 @media (min-width: 820px) {
   .notation-comparison {
-    margin-left: -6%;
-    margin-right: -6%;
+    margin-inline: -6%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -97,7 +92,6 @@
 
   .notation-comparison__bridge {
     max-width: 34em;
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline: auto;
   }
 }

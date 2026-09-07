@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2025-11-04
 title: "GitHub Actions with non-root Docker user"
 title_on_page: "GitHub Actions<br>with non-root Docker user"
 code: true

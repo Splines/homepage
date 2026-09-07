@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2025-09-28
 title: "Rails Flash messages via Turbo Streams"
 title_on_page: "Rails Flash messages<br>via Turbo Streams"
 code: true
@@ -8,7 +9,7 @@ excerpt: >
 ---
 
 <video controls width="100%">
-  <source src="/assets/blog/2025-flash-turbo-streams/flash-message-streamed.mp4" type="video/mp4" />
+  <source src="/blog/2025/flash-turbo-streams/flash-message-streamed.mp4" type="video/mp4" />
 </video>
 
 _For this article, I was inspired by [this](https://hivekind.com/blog/exploring-flash-messages-with-turbo-streams-in-rails-7), [this](https://bramjetten.dev/articles/flash-messages-with-hotwire-and-turbo-streams) and [this](https://thoughtbot.com/blog/rails-flashes-guide) post where you might find additional and alternative approaches._
@@ -172,7 +173,7 @@ We used `data-bs-dismiss="alert"` on the close button, so the Bootstrap JS code 
 But what about some niceties like auto-dismissal after some time? For example, the alert could automatically close after 6s. And let's render a small progress bar that indicates how much time is left. When you hover over the message, the auto-dismissal counter should be paused, in case you want to have more time to read the message.
 
 <figure class="image clickable" style="padding-left: 170px; padding-right: 170px;">
-  <img src="/assets/blog/2025-flash-turbo-streams/flash-messages-with-progress-stacked.png"
+  <img src="/blog/2025/flash-turbo-streams/flash-messages-with-progress-stacked.png"
     alt="Stacked Flash messages with a progress bar on top of each one indicating when they will close automatically.">
 </figure>
 

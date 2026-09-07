@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# Run the Vite dev server and Jekyll side by side, without foreman/overmind or
+# any other extra dependency. Stop both with Ctrl-C.
+
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+# Tear down every process in this script's process group (Vite, Jekyll and their
+# node/ruby children) when we exit or are interrupted.
+cleanup() {
+  trap - INT TERM EXIT
+  kill 0 2>/dev/null || true
+}
+trap cleanup INT TERM EXIT
+
+# Start Vite first and wait until it is listening, so Jekyll picks it up.
+bin/vite dev &
+bin/jekyll-vite wait
+
+bundle exec jekyll serve --livereload --incremental &
+
+# Exit (and trigger cleanup) as soon as either process stops.
+wait -n

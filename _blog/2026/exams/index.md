@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2026-01-22
 title: "Oh, my beloved exams"
 excerpt: >
   A rant about exams & competition. Not scientifically grounded, but unlike exams: human.

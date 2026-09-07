@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2025-09-18
 title: "My core principles"
 excerpt: >
   What I firmly believe in.

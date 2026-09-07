@@ -1,5 +1,6 @@
 ---
 layout: page
+date: 2025-09-27
 title: "Jacobi and the total time derivative"
 katex:
   enabled: true
@@ -131,7 +132,7 @@ In multivariable calculus, the chain rule for one variable can be generalized to
 For $U\subopenin \R^n, V\subopenin \R^m$, let $f:U\rightarrow V$ be differentiable at point $\bm{x} \in U$. Let $g: V\rightarrow \R^k$ be differentiable at point $\bm{y} \coloneqq f(\bm{x}) \in V$. Visually, we are in the following situation:
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/chain-rule-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/chain-rule-commutative-diagram.svg' | relative_url }}"
        alt="Chain rule diagram (since they are really hard to explain without seeing them, we will omit the alt attribute for the following images)"
        style="max-width: 140px; padding: 1.5em;">
 </figure>
@@ -156,7 +157,7 @@ $$
 and define $g: \R^2 \rightarrow \R,\, g(\bm{y}) \coloneqq y_1 \cdot y_2$, which puts us in this situation:
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/chain-rule-example-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/chain-rule-example-commutative-diagram.svg' | relative_url }}"
        style="max-width: 640px; padding: 1.5em;">
 </figure>
 
@@ -215,7 +216,7 @@ $$
 **The tricky part is to realize we can prefix $f$ by another function $\gamma$ which translates from the independent time variable $t$ to the $(n+1)$-dimensional input vector $\bigl(x_1(t), \dots, x_n(t), t\bigr)$** passed into $f$. Note that for $f$ in the introduction, we have $n=3$, yet we will leave $n$ generic here. The situation presents itself as follows in terms of a commutative diagram:
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/intro-example-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/intro-example-commutative-diagram.svg' | relative_url }}"
        style="max-width: 140px; padding: 1.5em;">
 </figure>
 
@@ -276,7 +277,7 @@ $$
 $$
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/final-examples-x1-x2-x3-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/final-examples-x1-x2-x3-commutative-diagram.svg' | relative_url }}"
        style="max-width: 520px; padding: 1.5em;">
 </figure>
 
@@ -316,7 +317,7 @@ $$
 $$
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/final-examples-with-dot-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/final-examples-with-dot-commutative-diagram.svg' | relative_url }}"
        style="max-width: 520px; padding: 1.5em;">
 </figure>
 
@@ -351,7 +352,7 @@ $$
 $$
 
 <figure class="image">
-  <img src="{{ '/assets/blog/2025-jacobi-total-time-derivative/final-examples-unknown-u-commutative-diagram.svg' | relative_url }}"
+  <img src="{{ '/blog/2025/jacobi-total-time-derivative/final-examples-unknown-u-commutative-diagram.svg' | relative_url }}"
        style="max-width: 520px; padding: 1.5em;">
 </figure>
 

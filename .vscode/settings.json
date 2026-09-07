@@ -1,7 +1,7 @@
 {
     "editor.formatOnSave": false, // autosave configured via options below
     //////////////////////////////////////
-    // ESLint: JS, HTML
+    // ESLint
     //////////////////////////////////////
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
@@ -12,20 +12,17 @@
     },
     "eslint.validate": [
       "javascript",
+      "typescript",
       "html",
+      "css",
     ],
-    "[javascript]": {
+    "[javascript,typescript,html,css]": {
         "editor.formatOnSave": false,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.indentSize": 2,
         "editor.tabSize": 2,
     },
-    "[html]": {
-      "editor.formatOnSave": false,
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.indentSize": 2,
-      "editor.tabSize": 2,
-    },
+    "js/ts.format.enabled": false,
     "emmet.includeLanguages": {
       "erb": "html",
     },
@@ -63,6 +60,16 @@
     "[markdown]": {
       "editor.wordWrap": "wordWrapColumn",
       "editor.wordWrapColumn": 75,
+    },
+    "remote.portsAttributes": {
+      "3036": {
+        "label": "Vite",
+        "onAutoForward": "ignore"
+      },
+      "4000": {
+        "label": "Jekyll",
+        "onAutoForward": "openBrowserOnce"
+      }
     },
     //////////////////////////////////////
     // Git
