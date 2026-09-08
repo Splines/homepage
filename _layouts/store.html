@@ -136,6 +136,12 @@
         <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
       </div>
 
+      <p class="store-currency-note">
+        Prices are in euro. If you choose another currency on the checkout page, the
+        amount is converted by Dodo Payments and a currency-conversion fee may be
+        added on top.
+      </p>
+
       {% if dodo_mode == "live" and jekyll.environment != "production" %}
       <p class="store-checkout-warning">
         <strong>Live mode forced locally.</strong>
