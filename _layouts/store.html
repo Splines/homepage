@@ -35,6 +35,10 @@
       {% if page.tagline %}
       <p>{{ page.tagline }}</p>
       {% endif %}
+      <p class="store-byline">
+        brought to you by
+        <a href="{{ '/' | relative_url }}">Splines</a>
+      </p>
     </header>
 
     <hr class="header-content-separator">
@@ -64,6 +68,12 @@
     </figure>
     {% endif %}
 
+    {% if page.intro %}
+    <div class="store-intro">
+      {{ page.intro | markdownify }}
+    </div>
+    {% endif %}
+
     {% assign dodo_mode = "test" %}
     {% if jekyll.environment == "production" %}
     {% assign dodo_mode = "live" %}
@@ -79,10 +89,45 @@
     {% endif %}
 
     <div class="store-purchase" data-dodo-mode="{{ dodo_mode }}" data-dodo-product="{{ dodo_product }}">
+
+      <p class="store-purchase-note">
+        One-time purchase, includes all future updates for life.
+        <br>
+        A download link is sent to you by email after checkout.
+      </p>
+
+      <div class="store-agree">
+        <label class="store-agree-item">
+          <input type="checkbox" data-agree>
+          <span>
+            I have read and accept the
+            <a href="{{ page.url | append: 'terms/' | relative_url }}" rel="noopener" target="_blank">Terms &amp; License</a>
+            and the
+            <a href="{{ '/datenschutz/' | relative_url }}" rel="noopener" target="_blank">privacy policy</a>,
+            including the
+            <a href="#known-limitations">known limitations</a>
+            of this product.
+          </span>
+        </label>
+
+        <label class="store-agree-item">
+          <input type="checkbox" data-agree>
+          <span>
+            I understand that this license is for a <strong>single user</strong> and
+            cannot be passed on: I will not share, resell or publish {{ page.title }} or
+            my download link.
+          </span>
+        </label>
+
+        <p class="store-agree-hint" data-agree-hint>
+          Please confirm both points to continue to the checkout.
+        </p>
+      </div>
+
       <div class="store-purchase-main">
         <span class="store-price">{{ page.price }}</span>
-        <button type="button" class="store-buy" data-buy>{{ page.buy_label | default: "Buy now" }}</button>
-        <span class="store-tax-note">plus VAT / sales tax where applicable</span>
+        <button type="button" class="store-buy" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
+        <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
       </div>
 
       {% if dodo_mode == "live" and jekyll.environment != "production" %}
@@ -93,12 +138,6 @@
         <code>dodo_force_mode</code> in <code>_config.yml</code> again.
       </p>
       {% endif %}
-
-      <p class="store-purchase-note">
-        One-time purchase, includes all future updates for life.
-        <br>
-        A download link is sent to you by email after checkout.
-      </p>
 
       <p class="store-checkout-consent" data-checkout-notice>
         Payments are processed by

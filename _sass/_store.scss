@@ -179,6 +179,21 @@
     outline: 2px solid v.$primary;
     outline-offset: 2px;
   }
+
+  // Disabled until the agreement boxes are ticked
+  &:disabled {
+    background: #b3a294;
+    border-color: #b3a294;
+    cursor: not-allowed;
+
+    &:hover {
+      background: #b3a294;
+    }
+
+    &:active {
+      transform: none;
+    }
+  }
 }
 
 .store-tax-note {
@@ -188,10 +203,130 @@
 }
 
 .store-purchase-note {
-  margin: 0.7em 0 0;
+  margin: 0 0 0.9em;
   font-size: 0.78rem;
   line-height: 1.35rem;
   color: #6b5646;
+}
+
+.store-agree {
+  align-self: stretch;
+  margin-bottom: 1.2em;
+  padding: 0.9em 1.05em 0.95em;
+
+  border: 1px solid #d9cabc;
+  border-radius: 0.45em;
+  background: #fffdfb80;
+}
+
+.store-agree-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+  padding: 0.3em 0;
+
+  font-size: 0.85rem;
+  line-height: 1.45rem;
+  color: #5a4636;
+  cursor: pointer;
+
+  + .store-agree-item {
+    margin-top: 0.15em;
+    padding-top: 0.55em;
+    border-top: 1px solid #e6dbd0;
+  }
+
+  // The native box is replaced by a drawn one: `appearance: none` keeps the input
+  // itself (so it stays a real checkbox for the keyboard and for assistive tech)
+  // but lets the tick and the frame match the rest of the purchase box.
+  //
+  // Sized in rem, not em: form controls do not inherit the page font size in every
+  // browser, so `em` here would resolve against the UA's own input font and the box
+  // would come out a different size than the alignment below assumes.
+  input {
+    appearance: none;
+    -webkit-appearance: none;
+
+    flex: none;
+    position: relative;
+
+    // Border included, so 1.2rem really is the height the centring below assumes
+    // (the page does not set a global `border-box`).
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+
+    // Centres the box on the label's first line: half the line box (1.45rem)
+    // minus half the box. Without this the box hangs above the text.
+    margin: calc((1.45rem - 1.2rem) / 2) 0 0;
+
+    background: #fff;
+    border: 2px solid #c0ad9c;
+    border-radius: 0.3em;
+    cursor: pointer;
+    transition: background 140ms ease-in-out,
+      border-color 140ms ease-in-out;
+
+    &:hover {
+      border-color: v.$primary;
+    }
+
+    &:checked {
+      background: v.$primary;
+      border-color: v.$primary;
+    }
+
+    // The tick is an SVG polyline whose ink is centered in its own viewBox
+    // (x and y both span 3.5..20.5 of 24), so `background-position: center`
+    // centers what you actually see. A rotated-border tick would instead
+    // center its bounding box, which sits off to one side of the ink.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff7f0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5,12 10,17 19,7'/%3E%3C/svg%3E")
+        center / 0.75rem 0.75rem no-repeat;
+
+      transform: scale(0);
+      transition: transform 140ms ease-in-out;
+    }
+
+    &:checked::after {
+      transform: scale(1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid v.$primary;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      &::after {
+        transition: none;
+      }
+    }
+  }
+
+  strong {
+    font-weight: 600;
+    color: v.$primary;
+  }
+}
+
+.store-agree-hint {
+  margin: 0.7em 0 0;
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+  font-style: italic;
+  color: #8c7a6b;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 // Overview / Manual / Releases switcher.
@@ -236,10 +371,39 @@
   }
 }
 
+.store-byline {
+  margin-top: 0.15em;
+
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #8c7a6b;
+
+  a {
+    color: inherit;
+    text-decoration-color: #c9bbae;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+}
+
 .store-disclaimer {
   font-size: 0.85rem;
   font-style: italic;
   color: #5a4636;
+}
+
+.store-intro {
+  margin-top: 1.8em;
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .doc-content h2:first-child {

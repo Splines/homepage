@@ -14,6 +14,10 @@
  *
  * Nothing is loaded from dodopayments.com until the reader presses "Buy"
  * (Art. 6 (1) (a) GDPR, § 25 (1) TDDDG).
+ *
+ * "Buy" stays disabled until every `[data-agree]` box is ticked, which is what records
+ * acceptance of the terms and of the documented product limitations (§ 327h BGB) before
+ * an order can be placed.
  */
 
 import { DodoPayments } from "dodopayments-checkout";
@@ -42,6 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const notice = document.querySelector<HTMLElement>("[data-checkout-notice]");
   const spinner = document.querySelector<HTMLElement>("[data-checkout-spinner]");
   const frame = document.getElementById(CONTAINER_ID);
+  const agreements = Array.from(
+    document.querySelectorAll<HTMLInputElement>("[data-agree]"),
+  );
+  const agreeHint = document.querySelector<HTMLElement>("[data-agree-hint]");
   if (!purchase || !button || !panel || !status || !closeButton) return;
   if (!notice || !spinner || !frame) return;
 
@@ -59,6 +67,22 @@ document.addEventListener("DOMContentLoaded", () => {
   let opened = false;
   let readyTimer = 0;
   let sweepTimer = 0;
+
+  /**
+   * Enables "Buy" exactly when every box is ticked and no checkout is open yet.
+   */
+  const syncGate = (): void => {
+    const agreed = agreements.every(box => box.checked);
+    button.disabled = opened || !agreed;
+    if (agreeHint) agreeHint.hidden = agreed;
+  };
+
+  for (const box of agreements) {
+    // A reloaded page can restore ticks the browser remembered, so read the boxes
+    // rather than assuming they start empty.
+    box.addEventListener("change", syncGate);
+  }
+  syncGate();
 
   /** Swaps the spinner for the payment frame once the frame has painted. */
   const reveal = (): void => {
@@ -82,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     opened = true;
 
     window.clearTimeout(sweepTimer);
-    button.disabled = true;
+    syncGate();
     notice.hidden = true;
     spinner.hidden = false;
     delete frame.dataset.ready;
@@ -97,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Dodo Payments checkout failed to open:", error);
       window.clearTimeout(readyTimer);
       opened = false;
-      button.disabled = false;
+      syncGate();
       notice.hidden = false;
       collapse();
       show(status, "The checkout could not be opened. Please try again.");
@@ -109,9 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
     DodoPayments.Checkout.close();
     collapse();
     hide(status);
-    button.disabled = false;
     notice.hidden = false;
     opened = false;
+    syncGate();
     button.focus();
   });
 });

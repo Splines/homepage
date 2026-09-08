@@ -8,22 +8,23 @@ preview_image: TypstRider-preview.jpg
 preview_alt: The TypstRider UI panel inside Cavalry
 youtube_id: "JHCOSNE2JkU"
 video_title: "TypstRider teaser"
-price: "18 €"
+price: "20 €"
+price_note: "incl. VAT"
 buy_label: "Buy"
+intro: |
+  With TypstRider, you get a new UI in [Cavalry](https://cavalry.scenegroup.co/) that
+  lets you preview [Typst](https://typst.app) formulas (and LaTeX formulas) in real-time, then insert them
+  into your composition as shape objects. You can click again on formulas to update
+  their content afterwards. Packages from the
+  [Typst Universe](https://typst.app/universe/) are also supported.
+
+  This project is not affiliated with or endorsed by Typst or Cavalry.
+  {:.store-disclaimer}
 dodo_product_id_test: "pdt_0Nn1eRhajGZz1V6UUPx8F"
 dodo_product_id_live: "pdt_0Nn7F12p1FYerNKuKB3JS"
 ---
 
 <div class="doc-panel" data-doc-panel="overview" markdown="1">
-
-With TypstRider, you get a new UI in [Cavalry](https://cavalry.scenegroup.co/) that
-lets you preview [Typst](https://typst.app) formulas (and LaTeX formulas) in real-time, then insert them
-into your composition as shape objects. You can click again on formulas to update
-their content afterwards. Packages from the
-[Typst Universe](https://typst.app/universe/) are also supported.
-
-This project is not affiliated with or endorsed by Typst or Cavalry.
-{:.store-disclaimer}
 
 ## Main Features
 
