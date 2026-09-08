@@ -7,10 +7,24 @@
  * is involved — a product id is public information, and the payment itself is handled
  * entirely inside the Dodo frame, which is the merchant of record.
  *
- * Note: `linkType: "static"` and the `products` option are deprecated in the SDK and
- * are scheduled to be removed in v2.0.0, where every flow needs a server-created
- * session. `dodopayments-checkout` is therefore pinned to an exact version; revisit
- * this before bumping to v2.
+ * Note: `linkType: "static"` and the `products` option are deprecated. This is not
+ * written down in the public docs -- the deprecation is only announced by the SDK
+ * itself, which logs on every open (dodopayments-checkout 1.9.9):
+ *
+ *   ⚠️ DEPRECATION WARNING: 'static' linkType is deprecated and will be removed in
+ *   v2.0.0. Please migrate to 'session' linkType with checkoutUrl.
+ *   ⚠️ DEPRECATION WARNING: 'products' option is deprecated and will be removed in
+ *   v2.0.0. Please use 'checkoutUrl' with session linkType instead.
+ *
+ * Corroborating that, the package README and
+ * https://docs.dodopayments.com/developer-resources/inline-checkout now document
+ * only `checkoutUrl` with a server-created session, and no longer mention static
+ * links at all. Moving to sessions needs an API key, hence a server, which this
+ * static site does not have; it would also bring back the discount-code field,
+ * which is a checkout-session feature (`feature_flags.allow_discount_code`).
+ *
+ * `dodopayments-checkout` is therefore pinned to an exact version; revisit this
+ * before bumping to v2.
  *
  * Nothing is loaded from dodopayments.com until the reader presses "Buy"
  * (Art. 6 (1) (a) GDPR, § 25 (1) TDDDG).
