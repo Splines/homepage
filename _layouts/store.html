@@ -132,8 +132,8 @@
 
       <div class="store-purchase-main">
         <span class="store-price">{{ page.price }}</span>
-        <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
         <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
+        <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
       </div>
 
       {% if dodo_mode == "live" and jekyll.environment != "production" %}
