@@ -17,6 +17,11 @@
   // otherwise shrink the panel to its content width.
   align-self: stretch;
 
+  --store-checkout-gutter: 0.5em;
+  --store-checkout-bleed: calc(var(--store-purchase-pad-x, 0px) - var(--store-checkout-gutter));
+
+  margin-inline: calc(-1 * var(--store-checkout-bleed));
+
   transition: grid-template-rows 420ms ease,
     opacity 260ms ease,
     visibility 420ms;
@@ -40,8 +45,8 @@
 }
 
 .store-checkout-inner {
-  padding-top: 1.2em;
-  margin-top: 1.2em;
+  padding-top: 0.9em;
+  margin-top: 0.9em;
   border-top: 1px solid #d9cabc;
 }
 
@@ -103,7 +108,11 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.4em 1em;
-  margin-bottom: 0.9em;
+  margin-bottom: 0.6em;
+
+  // Make sure the heading and the cancel button line up with the rest of the
+  // purchase box.
+  padding-inline: var(--store-checkout-bleed, 0px);
 }
 
 .store-checkout-title {
@@ -179,6 +188,7 @@
 }
 
 .store-checkout-status {
+  padding-inline: var(--store-checkout-bleed, 0px);
   margin: 0.8em 0 0;
   font-size: 0.8rem;
   line-height: 1.3rem;

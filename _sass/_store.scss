@@ -124,7 +124,10 @@
   // No `gap` on purpose: the collapsed checkout panel is a zero-height child, and a
   // gap would still reserve space below it. Children space themselves instead.
   margin: 1.6em 0 2.4em;
-  padding: 1.1em 1.3em;
+
+  // Published so the checkout panel can bleed back out of it; see `_checkout.scss`.
+  --store-purchase-pad-x: 1.3em;
+  padding: 1.1em var(--store-purchase-pad-x);
 
   border: 2px solid v.$primary;
   border-radius: 0.6em;
