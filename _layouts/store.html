@@ -84,11 +84,17 @@
 
     {% if dodo_mode == "live" %}
     {% assign dodo_product = page.dodo_product_id_live %}
+    {% assign dodo_host = "checkout.dodopayments.com" %}
     {% else %}
     {% assign dodo_product = page.dodo_product_id_test %}
+    {% assign dodo_host = "test.checkout.dodopayments.com" %}
     {% endif %}
 
-    <div class="store-purchase" data-dodo-mode="{{ dodo_mode }}" data-dodo-product="{{ dodo_product }}">
+    {% if dodo_product and dodo_product != "" %}
+    {% assign dodo_url = "https://" | append: dodo_host | append: "/buy/" | append: dodo_product %}
+    {% endif %}
+
+    <div class="store-purchase" data-checkout-url="{{ dodo_url }}">
 
       <p class="store-purchase-note">
         One-time purchase, includes all future updates for life.
@@ -126,47 +132,29 @@
 
       <div class="store-purchase-main">
         <span class="store-price">{{ page.price }}</span>
-        <button type="button" class="store-buy" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
+        <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
         <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
       </div>
 
       {% if dodo_mode == "live" and jekyll.environment != "production" %}
       <p class="store-checkout-warning">
         <strong>Live mode forced locally.</strong>
-        This checkout takes <em>real</em> payments and test cards will be declined. Apply
-        your 100% discount code before paying, then comment out
+        The checkout this opens takes <em>real</em> payments and test cards will be
+        declined. Apply your 100% discount code before paying, then comment out
         <code>dodo_force_mode</code> in <code>_config.yml</code> again.
       </p>
       {% endif %}
 
-      <p class="store-checkout-consent" data-checkout-notice>
+      <p id="checkout-notice" class="store-checkout-consent">
         Payments are processed by
         <a href="https://dodopayments.com" rel="noopener">Dodo Payments</a>,
         the merchant of record. Pressing &ldquo;{{ page.buy_label | default: "Buy now" }}&rdquo;
-        loads a checkout frame from dodopayments.com and sends your IP address there.
+        opens their checkout at <code>{{ dodo_host }}</code> in a new tab. Nothing is
+        loaded from them into this page, so they only receive your data once you are
+        over there.
       </p>
 
-      <div class="store-checkout" data-checkout>
-        <div class="store-checkout-clip">
-          <div class="store-checkout-inner">
-            <div class="store-checkout-head">
-              <span class="store-checkout-title">Checkout</span>
-              <button type="button" class="store-checkout-close" data-checkout-close>Cancel</button>
-            </div>
-
-            <div class="store-checkout-frame" data-checkout-frame>
-              <div class="store-checkout-spinner" data-checkout-spinner>
-                <span class="store-checkout-spinner-ring" aria-hidden="true"></span>
-                <span class="store-checkout-spinner-label" role="status">Loading secure checkout&hellip;</span>
-              </div>
-
-              <div id="dodo-inline-checkout"></div>
-            </div>
-
-            <p class="store-checkout-status" data-checkout-status hidden></p>
-          </div>
-        </div>
-      </div>
+      <p class="store-checkout-status" data-checkout-status hidden></p>
     </div>
 
     <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>

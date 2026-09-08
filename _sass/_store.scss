@@ -125,9 +125,7 @@
   // gap would still reserve space below it. Children space themselves instead.
   margin: 1.6em 0 2.4em;
 
-  // Published so the checkout panel can bleed back out of it; see `_checkout.scss`.
-  --store-purchase-pad-x: 1.3em;
-  padding: 1.1em var(--store-purchase-pad-x);
+  padding: 1.1em 1.3em;
 
   border: 2px solid v.$primary;
   border-radius: 0.6em;
@@ -329,6 +327,50 @@
 
   &[hidden] {
     display: none;
+  }
+}
+
+// Shown only when `dodo_force_mode` puts a local build into live mode, where a
+// mistaken purchase would be a real charge.
+.store-checkout-warning {
+  margin: 0.9em 0 0;
+  padding: 0.7em 0.9em;
+
+  font-size: 0.78rem;
+  line-height: 1.35rem;
+  color: #7a2718;
+
+  background: #fdf0e6;
+  border: 1px solid #e0a894;
+  border-radius: 0.4em;
+
+  code {
+    font-family: v.$code-font;
+    font-size: 0.95em;
+  }
+}
+
+.store-checkout-status {
+  padding-inline: var(--store-checkout-bleed, 0px);
+  margin: 0.8em 0 0;
+  font-size: 0.8rem;
+  line-height: 1.3rem;
+  color: #8a2f1c;
+}
+
+.store-checkout-consent {
+  margin: 1em 0 0;
+  font-size: 0.72rem;
+  line-height: 1.2rem;
+  color: #8c7a6b;
+
+  a {
+    color: inherit;
+    text-decoration-color: #d9cabc;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
   }
 }
 
