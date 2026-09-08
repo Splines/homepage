@@ -81,7 +81,7 @@ dodo_product_id_live: "pdt_0Nn7F12p1FYerNKuKB3JS"
 
 ## Acknowledgements
 
-This project wouldn't exist without the amazing work of the [Typst team](https://typst.app/about/) as well as Myriad Dreamin, who brought Typst to JavaScript in their [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) project. Thanks also to [Scenery](https://scenery.io/) for their support and for their [dev tools](https://github.com/scenery-io/) as well as the Cavalry team for their really cool animation software.
+This project wouldn't exist without the amazing work of the [Typst team](https://typst.app/about/) as well as Myriad Dreamin, who brought Typst to JavaScript in their [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) project. Thanks also to Remco from [Scenery](https://scenery.io/) for their support and for their [dev tools](https://github.com/scenery-io/) as well as the Cavalry team for their really cool animation software.
 
 </div>
 
