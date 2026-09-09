@@ -1,14 +1,2 @@
----
-# Rendered by Jekyll (hence the front matter) so that the store can be kept out of
-# search engines while it is not open yet — see `store_open` in _config.yml.
----
-{%- if site.store_open %}
 User-agent: *
 Disallow:
-{%- else %}
-# The store is not open for business yet, so keep it out of search results. The
-# product pages themselves also carry a `noindex` robots meta tag, which is what
-# gets an already-known URL dropped from an index; this rule stops the crawling.
-User-agent: *
-Disallow: /store/
-{%- endif %}

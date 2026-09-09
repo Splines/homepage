@@ -29,13 +29,6 @@ collections:
 # payments, and test cards will be declined. Requires a restart of `bin/dev` to apply.
 # dodo_force_mode: live
 
-# The store is finished but not open for business yet: Dodo Payments still has to
-# verify the account, so a checkout would fail. While this is `false`, the product
-# pages stay reachable under their URLs (Dodo needs to review them), but the store is
-# not advertised: no tile on the home page, no "Buy" button, and search engines are
-# asked to stay away (see robots.txt). Flip it to `true` to open the store.
-store_open: false
-
 feed:
   excerpt_only: true
   disable_in_development: true
