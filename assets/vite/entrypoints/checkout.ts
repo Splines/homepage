@@ -46,10 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
   syncGate();
 
   button.addEventListener("click", () => {
-    // `noopener` in the features string would make `window.open` return `null` even on
-    // success, and we could then no longer tell a blocked tab apart from an opened one.
-    // So we take the handle and sever the link ourselves instead.
-    const tab = window.open(checkoutUrl, "_blank");
+    // avoid reverse tabnabbing
+    const tab = window.open("about:blank", "_blank");
 
     if (tab === null) {
       // Offer a link to open the checkout in case the browser blocked the new tab.
@@ -62,9 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Cut the checkout tab loose from this one, so it cannot navigate us away
-    // (reverse tabnabbing).
     tab.opener = null;
+    tab.location = checkoutUrl;
     hide(status);
   });
 });
