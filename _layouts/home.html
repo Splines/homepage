@@ -57,6 +57,18 @@
       through life as Jacob would put it :)
     </p>
 
+    {% if site.store_open %}
+    <a class="store-tile" href="{{ '/store/typstrider/' | relative_url }}">
+      <img class="store-tile-image" alt="The TypstRider UI panel inside Cavalry" src="{{ '/store/typstrider/TypstRider-preview.jpg' | relative_url }}">
+      <div class="store-tile-body">
+        <span class="store-tile-badge">New product</span>
+        <h2 class="store-tile-title">TypstRider</h2>
+        <p class="store-tile-sub">Bring Typst to Cavalry</p>
+        <span class="store-tile-cta">See more details &rarr;</span>
+      </div>
+    </a>
+    {% endif %}
+
     <div class="post-list">
 
       {% assign posts = site.blog | sort: "date" | reverse %}

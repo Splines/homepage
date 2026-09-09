@@ -1,0 +1,245 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>{{ page.title }} – {{ site.title }}</title>
+  {% vite_client_tag %}
+  <meta content="{{ page.title }}" property="og:title">
+  {% unless site.store_open %}
+  <meta content="noindex, nofollow" name="robots">
+  {% endunless %}
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
+
+  {% if page.code %}
+  <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
+  <script defer src="{{ '/assets/js/code.js' | relative_url }}"></script>
+  {% endif %}
+
+  <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
+  {% vite_typescript_tag store %}
+  {% vite_typescript_tag comments %}
+
+  {% if page.dodo_product_id_test or page.dodo_product_id_live %}
+  {% vite_typescript_tag checkout %}
+  {% endif %}
+</head>
+
+<body>
+  <article class="container store">
+
+    <header>
+      <h1>{{ page.title_on_page | default: page.title }}</h1>
+      {% if page.tagline %}
+      <p>{{ page.tagline }}</p>
+      {% endif %}
+      <p class="store-byline">
+        brought to you by
+        <a href="{{ '/' | relative_url }}">Splines</a>
+      </p>
+    </header>
+
+    <hr class="header-content-separator">
+
+    {% if page.preview_image %}
+    <figure class="store-video" data-video data-video-id="{{ page.youtube_id }}" data-video-title="{{ page.video_title | default: page.title | xml_escape }}">
+      <img class="store-video-poster" alt="{{ page.preview_alt | default: page.title | xml_escape }}" src="{{ page.url | append: page.preview_image | relative_url }}">
+
+      {% if page.youtube_id and page.youtube_id != "" %}
+      <div class="store-video-gate">
+        <button type="button" class="store-video-play" data-video-play>
+          <span class="store-video-play-icon" aria-hidden="true"></span>
+          Play teaser
+        </button>
+        <p class="store-video-consent">
+          Loads the video from YouTube (Google), which then receives your IP address and
+          may set cookies.
+          <br>
+          Embedded via youtube-nocookie.com.
+        </p>
+      </div>
+      {% endif %}
+    </figure>
+    {% else %}
+    <figure class="store-video store-video-empty">
+      <span>Demo video coming soon</span>
+    </figure>
+    {% endif %}
+
+    {% if page.intro %}
+    <div class="store-intro">
+      {{ page.intro | markdownify }}
+    </div>
+    {% endif %}
+
+    {% assign dodo_mode = "test" %}
+    {% if jekyll.environment == "production" %}
+    {% assign dodo_mode = "live" %}
+    {% endif %}
+    {% if site.dodo_force_mode %}
+    {% assign dodo_mode = site.dodo_force_mode %}
+    {% endif %}
+
+    {% if dodo_mode == "live" %}
+    {% assign dodo_product = page.dodo_product_id_live %}
+    {% assign dodo_host = "checkout.dodopayments.com" %}
+    {% else %}
+    {% assign dodo_product = page.dodo_product_id_test %}
+    {% assign dodo_host = "test.checkout.dodopayments.com" %}
+    {% endif %}
+
+    {% if dodo_product and dodo_product != "" %}
+    {% assign dodo_url = "https://" | append: dodo_host | append: "/buy/" | append: dodo_product %}
+    {% endif %}
+
+    {% comment %}
+    While the store is not open yet the whole purchase flow stays on the page (so it can
+    be reviewed), but the checkout URL is blanked out: there is nothing a stray click
+    could open. `data-store-closed` tells checkout.ts to keep the button disabled no
+    matter what. See `store_open` in _config.yml.
+    {% endcomment %}
+    {% assign store_closed = "" %}
+    {% unless site.store_open %}
+    {% assign store_closed = "true" %}
+    {% assign dodo_url = "" %}
+    {% endunless %}
+
+    <div class="store-purchase" data-checkout-url="{{ dodo_url }}" data-store-closed="{{ store_closed }}">
+
+      <p class="store-purchase-note">
+        One-time purchase, includes all future updates for life.
+        <br>
+        A download link is sent to you by email after checkout.
+      </p>
+
+      <div class="store-agree">
+        <label class="store-agree-item">
+          <input type="checkbox" data-agree>
+          <span>
+            I have read and accept the
+            <a href="{{ page.url | append: 'terms/' | relative_url }}" rel="noopener" target="_blank">Terms &amp; License</a>
+            and the
+            <a href="{{ '/datenschutz/' | relative_url }}" rel="noopener" target="_blank">privacy policy</a>,
+            including the
+            <a href="#known-limitations">known limitations</a>
+            of this product.
+          </span>
+        </label>
+
+        <label class="store-agree-item">
+          <input type="checkbox" data-agree>
+          <span>
+            I understand that this license is for a <strong>single user</strong>: I will
+            not share, resell or publish {{ page.title }} or my download link, and I will
+            not let other people use it alongside me.
+          </span>
+        </label>
+
+        <p class="store-agree-hint" data-agree-hint>
+          Please confirm both points to continue to the checkout.
+        </p>
+      </div>
+
+      <div class="store-purchase-main">
+        <span class="store-price">{{ page.price }}</span>
+        <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
+        <button type="button" class="store-buy" aria-describedby="{% if site.store_open %}checkout-notice{% else %}store-closed-note{% endif %}" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
+        {% unless site.store_open %}
+        <p id="store-closed-note" class="store-closed-note">
+          <strong>The store opens soon.</strong>
+          {{ page.title }} is finished, but the checkout is not live yet, so you cannot
+          buy it at the moment. Please check back in a little while.
+        </p>
+        {% endunless %}
+      </div>
+
+      <p class="store-currency-note">
+        Prices are in euro. If you choose another currency on the checkout page, the
+        amount is converted by Dodo Payments and a currency-conversion fee may be
+        added on top.
+      </p>
+
+      {% if dodo_mode == "live" and jekyll.environment != "production" %}
+      <p class="store-checkout-warning">
+        <strong>Live mode forced locally.</strong>
+        The checkout this opens takes <em>real</em> payments and test cards will be
+        declined. Apply your 100% discount code before paying, then comment out
+        <code>dodo_force_mode</code> in <code>_config.yml</code> again.
+      </p>
+      {% endif %}
+
+      <p id="checkout-notice" class="store-checkout-consent">
+        Payments are processed by
+        <a href="https://dodopayments.com" rel="noopener">Dodo Payments</a>,
+        the merchant of record. Pressing &ldquo;{{ page.buy_label | default: "Buy now" }}&rdquo;
+        opens their checkout at <code>{{ dodo_host }}</code> in a new tab. Nothing is
+        loaded from them into this page, so they only receive your data once you are
+        over there.
+      </p>
+
+      <p class="store-checkout-status" data-checkout-status hidden></p>
+    </div>
+
+    <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
+      <button type="button" class="doc-tab" aria-current="true" data-doc-target="overview">Overview</button>
+      <button type="button" class="doc-tab" aria-current="false" data-doc-target="manual">Manual</button>
+      <button type="button" class="doc-tab" aria-current="false" data-doc-target="releases">Releases</button>
+    </nav>
+
+    <div class="doc-content">
+      {{ content }}
+    </div>
+
+  </article>
+
+  <a class="return-back" href="/">
+    <svg>
+      <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
+    </svg>
+    <i>Back</i>
+  </a>
+
+  <section
+    class="container comments"
+    data-comments
+    data-giscus-category="Homepage comments"
+    data-giscus-category-id="DIC_kwDOOG9Rj84CvIU6"
+    data-giscus-emit-metadata="0"
+    data-giscus-input-position="top"
+    data-giscus-lang="en"
+    data-giscus-mapping="og:title"
+    data-giscus-reactions-enabled="1"
+    data-giscus-repo="splines/homepage"
+    data-giscus-repo-id="R_kgDOOG9Rjw"
+    data-giscus-strict="1"
+    data-giscus-theme="light"
+  >
+
+    <div class="comments-consent">
+      <p class="comments-consent-text">
+        Comments are hosted by
+        <a href="https://giscus.app/" rel="noopener">giscus</a>
+        and GitHub. Loading them sends your IP address and browser data there, and GitHub
+        may set cookies.
+      </p>
+
+      <button type="button" class="comments-load">Load comments</button>
+
+      <p class="comments-consent-note">
+        Applies to this page only &middot;
+        <a href="{{ '/datenschutz/#comments' | relative_url }}">Privacy</a>
+      </p>
+    </div>
+
+    <div class="giscus"></div>
+  </section>
+
+  <div class="whitespace-below"></div>
+</body>
+
+</html>

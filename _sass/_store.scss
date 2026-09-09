@@ -1,0 +1,485 @@
+@use "variables" as v;
+
+// The demo video, intentionally a touch wider than the text column, echoing the
+// oversized figures used in the blog posts.
+.store-video {
+  position: relative;
+  display: flex;
+  aspect-ratio: 16 / 9;
+  margin: 1.8em 0;
+  overflow: hidden;
+
+  border-radius: 6px;
+  box-shadow: 0 0.1em 0.2em #00000015;
+  background: #f1e7de;
+
+  @media (min-width: 720px) {
+    margin-left: -9%;
+    margin-right: -9%;
+  }
+
+  @media (min-width: 1000px) {
+    margin-left: -15%;
+    margin-right: -15%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+// Override the global `_page.scss` image styling for the poster.
+.store-video-poster {
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.store-video-empty {
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-family: v.$serif-font;
+    color: #8c7a6b;
+  }
+}
+
+// Consent bar pinned to the lower edge of the poster. Nothing is requested from
+// YouTube until the button is pressed.
+.store-video-gate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 0.9em;
+  padding: 1.5em 1.1em 0.9em;
+
+  background: linear-gradient(to top, #000000e0 0%, #000000cc 45%, #0000006b 80%, #00000000 100%);
+}
+
+.store-video-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-shrink: 0;
+  padding: 0.5em 1.1em;
+
+  font-family: v.$serif-font;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff7f0;
+
+  background: v.$primary;
+  border: 2px solid #fff7f0;
+  border-radius: 0.4em;
+  box-shadow: 0 0.15em 0.5em #00000059;
+  cursor: pointer;
+  transition: background 150ms ease-in-out, transform 150ms ease-in-out;
+
+  &:hover {
+    background: #6b4c34;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff7f0;
+    outline-offset: 2px;
+  }
+}
+
+.store-video-play-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.42em 0 0.42em 0.72em;
+  border-color: transparent transparent transparent #fff7f0;
+}
+
+.store-video-consent {
+  flex: 1 1 16em;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.2rem;
+  color: #f0e6dc;
+}
+
+// Price + buy button.
+.store-purchase {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  // No `gap` on purpose: the collapsed checkout panel is a zero-height child, and a
+  // gap would still reserve space below it. Children space themselves instead.
+  margin: 1.6em 0 2.4em;
+
+  padding: 1.1em 1.3em;
+
+  border: 2px solid v.$primary;
+  border-radius: 0.6em;
+  background: #00000006;
+}
+
+.store-purchase-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7em 1em;
+}
+
+.store-price {
+  display: inline-flex;
+  align-items: center;
+
+  font-family: v.$serif-font;
+  font-weight: 700;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: v.$primary;
+
+  // Optical alignment: the serif numerals sit high in their line box, so nudge
+  // them down to line up with the button's text.
+  transform: translateY(0.06em);
+}
+
+.store-buy {
+  padding: 0.55em 1.4em;
+
+  font-family: v.$serif-font;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff7f0;
+
+  background: v.$primary;
+  border: 1px solid v.$primary;
+  border-radius: 0.4em;
+  cursor: pointer;
+  transition: background 150ms ease-in-out, transform 150ms ease-in-out;
+
+  &:hover {
+    background: #6b4c34;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid v.$primary;
+    outline-offset: 2px;
+  }
+
+  // Disabled until the agreement boxes are ticked
+  &:disabled {
+    background: #b3a294;
+    border-color: #b3a294;
+    cursor: not-allowed;
+
+    &:hover {
+      background: #b3a294;
+    }
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+.store-tax-note {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: #8c7a6b;
+}
+
+// Sits to the right of the (permanently disabled) buy button while the store is not
+// open for business yet — see `store_open` in _config.yml.
+.store-closed-note {
+  // Takes the rest of the row next to the button, and drops onto its own line as soon
+  // as there is no room left for a readable line length.
+  flex: 1 1 15em;
+  margin: 0;
+  padding: 0.5em 0.8em;
+
+  font-size: 0.78rem;
+  line-height: 1.3rem;
+  color: #7a5a2f;
+
+  background: #fdf6ea;
+  border: 1px solid #e2c99f;
+  border-radius: 0.4em;
+
+  strong {
+    color: #6b4c34;
+  }
+}
+
+.store-currency-note {
+  margin: 0.7em 0 0;
+  font-size: 0.72rem;
+  line-height: 1.2rem;
+  color: #8c7a6b;
+}
+
+.store-purchase-note {
+  margin: 0 0 0.9em;
+  font-size: 0.78rem;
+  line-height: 1.35rem;
+  color: #6b5646;
+}
+
+.store-agree {
+  align-self: stretch;
+  margin-bottom: 1.2em;
+  padding: 0.9em 1.05em 0.95em;
+
+  border: 1px solid #d9cabc;
+  border-radius: 0.45em;
+  background: #fffdfb80;
+}
+
+.store-agree-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+  padding: 0.3em 0;
+
+  font-size: 0.85rem;
+  line-height: 1.45rem;
+  color: #5a4636;
+  cursor: pointer;
+
+  + .store-agree-item {
+    margin-top: 0.15em;
+    padding-top: 0.55em;
+    border-top: 1px solid #e6dbd0;
+  }
+
+  // The native box is replaced by a drawn one: `appearance: none` keeps the input
+  // itself (so it stays a real checkbox for the keyboard and for assistive tech)
+  // but lets the tick and the frame match the rest of the purchase box.
+  //
+  // Sized in rem, not em: form controls do not inherit the page font size in every
+  // browser, so `em` here would resolve against the UA's own input font and the box
+  // would come out a different size than the alignment below assumes.
+  input {
+    appearance: none;
+    -webkit-appearance: none;
+
+    flex: none;
+    position: relative;
+
+    // Border included, so 1.2rem really is the height the centring below assumes
+    // (the page does not set a global `border-box`).
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+
+    // Centres the box on the label's first line: half the line box (1.45rem)
+    // minus half the box. Without this the box hangs above the text.
+    margin: calc((1.45rem - 1.2rem) / 2) 0 0;
+
+    background: #fff;
+    border: 2px solid #c0ad9c;
+    border-radius: 0.3em;
+    cursor: pointer;
+    transition: background 140ms ease-in-out,
+      border-color 140ms ease-in-out;
+
+    &:hover {
+      border-color: v.$primary;
+    }
+
+    &:checked {
+      background: v.$primary;
+      border-color: v.$primary;
+    }
+
+    // The tick is an SVG polyline whose ink is centered in its own viewBox
+    // (x and y both span 3.5..20.5 of 24), so `background-position: center`
+    // centers what you actually see. A rotated-border tick would instead
+    // center its bounding box, which sits off to one side of the ink.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff7f0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5,12 10,17 19,7'/%3E%3C/svg%3E")
+        center / 0.75rem 0.75rem no-repeat;
+
+      transform: scale(0);
+      transition: transform 140ms ease-in-out;
+    }
+
+    &:checked::after {
+      transform: scale(1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid v.$primary;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      &::after {
+        transition: none;
+      }
+    }
+  }
+
+  strong {
+    font-weight: 600;
+    color: v.$primary;
+  }
+}
+
+.store-agree-hint {
+  margin: 0.7em 0 0;
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+  font-style: italic;
+  color: #8c7a6b;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Shown only when `dodo_force_mode` puts a local build into live mode, where a
+// mistaken purchase would be a real charge.
+.store-checkout-warning {
+  margin: 0.9em 0 0;
+  padding: 0.7em 0.9em;
+
+  font-size: 0.78rem;
+  line-height: 1.35rem;
+  color: #7a2718;
+
+  background: #fdf0e6;
+  border: 1px solid #e0a894;
+  border-radius: 0.4em;
+
+  code {
+    font-family: v.$code-font;
+    font-size: 0.95em;
+  }
+}
+
+.store-checkout-status {
+  padding-inline: var(--store-checkout-bleed, 0px);
+  margin: 0.8em 0 0;
+  font-size: 0.8rem;
+  line-height: 1.3rem;
+  color: #8a2f1c;
+}
+
+.store-checkout-consent {
+  margin: 1em 0 0;
+  font-size: 0.72rem;
+  line-height: 1.2rem;
+  color: #8c7a6b;
+
+  a {
+    color: inherit;
+    text-decoration-color: #d9cabc;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+}
+
+// Overview / Manual / Releases switcher.
+.doc-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 1.8em;
+}
+
+.doc-tab {
+  padding: 0.4em 1em;
+
+  font-family: v.$serif-font;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #88593a;
+
+  background: transparent;
+  border: 1px solid #d9cabc;
+  border-radius: 0.35em;
+  cursor: pointer;
+  transition: color 200ms ease-in-out,
+    border-color 200ms ease-in-out,
+    background 200ms ease-in-out;
+
+  &:hover {
+    color: v.$primary;
+    border-color: v.$primary;
+    background: #00000005;
+  }
+
+  &:focus-visible {
+    outline: 2px solid v.$primary;
+    outline-offset: 2px;
+  }
+
+  &[aria-current="true"] {
+    color: #fff7f0;
+    background: v.$primary;
+    border-color: v.$primary;
+  }
+}
+
+.store-byline {
+  margin-top: 0.15em;
+
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #8c7a6b;
+
+  a {
+    color: inherit;
+    text-decoration-color: #c9bbae;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+}
+
+.store-disclaimer {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #5a4636;
+}
+
+.store-intro {
+  margin-top: 1.8em;
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.doc-content h2:first-child {
+  padding-top: 0;
+}

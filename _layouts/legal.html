@@ -1,0 +1,57 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>{{ page.title }} – {{ site.title }}</title>
+  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/legal.css' | relative_url }}" rel="stylesheet">
+</head>
+
+<body>
+  <article class="container legal">
+
+    <header>
+      <h1>{{ page.title_on_page | default: page.title }}</h1>
+      {% if page.subtitle %}
+      <p>{{ page.subtitle }}</p>
+      {% endif %}
+    </header>
+
+    <hr class="header-content-separator">
+
+    {% if page.back_url %}
+    <div class="legal-back-top">
+      <a class="return-back" href="{{ page.back_url | relative_url }}">
+        <svg>
+          <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
+        </svg>
+        <i>{{ page.back_label | default: "Back" }}</i>
+      </a>
+    </div>
+    {% endif %}
+
+    {{ content }}
+
+    <p class="legal-updated">
+      Last updated:
+      <span>{{ page.updated }}</span>
+    </p>
+
+  </article>
+
+  <a class="return-back" href="{{ page.back_url | default: '/' | relative_url }}">
+    <svg>
+      <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
+    </svg>
+    <i>{{ page.back_label | default: "Back" }}</i>
+  </a>
+
+  <div class="whitespace-below"></div>
+</body>
+
+</html>

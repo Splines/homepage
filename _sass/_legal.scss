@@ -45,6 +45,16 @@
   font-style: normal;
 }
 
+.legal-back-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.2em;
+
+  .return-back {
+    margin-top: 0;
+  }
+}
+
 .legal-intro {
   font-size: 0.9rem;
   color: #6b5646;
