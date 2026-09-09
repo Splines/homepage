@@ -20,9 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const checkoutUrl = purchase.dataset.checkoutUrl;
 
+  // Before the store opens, the page still shows the whole purchase flow so that it can
+  // be reviewed, but no checkout URL is rendered and the button stays disabled. The
+  // agreement gate below still runs, so the boxes behave as they will once we open.
+  // See `store_open` in _config.yml.
+  const storeClosed = purchase.dataset.storeClosed === "true";
+
   // The live product id is only filled in once the product goes live, so fail loudly
   // here rather than opening a blank tab.
-  if (!checkoutUrl) {
+  if (!storeClosed && !checkoutUrl) {
     button.disabled = true;
     show(status, "The checkout is not configured yet. Please try again later.");
     return;
@@ -34,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   const syncGate = (): void => {
     const agreed = agreements.every(box => box.checked);
-    button.disabled = !agreed;
+    button.disabled = storeClosed || !agreed;
     if (agreeHint) agreeHint.hidden = agreed;
   };
 
@@ -44,6 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
     box.addEventListener("change", syncGate);
   }
   syncGate();
+
+  // Nothing to hand off to while the store is closed: the button never enables, and
+  // there is no checkout URL to open.
+  if (storeClosed || !checkoutUrl) return;
 
   button.addEventListener("click", () => {
     const tab = window.open(checkoutUrl, "_blank", "noopener");

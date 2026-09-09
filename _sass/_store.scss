@@ -203,6 +203,28 @@
   color: #8c7a6b;
 }
 
+// Sits to the right of the (permanently disabled) buy button while the store is not
+// open for business yet — see `store_open` in _config.yml.
+.store-closed-note {
+  // Takes the rest of the row next to the button, and drops onto its own line as soon
+  // as there is no room left for a readable line length.
+  flex: 1 1 15em;
+  margin: 0;
+  padding: 0.5em 0.8em;
+
+  font-size: 0.78rem;
+  line-height: 1.3rem;
+  color: #7a5a2f;
+
+  background: #fdf6ea;
+  border: 1px solid #e2c99f;
+  border-radius: 0.4em;
+
+  strong {
+    color: #6b4c34;
+  }
+}
+
 .store-currency-note {
   margin: 0.7em 0 0;
   font-size: 0.72rem;
