@@ -185,11 +185,38 @@
       <p class="store-checkout-status" data-checkout-status hidden></p>
     </div>
 
-    <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
-      <button type="button" class="doc-tab" aria-selected="true" data-doc-target="overview">Overview</button>
-      <button type="button" class="doc-tab" aria-selected="false" data-doc-target="manual">Manual</button>
-      <button type="button" class="doc-tab" aria-selected="false" data-doc-target="releases">Releases</button>
-    </nav>
+    <div class="doc-tabs" aria-label="Documentation sections" data-doc-tabs role="tablist">
+      <button
+        id="doc-tab-overview"
+        type="button"
+        class="doc-tab"
+        aria-controls="doc-panel-overview"
+        aria-selected="true"
+        data-doc-target="overview"
+        role="tab"
+        tabindex="0"
+      >Overview</button>
+      <button
+        id="doc-tab-manual"
+        type="button"
+        class="doc-tab"
+        aria-controls="doc-panel-manual"
+        aria-selected="false"
+        data-doc-target="manual"
+        role="tab"
+        tabindex="-1"
+      >Manual</button>
+      <button
+        id="doc-tab-releases"
+        type="button"
+        class="doc-tab"
+        aria-controls="doc-panel-releases"
+        aria-selected="false"
+        data-doc-target="releases"
+        role="tab"
+        tabindex="-1"
+      >Releases</button>
+    </div>
 
     <div class="doc-content">
       {{ content }}
