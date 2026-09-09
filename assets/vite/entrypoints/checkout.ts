@@ -46,49 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
   syncGate();
 
   button.addEventListener("click", () => {
-    // avoid reverse tabnabbing
-    const tab = window.open("about:blank", "_blank");
-
-    if (tab === null) {
-      // Offer a link to open the checkout in case the browser blocked the new tab.
-      showWithLink(
-        status,
-        "Your browser blocked the checkout tab.",
-        checkoutUrl,
-        "Open the checkout",
-      );
-      return;
-    }
-
-    tab.opener = null;
-    tab.location = checkoutUrl;
-    hide(status);
+    window.open(checkoutUrl, "_blank", "noopener");
   });
 });
 
 function show(element: HTMLElement, message: string): void {
   element.textContent = message;
   element.hidden = false;
-}
-
-function showWithLink(
-  element: HTMLElement,
-  message: string,
-  href: string,
-  label: string,
-): void {
-  const link = document.createElement("a");
-  link.href = href;
-  link.target = "_blank";
-  link.rel = "noopener";
-  link.textContent = label;
-
-  element.replaceChildren(`${message} `, link);
-  element.hidden = false;
-}
-
-function hide(element: HTMLElement): void {
-  element.hidden = true;
 }
 
 export {};
