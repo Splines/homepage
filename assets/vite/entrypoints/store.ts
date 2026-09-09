@@ -9,6 +9,9 @@
 
 const YOUTUBE_EMBED_BASE = "https://www.youtube-nocookie.com/embed/";
 
+/** How far Left/Right move along the documentation tabs, wrapping at the ends. */
+const ARROW_STEPS: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1 };
+
 document.addEventListener("DOMContentLoaded", () => {
   setupDocTabs();
   setupVideoGate();
@@ -16,6 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Wires the Overview / Manual / Releases buttons so exactly one panel shows.
+ *
+ * These are plain buttons in a nav rather than an ARIA tabs widget, so each one is
+ * its own tab stop and `aria-current` marks the panel on display. Left/Right are
+ * wired up on top of that because the buttons sit in a row and readers reach for
+ * them; the browser does not do this on its own.
  */
 function setupDocTabs(): void {
   const tabList = document.querySelector<HTMLElement>("[data-doc-tabs]");
@@ -28,21 +36,27 @@ function setupDocTabs(): void {
     tabList.querySelectorAll<HTMLButtonElement>("[data-doc-target]"),
   );
 
-  function select(target: string): void {
-    for (const panel of panels) {
-      panel.hidden = panel.dataset.docPanel !== target;
-    }
-    for (const tab of tabs) {
-      tab.setAttribute("aria-selected", String(tab.dataset.docTarget === target));
-    }
-  }
-
   for (const tab of tabs) {
     tab.addEventListener("click", () => {
-      const target = tab.dataset.docTarget;
-      if (target) select(target);
+      for (const panel of panels) {
+        panel.hidden = panel.dataset.docPanel !== tab.dataset.docTarget;
+      }
+      for (const other of tabs) {
+        other.setAttribute("aria-current", String(other === tab));
+      }
     });
   }
+
+  tabList.addEventListener("keydown", (event) => {
+    const step = ARROW_STEPS[event.key];
+    const index = tabs.indexOf(event.target as HTMLButtonElement);
+    if (step === undefined || index === -1) return;
+
+    event.preventDefault();
+    const next = tabs[(index + step + tabs.length) % tabs.length];
+    next.focus();
+    next.click();
+  });
 }
 
 /**
