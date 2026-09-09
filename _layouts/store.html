@@ -10,9 +10,6 @@
   <title>{{ page.title }} – {{ site.title }}</title>
   {% vite_client_tag %}
   <meta content="{{ page.title }}" property="og:title">
-  {% unless site.store_open %}
-  <meta content="noindex, nofollow" name="robots">
-  {% endunless %}
   <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
 
@@ -97,19 +94,7 @@
     {% assign dodo_url = "https://" | append: dodo_host | append: "/buy/" | append: dodo_product %}
     {% endif %}
 
-    {% comment %}
-    While the store is not open yet the whole purchase flow stays on the page (so it can
-    be reviewed), but the checkout URL is blanked out: there is nothing a stray click
-    could open. `data-store-closed` tells checkout.ts to keep the button disabled no
-    matter what. See `store_open` in _config.yml.
-    {% endcomment %}
-    {% assign store_closed = "" %}
-    {% unless site.store_open %}
-    {% assign store_closed = "true" %}
-    {% assign dodo_url = "" %}
-    {% endunless %}
-
-    <div class="store-purchase" data-checkout-url="{{ dodo_url }}" data-store-closed="{{ store_closed }}">
+    <div class="store-purchase" data-checkout-url="{{ dodo_url }}">
 
       <p class="store-purchase-note">
         One-time purchase, includes all future updates for life.
@@ -148,14 +133,7 @@
       <div class="store-purchase-main">
         <span class="store-price">{{ page.price }}</span>
         <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
-        <button type="button" class="store-buy" aria-describedby="{% if site.store_open %}checkout-notice{% else %}store-closed-note{% endif %}" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
-        {% unless site.store_open %}
-        <p id="store-closed-note" class="store-closed-note">
-          <strong>The store opens soon.</strong>
-          {{ page.title }} is finished, but the checkout is not live yet, so you cannot
-          buy it at the moment. Please check back in a little while.
-        </p>
-        {% endunless %}
+        <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
       </div>
 
       <p class="store-currency-note">
