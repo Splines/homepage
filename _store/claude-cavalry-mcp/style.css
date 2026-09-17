@@ -31,16 +31,11 @@
   margin-bottom: 1.4em;
 }
 
-/* One example = one card holding both the prompt and what came back, so a section
- * reads as a single object rather than two loose columns.
- *
- * No `overflow: hidden` here, however tempting for the rounded corners: it would
- * turn the card into a scrollport and silently kill the sticky prompt inside it. */
 .store-example {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  margin: 0 0 2.2em;
+  margin: 0 0 1em;
 
   border: 1.3px solid #e3d7cb;
   border-radius: 0.6em;
@@ -62,9 +57,6 @@
   }
 }
 
-/* Full-height column so its tint and divider run the whole card, with the prompt
- * itself sticky inside it. Sticking the column directly would cut both short as
- * soon as it detached. */
 .store-example-prompt {
   flex: 1 1 260px;
 
