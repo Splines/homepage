@@ -2,7 +2,7 @@
 layout: store
 title: Claude Desktop Cavalry MCP
 title_on_page: Claude Desktop Cavalry MCP
-tagline: Get a helping hand by Claude Desktop for your open Cavalry project.
+tagline: Get a helping hand by Claude Desktop for your Cavalry project.
 extra_css: style.css
 custom_body: true
 price: "TBD"
@@ -12,132 +12,131 @@ dodo_product_id_test: ""
 dodo_product_id_live: ""
 ---
 
-<div class="store-header-custom">
-  <p class="store-header-intro">
-    This project provides an MCP server for Claude Desktop. It automatically
-    installs a small bridge in Cavalry so the agent can read the current scene
-    state and execute JavaScript code in your project — backed by a complete
-    knowledge base of the Cavalry JavaScript API and the full user docs.
-  </p>
+<p>
+  An MCP server for Claude Desktop. It automatically installs a small bridge in Cavalry, such that the agent can read the current scene state and execute code in your project. For more accurate answers, the MCP server is backed by a complete knowledge base of the Cavalry JavaScript API and the user docs.
+</p>
 
-  <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort).</p>
+<p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort).</p>
 
-  <div class="store-example" aria-hidden="true">
-    <div class="store-example-prompt">
-      <div class="store-example-prompt-inner">
-        <p class="store-prompt-label">Prompt</p>
-        <p class="store-prompt-text">Use the CavalryMCP. Is there a way in Cavalry to automatically animate text paragraph by paragraph? E.g. some snappy, staggered reveal animation?</p>
-      </div>
+<h2>Get Unstuck</h2>
+
+<p>You're the artist with ideas. But sometimes it's hard to put them </p>
+
+<p>You're the artist, you have ideas. But they might be hard to carry out in Cavalry, e.g. when you're new to the
+  program or don't know every functionality. Don't stay stuck, prototype more easily. You get a helping hand while
+  remaining in full control.</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. I made a path and a blue rectangle. Now I want that the rectangle
+        follows along the path while changing its rotation according to the normal vector of the curve. Do this
+        procedurally such that I can later change the path itself.</p>
     </div>
+  </div>
 
-    <div class="store-example-output store-example-fade">
-      <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
-
-      <p>Yes — Cavalry has a built-in behavior made exactly for this: <strong>Auto-Animate</strong>, combined with Text's paragraph/line level splitting. Here's the recipe for a snappy, staggered paragraph-by-paragraph reveal:</p>
-
-      <h2>Steps</h2>
-
-      <ol>
-        <li><strong>Create your Text Shape</strong> with each paragraph separated by a blank line (Cavalry treats a paragraph as text separated by an empty line).</li>
-        <li>Select the Text Shape, and click <strong>Auto-Animate</strong> in the Shelf (this auto-checks <strong>Use Levels</strong>, since Text is a sub-mesh).</li>
-        <li>
-          In Auto-Animate's <strong>Animation</strong> tab, set:
-          <ul>
-            <li><strong>Level Mode</strong> → <strong>Custom...</strong> with a <strong>Custom Level Range</strong> targeting <strong>Paragraph</strong>.</li>
-            <li><strong>Opacity Mode</strong> → <strong>Fade Up</strong> for a reveal.</li>
-          </ul>
-        </li>
-        <li>In the <strong>Timing</strong> tab, check <strong>Time Offset</strong> so each paragraph is staggered automatically.</li>
-      </ol>
-    </div>
+  <div class="store-example-video">
+    <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+    <div class="store-inline-video">Video coming soon</div>
   </div>
 </div>
 
-<div class="store-highlights">
-
-  <h2>Better Understand Cavalry</h2>
-
-  <p>As the extension contains the entire Cavalry user docs, ask about anything and get precise answers instead of hallucinated crap.</p>
-
-  <div class="store-example">
-    <div class="store-example-prompt">
-      <div class="store-example-prompt-inner">
-        <p class="store-prompt-label">Prompt</p>
-        <p class="store-prompt-text">Use the CavalryMCP. Unfortunately, I've lost the overview over my scene. Tell me what is going on in all these layers.</p>
-      </div>
-    </div>
-
-    <div class="store-example-output store-example-fade">
-      <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
-
-      <p>Here's the picture of your scene, reconstructed from the scene graph:</p>
-
-      <p><strong>Concept:</strong> A particle-morphing animation that spells out a sequence of math symbols/words, one morphing into the next — like <code>sqrt → pi → e → integral → nabla → partial → delta → approx → infty → in → equiv → smaller → bigger → sum</code>.</p>
-
-      <p><strong>Core building blocks</strong></p>
-      <ul>
-        <li><strong><code>basicShape#1</code> "Particle"</strong> — the single source shape (a dot/particle) used by <em>every</em> duplicator below. Its fill color comes from <strong><code>colorArray#3</code> "Colors"</strong>.</li>
-        <li>14 <strong>Duplicators</strong>, one per symbol. Each one distributes copies of <code>basicShape#1</code>, is masked by its own <strong><code>editableShape</code></strong> (a vector shape of that symbol's glyph), and has its particle scale driven by an <strong>oscillator</strong>, giving a lively size-jitter per particle.</li>
-      </ul>
-
-      <p><strong>The morph chain</strong><br>Each duplicator's output feeds into a <strong><code>blendSubMeshPositions</code></strong> node that blends it toward the <em>next</em> duplicator in the sequence, which in turn becomes a <code>deformer</code> on the next duplicator. This creates one continuous pipeline from <code>sqrt</code> all the way to <code>sum</code>.</p>
-
-      <p><strong>Summary:</strong> It's a 14-stage particle text-morph rig, each stage a masked duplicator plus a blend transition to the next, all sharing one particle shape and one color source, with staggers/oscillators layered on top for organic timing and scale variation.</p>
-
-      <p>Want me to check current attribute values, or render a preview frame to see it visually?</p>
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. I have a bouncing ball animation using Forge Dynamics. But right
+        now, the ball only bounces off the ground (composition bottom). Instead, I want it to bounce off the rectangle
+        named "Ground". Fix that and also tell me how I could have achieved that in the UI on my own.</p>
     </div>
   </div>
 
-  <h2>Get Unstuck</h2>
+  <div class="store-example-video">
+    <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+    <div class="store-inline-video">Video coming soon</div>
+  </div>
+</div>
 
-  <p>You're the artist, you have ideas. But they might be hard to carry out in Cavalry, e.g. when you're new to the program or don't know every functionality. Don't stay stuck, prototype more easily. You get a helping hand while remaining in full control.</p>
+<h2>Better Understand Cavalry</h2>
 
-  <div class="store-example">
-    <div class="store-example-prompt">
-      <div class="store-example-prompt-inner">
-        <p class="store-prompt-label">Prompt</p>
-        <p class="store-prompt-text">Use the CavalryMCP. I made a path and a blue rectangle. Now I want that the rectangle follows along the path while changing its rotation according to the normal vector of the curve. Do this procedurally such that I can later change the path itself.</p>
-      </div>
-    </div>
-
-    <div class="store-example-video">
-      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
-      <div class="store-inline-video">Video coming soon</div>
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. Is there a way in Cavalry to automatically animate text paragraph by paragraph? E.g. some snappy, staggered reveal animation?</p>
     </div>
   </div>
 
-  <div class="store-example">
-    <div class="store-example-prompt">
-      <div class="store-example-prompt-inner">
-        <p class="store-prompt-label">Prompt</p>
-        <p class="store-prompt-text">Use the CavalryMCP. I have a bouncing ball animation using Forge Dynamics. But right now, the ball only bounces off the ground (composition bottom). Instead, I want it to bounce off the rectangle named "Ground". Fix that and also tell me how I could have achieved that in the UI on my own.</p>
-      </div>
-    </div>
+  <div class="store-example-output store-example-fade">
+    <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
 
-    <div class="store-example-video">
-      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
-      <div class="store-inline-video">Video coming soon</div>
+    <p>Yes — Cavalry has a built-in behavior made exactly for this: <strong>Auto-Animate</strong>, combined with Text's paragraph/line level splitting. Here's the recipe for a snappy, staggered paragraph-by-paragraph reveal:</p>
+
+    <h2>Steps</h2>
+
+    <ol>
+      <li><strong>Create your Text Shape</strong> with each paragraph separated by a blank line (Cavalry treats a paragraph as text separated by an empty line).</li>
+      <li>Select the Text Shape, and click <strong>Auto-Animate</strong> in the Shelf (this auto-checks <strong>Use Levels</strong>, since Text is a sub-mesh).</li>
+      <li>
+        In Auto-Animate's <strong>Animation</strong> tab, set:
+        <ul>
+          <li><strong>Level Mode</strong> → <strong>Custom...</strong> with a <strong>Custom Level Range</strong> targeting <strong>Paragraph</strong>.</li>
+          <li><strong>Opacity Mode</strong> → <strong>Fade Up</strong> for a reveal.</li>
+        </ul>
+      </li>
+      <li>In the <strong>Timing</strong> tab, check <strong>Time Offset</strong> so each paragraph is staggered automatically.</li>
+    </ol>
+  </div>
+</div>
+
+<p>As the extension contains the entire Cavalry user docs, ask about anything and get precise answers instead of hallucinated crap.</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. Unfortunately, I've lost the overview over my scene. Tell me what is going on in all these layers.</p>
     </div>
   </div>
 
-  <h2>Start With a Sketch</h2>
+  <div class="store-example-output store-example-fade">
+    <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
 
-  <p>Claude can read your images. So why not start your new project with a sketch and paper? Then let Claude give you some first working version of your idea in Cavalry.</p>
+    <p>Here's the picture of your scene, reconstructed from the scene graph:</p>
 
-  <div class="store-example">
-    <div class="store-example-prompt">
-      <div class="store-example-prompt-inner">
-        <p class="store-prompt-label">Prompt</p>
-        <p class="store-prompt-text">Use the CavalryMCP. Attached is a sketch of an animation I want to create in Cavalry.</p>
-      </div>
-    </div>
+    <p><strong>Concept:</strong> A particle-morphing animation that spells out a sequence of math symbols/words, one morphing into the next — like <code>sqrt → pi → e → integral → nabla → partial → delta → approx → infty → in → equiv → smaller → bigger → sum</code>.</p>
 
-    <div class="store-example-video">
-      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
-      <div class="store-inline-video">Video coming soon</div>
+    <p><strong>Core building blocks</strong></p>
+    <ul>
+      <li><strong><code>basicShape#1</code> "Particle"</strong> — the single source shape (a dot/particle) used by <em>every</em> duplicator below. Its fill color comes from <strong><code>colorArray#3</code> "Colors"</strong>.</li>
+      <li>14 <strong>Duplicators</strong>, one per symbol. Each one distributes copies of <code>basicShape#1</code>, is masked by its own <strong><code>editableShape</code></strong> (a vector shape of that symbol's glyph), and has its particle scale driven by an <strong>oscillator</strong>, giving a lively size-jitter per particle.</li>
+    </ul>
+
+    <p><strong>The morph chain</strong><br>Each duplicator's output feeds into a <strong><code>blendSubMeshPositions</code></strong> node that blends it toward the <em>next</em> duplicator in the sequence, which in turn becomes a <code>deformer</code> on the next duplicator. This creates one continuous pipeline from <code>sqrt</code> all the way to <code>sum</code>.</p>
+
+    <p><strong>Summary:</strong> It's a 14-stage particle text-morph rig, each stage a masked duplicator plus a blend transition to the next, all sharing one particle shape and one color source, with staggers/oscillators layered on top for organic timing and scale variation.</p>
+
+    <p>Want me to check current attribute values, or render a preview frame to see it visually?</p>
+  </div>
+</div>
+
+<h2>Start With a Sketch</h2>
+
+<p>Claude can read your images. So why not start your new project with a sketch and paper? Then let Claude give you some first working version of your idea in Cavalry.</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. Attached is a sketch of an animation I want to create in Cavalry.</p>
     </div>
   </div>
 
+  <div class="store-example-video">
+    <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+    <div class="store-inline-video">Video coming soon</div>
+  </div>
 </div>
 
 {%- comment -%}

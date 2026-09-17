@@ -1,21 +1,3 @@
-/*
- * Styles specific to the Claude Desktop Cavalry MCP product page: the custom
- * "prompt in, result out" header and the example cards further down. Kept next to
- * this product's index.md rather than in the shared store stylesheet, since no
- * other product uses this layout.
- */
-
-/* Custom header used instead of a teaser video: a short intro paragraph at the
- * normal text width, followed by the same "prompt in, result out" example card
- * used further down the page (see .store-example below). */
-.store-header-custom {
-  margin: 1.8em 0;
-}
-
-.store-header-intro {
-  margin: 0 0 2em;
-}
-
 /* Typography for "what you typed into Claude", used inside .store-example-prompt. */
 .store-prompt-label {
   margin: 0 0 0.55em;
@@ -35,14 +17,6 @@
   line-height: 1.5em;
   color: #3d3226;
   white-space: pre-wrap;
-}
-
-/* Marketing/example content shown above the purchase box and the doc tabs, rather
- * than tucked away inside the Overview tab. The page only ever uses two widths —
- * the text column and the wider one shared by the hero and the example cards —
- * so the eye has a rhythm to follow instead of a new edge every section. */
-.store-highlights {
-  margin: 2.4em 0;
 }
 
 .store-highlights h2 {
