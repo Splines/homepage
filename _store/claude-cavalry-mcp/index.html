@@ -46,11 +46,22 @@ dodo_product_id_live: ""
     </div>
   </div>
 
-  <div class="store-example-video">
+  <div class="store-example-video store-example-output">
     <p class="store-example-meta">~1m10s | ~ 850 Tokens<br>
       Started with the scene that had the bouncing ball and the rectangle named "Ground" defined. A basic Forge setup for the bouncing ball was in place, but the ground shape not added as body and no collision detection.
     </p>
     <video controls loop muted playsinline src="assets/bouncing-ball.mp4"></video>
+
+    <h2 style="padding-top: 0;">How to do it in the UI</h2>
+
+    <ol>
+      <li>Select the <strong>Forge Dynamics</strong> layer, open its Attributes.</li>
+      <li>Under <strong>Ground Mode</strong>, switch it to <strong>Off</strong> (Attributes panel, top-level settings).</li>
+      <li>Drag the <strong>Ground</strong> layer from the Scene/Assets into the Forge Dynamics <strong>Bodies (shapes)</strong> attribute — or right-click Ground → <strong>Add Body</strong> → Add to Forge Dynamics.</li>
+      <li>On the new Body entry for Ground, open its <strong>Body</strong> tab and change <strong>Body Type</strong> from <em>Dynamic</em> to <strong>Still</strong> (a Still body
+        participates in collisions but doesn't move or fall).</li>
+      <li>Scrub the timeline (or hit play)to re-simulate — the Ball should now bounce off the Ground rectangle's top edge instead of the composition's bottom edge.</li>
+    </ol>
   </div>
 </div>
 
