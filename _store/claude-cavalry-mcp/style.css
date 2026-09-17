@@ -112,8 +112,9 @@
 
   font-family: "Vermiglione", serif;
   font-style: italic;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: #a3958a;
+  line-height: 1rem;
 }
 
 /* What came back from Claude, wherever it is shown. Headings inside an answer are
@@ -150,6 +151,16 @@
 
 .store-example-video .store-inline-video {
   margin: 0;
+}
+
+.store-example-video {
+  video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    background: #000;
+  }
 }
 
 /* The "(show video)" markers from the source notes: a plain placeholder box until
