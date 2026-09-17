@@ -1,4 +1,22 @@
 @use "variables" as v;
+@use "product-tile";
+
+// Store overview page: a simple grid of product tiles, with a "Back" link above
+// it mirroring the one legal pages show above their content.
+.store-back-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+
+  .return-back {
+    margin-top: 0;
+  }
+}
+
+.store-index-grid {
+  display: flex;
+  flex-direction: column;
+}
 
 // The demo video, intentionally a touch wider than the text column, echoing the
 // oversized figures used in the blog posts.

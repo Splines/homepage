@@ -1,0 +1,284 @@
+---
+layout: store
+title: Claude Desktop Cavalry MCP
+title_on_page: Claude Desktop Cavalry MCP
+tagline: Get a helping hand by Claude Desktop for your open Cavalry project.
+extra_css: style.css
+custom_body: true
+price: "TBD"
+price_note: "incl. VAT"
+buy_label: "Buy"
+dodo_product_id_test: ""
+dodo_product_id_live: ""
+---
+
+<div class="store-header-custom">
+  <p class="store-header-intro">
+    This project provides an MCP server for Claude Desktop. It automatically
+    installs a small bridge in Cavalry so the agent can read the current scene
+    state and execute JavaScript code in your project — backed by a complete
+    knowledge base of the Cavalry JavaScript API and the full user docs.
+  </p>
+
+  <div class="store-example" aria-hidden="true">
+    <div class="store-example-prompt">
+      <div class="store-example-prompt-inner">
+        <p class="store-prompt-label">Prompt</p>
+        <p class="store-prompt-text">Use the CavalryMCP. Is there a way in Cavalry to automatically animate text paragraph by paragraph? E.g. some snappy, staggered reveal animation?</p>
+      </div>
+    </div>
+
+    <div class="store-example-output store-example-fade">
+      <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
+
+      <p>Yes — Cavalry has a built-in behavior made exactly for this: <strong>Auto-Animate</strong>, combined with Text's paragraph/line level splitting. Here's the recipe for a snappy, staggered paragraph-by-paragraph reveal:</p>
+
+      <h2>Steps</h2>
+
+      <ol>
+        <li><strong>Create your Text Shape</strong> with each paragraph separated by a blank line (Cavalry treats a paragraph as text separated by an empty line).</li>
+        <li>Select the Text Shape, and click <strong>Auto-Animate</strong> in the Shelf (this auto-checks <strong>Use Levels</strong>, since Text is a sub-mesh).</li>
+        <li>
+          In Auto-Animate's <strong>Animation</strong> tab, set:
+          <ul>
+            <li><strong>Level Mode</strong> → <strong>Custom...</strong> with a <strong>Custom Level Range</strong> targeting <strong>Paragraph</strong>.</li>
+            <li><strong>Opacity Mode</strong> → <strong>Fade Up</strong> for a reveal.</li>
+          </ul>
+        </li>
+        <li>In the <strong>Timing</strong> tab, check <strong>Time Offset</strong> so each paragraph is staggered automatically.</li>
+      </ol>
+    </div>
+  </div>
+
+  <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic.</p>
+</div>
+
+<div class="store-highlights">
+
+  <h2>Better Understand Cavalry</h2>
+
+  <p>As the extension contains the entire Cavalry user docs, ask about anything and get precise answers instead of hallucinated crap.</p>
+
+  <div class="store-example">
+    <div class="store-example-prompt">
+      <div class="store-example-prompt-inner">
+        <p class="store-prompt-label">Prompt</p>
+        <p class="store-prompt-text">Use the CavalryMCP. Unfortunately, I've lost the overview over my scene. Tell me what is going on in all these layers.</p>
+      </div>
+    </div>
+
+    <div class="store-example-output store-example-fade">
+      <p class="store-example-meta">~10s · tested with Sonnet 5 (medium effort) · Tokens: TODO</p>
+
+      <p>Here's the picture of your scene, reconstructed from the scene graph:</p>
+
+      <p><strong>Concept:</strong> A particle-morphing animation that spells out a sequence of math symbols/words, one morphing into the next — like <code>sqrt → pi → e → integral → nabla → partial → delta → approx → infty → in → equiv → smaller → bigger → sum</code>.</p>
+
+      <p><strong>Core building blocks</strong></p>
+      <ul>
+        <li><strong><code>basicShape#1</code> "Particle"</strong> — the single source shape (a dot/particle) used by <em>every</em> duplicator below. Its fill color comes from <strong><code>colorArray#3</code> "Colors"</strong>.</li>
+        <li>14 <strong>Duplicators</strong>, one per symbol. Each one distributes copies of <code>basicShape#1</code>, is masked by its own <strong><code>editableShape</code></strong> (a vector shape of that symbol's glyph), and has its particle scale driven by an <strong>oscillator</strong>, giving a lively size-jitter per particle.</li>
+      </ul>
+
+      <p><strong>The morph chain</strong><br>Each duplicator's output feeds into a <strong><code>blendSubMeshPositions</code></strong> node that blends it toward the <em>next</em> duplicator in the sequence, which in turn becomes a <code>deformer</code> on the next duplicator. This creates one continuous pipeline from <code>sqrt</code> all the way to <code>sum</code>.</p>
+
+      <p><strong>Summary:</strong> It's a 14-stage particle text-morph rig, each stage a masked duplicator plus a blend transition to the next, all sharing one particle shape and one color source, with staggers/oscillators layered on top for organic timing and scale variation.</p>
+
+      <p>Want me to check current attribute values, or render a preview frame to see it visually?</p>
+    </div>
+  </div>
+
+  <h2>Get Unstuck</h2>
+
+  <p>You're the artist, you have ideas. But they might be hard to carry out in Cavalry, e.g. when you're new to the program or don't know every functionality. Don't stay stuck, prototype more easily. You get a helping hand while remaining in full control.</p>
+
+  <div class="store-example">
+    <div class="store-example-prompt">
+      <div class="store-example-prompt-inner">
+        <p class="store-prompt-label">Prompt</p>
+        <p class="store-prompt-text">Use the CavalryMCP. I made a path and a blue rectangle. Now I want that the rectangle follows along the path while changing its rotation according to the normal vector of the curve. Do this procedurally such that I can later change the path itself.</p>
+      </div>
+    </div>
+
+    <div class="store-example-video">
+      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+      <div class="store-inline-video">Video coming soon</div>
+    </div>
+  </div>
+
+  <div class="store-example">
+    <div class="store-example-prompt">
+      <div class="store-example-prompt-inner">
+        <p class="store-prompt-label">Prompt</p>
+        <p class="store-prompt-text">Use the CavalryMCP. I have a bouncing ball animation using Forge Dynamics. But right now, the ball only bounces off the ground (composition bottom). Instead, I want it to bounce off the rectangle named "Ground". Fix that and also tell me how I could have achieved that in the UI on my own.</p>
+      </div>
+    </div>
+
+    <div class="store-example-video">
+      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+      <div class="store-inline-video">Video coming soon</div>
+    </div>
+  </div>
+
+  <h2>Start With a Sketch</h2>
+
+  <p>Claude can read your images. So why not start your new project with a sketch and paper? Then let Claude give you some first working version of your idea in Cavalry.</p>
+
+  <div class="store-example">
+    <div class="store-example-prompt">
+      <div class="store-example-prompt-inner">
+        <p class="store-prompt-label">Prompt</p>
+        <p class="store-prompt-text">Use the CavalryMCP. Attached is a sketch of an animation I want to create in Cavalry.</p>
+      </div>
+    </div>
+
+    <div class="store-example-video">
+      <p class="store-example-meta">Time: TODO · Tokens: TODO</p>
+      <div class="store-inline-video">Video coming soon</div>
+    </div>
+  </div>
+
+</div>
+
+{%- comment -%}
+  This page opts out of the layout's automatic purchase-box/doc-tabs generation
+  (see `custom_body` in _layouts/store.html), so the checkout-URL calculation
+  below mirrors the layout's own copy of it exactly.
+{%- endcomment -%}
+{% assign dodo_mode = "test" %}
+{% if jekyll.environment == "production" %}
+{% assign dodo_mode = "live" %}
+{% endif %}
+{% if site.dodo_force_mode %}
+{% assign dodo_mode = site.dodo_force_mode %}
+{% endif %}
+
+{% if dodo_mode == "live" %}
+{% assign dodo_product = page.dodo_product_id_live %}
+{% assign dodo_host = "checkout.dodopayments.com" %}
+{% else %}
+{% assign dodo_product = page.dodo_product_id_test %}
+{% assign dodo_host = "test.checkout.dodopayments.com" %}
+{% endif %}
+
+{% if dodo_product and dodo_product != "" %}
+{% assign dodo_url = "https://" | append: dodo_host | append: "/buy/" | append: dodo_product %}
+{% endif %}
+
+<div class="store-purchase" data-checkout-url="{{ dodo_url }}">
+
+  <p class="store-purchase-note">
+    One-time purchase, includes all future updates for life.
+    <br>
+    A download link is sent to you by email after checkout.
+  </p>
+
+  <div class="store-agree">
+    <label class="store-agree-item">
+      <input type="checkbox" data-agree>
+      <span>
+        I have read and accept the
+        <a href="{{ page.url | append: 'terms/' | relative_url }}" rel="noopener" target="_blank">Terms &amp; License</a>
+        and the
+        <a href="{{ '/datenschutz/' | relative_url }}" rel="noopener" target="_blank">privacy policy</a>,
+        including the
+        <a href="#known-limitations">known limitations</a>
+        of this product.
+      </span>
+    </label>
+
+    <label class="store-agree-item">
+      <input type="checkbox" data-agree>
+      <span>
+        I understand that this license is for a <strong>single user</strong>: I will
+        not share, resell or publish {{ page.title }} or my download link, and I will
+        not let other people use it alongside me.
+      </span>
+    </label>
+
+    <p class="store-agree-hint" data-agree-hint>
+      Please confirm both points to continue to the checkout.
+    </p>
+  </div>
+
+  <div class="store-purchase-main">
+    <span class="store-price">{{ page.price }}</span>
+    <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
+    <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
+  </div>
+
+  <p class="store-currency-note">
+    Prices are in euro. If you choose another currency on the checkout page, the
+    amount is converted by Dodo Payments and a currency-conversion fee may be
+    added on top.
+  </p>
+
+  {% if dodo_mode == "live" and jekyll.environment != "production" %}
+  <p class="store-checkout-warning">
+    <strong>Live mode forced locally.</strong>
+    The checkout this opens takes <em>real</em> payments and test cards will be
+    declined. Apply your 100% discount code before paying, then comment out
+    <code>dodo_force_mode</code> in <code>_config.yml</code> again.
+  </p>
+  {% endif %}
+
+  <p id="checkout-notice" class="store-checkout-consent">
+    Payments are processed by
+    <a href="https://dodopayments.com" rel="noopener">Dodo Payments</a>,
+    the merchant of record. Pressing &ldquo;{{ page.buy_label | default: "Buy now" }}&rdquo;
+    opens their checkout at <code>{{ dodo_host }}</code> in a new tab. Nothing is
+    loaded from them into this page, so they only receive your data once you are
+    over there.
+  </p>
+
+  <p class="store-checkout-status" data-checkout-status hidden></p>
+</div>
+
+<nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
+  <button type="button" class="doc-tab" aria-current="true" data-doc-target="overview">Overview</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="manual">Manual</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="releases">Releases</button>
+</nav>
+
+<div class="doc-content">
+
+  <div class="doc-panel" data-doc-panel="overview">
+
+    <h2 id="known-limitations">Known Limitations</h2>
+
+    <ul>
+      <li><strong>Work in progress.</strong> This product page is a preview — pricing, the manual and the release notes below will be filled in before launch.</li>
+    </ul>
+
+    <h2>Acknowledgements</h2>
+
+    <p>This project wouldn't exist without the Cavalry team building such a great animation tool, and Anthropic's work on Claude and the Model Context Protocol.</p>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="manual" hidden>
+
+    <h2>Installation</h2>
+
+    <ol>
+      <li>Download the <code>CavalryMCP.zip</code> (a download link is sent to you by email after checkout).</li>
+      <li>Add the MCP server to Claude Desktop's configuration (<code>claude_desktop_config.json</code>) as described in the included <code>README</code>.</li>
+      <li>In Cavalry, navigate to <code>Scripts &gt; Show Scripts Folder</code> and drag the bundled bridge script in-place, then run it once from <code>Scripts &gt; CavalryMCP Bridge</code> with your project open.</li>
+      <li>Restart Claude Desktop and ask it to use the CavalryMCP tools.</li>
+    </ol>
+
+    <h2>Usage</h2>
+
+    <p>Start your prompt with "Use the CavalryMCP" (or simply enable the MCP server for the conversation) so Claude reaches for the scene-state and documentation-search tools instead of guessing.</p>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="releases" hidden>
+
+    <h2>Releases</h2>
+
+    <p>Not released yet — check back soon.</p>
+
+  </div>
+
+</div>

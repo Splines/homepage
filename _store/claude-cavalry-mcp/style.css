@@ -1,0 +1,196 @@
+/*
+ * Styles specific to the Claude Desktop Cavalry MCP product page: the custom
+ * "prompt in, result out" header and the example cards further down. Kept next to
+ * this product's index.md rather than in the shared store stylesheet, since no
+ * other product uses this layout.
+ */
+
+/* Custom header used instead of a teaser video: a short intro paragraph at the
+ * normal text width, followed by the same "prompt in, result out" example card
+ * used further down the page (see .store-example below). */
+.store-header-custom {
+  margin: 1.8em 0;
+}
+
+.store-header-intro {
+  margin: 0 0 2em;
+}
+
+/* Typography for "what you typed into Claude", used inside .store-example-prompt. */
+.store-prompt-label {
+  margin: 0 0 0.55em;
+
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a3958a;
+}
+
+.store-prompt-text {
+  margin: 0;
+
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5em;
+  color: #3d3226;
+  white-space: pre-wrap;
+}
+
+/* Marketing/example content shown above the purchase box and the doc tabs, rather
+ * than tucked away inside the Overview tab. The page only ever uses two widths —
+ * the text column and the wider one shared by the hero and the example cards —
+ * so the eye has a rhythm to follow instead of a new edge every section. */
+.store-highlights {
+  margin: 2.4em 0;
+}
+
+.store-highlights h2 {
+  margin-top: 2.2em;
+}
+
+.store-highlights h2:first-child {
+  margin-top: 0;
+}
+
+.store-highlights > p {
+  margin-bottom: 1.4em;
+}
+
+/* One example = one card holding both the prompt and what came back, so a section
+ * reads as a single object rather than two loose columns.
+ *
+ * No `overflow: hidden` here, however tempting for the rounded corners: it would
+ * turn the card into a scrollport and silently kill the sticky prompt inside it. */
+.store-example {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 2.2em;
+
+  border: 1.3px solid #e3d7cb;
+  border-radius: 0.6em;
+  background: #fffefc;
+}
+
+@media (min-width: 720px) {
+  .store-example {
+    margin-left: -9%;
+    margin-right: -9%;
+    flex-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1000px) {
+  .store-example {
+    margin-left: -15%;
+    margin-right: -15%;
+  }
+}
+
+/* Full-height column so its tint and divider run the whole card, with the prompt
+ * itself sticky inside it. Sticking the column directly would cut both short as
+ * soon as it detached. */
+.store-example-prompt {
+  flex: 1 1 260px;
+
+  background: #faf3ec;
+  border-bottom: 1.3px solid #e3d7cb;
+  border-radius: 0.5em 0.5em 0 0;
+}
+
+@media (min-width: 720px) {
+  .store-example-prompt {
+    max-width: 38%;
+
+    border-bottom: 0;
+    border-right: 1.3px solid #e3d7cb;
+    border-radius: 0.5em 0 0 0.5em;
+  }
+}
+
+.store-example-prompt-inner {
+  padding: 1.15em 1.3em;
+}
+
+@media (min-width: 720px) {
+  .store-example-prompt-inner {
+    position: sticky;
+    top: 1.5em;
+  }
+}
+
+.store-example-output,
+.store-example-video {
+  flex: 1 1 320px;
+  padding: 1.15em 1.3em;
+}
+
+@media (min-width: 720px) {
+  .store-example-output,
+  .store-example-video {
+    max-width: 62%;
+  }
+}
+
+.store-example-meta {
+  margin: 0 0 0.9em;
+
+  font-family: "Vermiglione", serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: #a3958a;
+}
+
+/* What came back from Claude, wherever it is shown. Headings inside an answer are
+ * part of a quoted reply, not of the page outline, so they stay close to the size
+ * of the text around them. */
+.store-example-output {
+  font-size: 0.88rem;
+  line-height: 1.55em;
+  color: #3d3226;
+}
+
+.store-example-output > :first-child {
+  margin-top: 0;
+}
+
+.store-example-output > :last-child {
+  margin-bottom: 0;
+}
+
+.store-example-output h2 {
+  margin-top: 1.3em;
+  font-size: 1.05rem;
+}
+
+/* Long answers are shown as a taste, not in full: clipped and faded rather than
+ * making the reader scroll past an entire chat transcript. */
+.store-example-fade {
+  max-height: 24em;
+  overflow: hidden;
+
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
+}
+
+.store-example-video .store-inline-video {
+  margin: 0;
+}
+
+/* The "(show video)" markers from the source notes: a plain placeholder box until
+ * a real recording is dropped in. */
+.store-inline-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  margin: 1.2em 0 1.6em;
+
+  font-family: "Vermiglione", serif;
+  font-size: 0.85rem;
+  color: #8c7a6b;
+
+  background: #e7ded4;
+  border-radius: 0.5em;
+}
