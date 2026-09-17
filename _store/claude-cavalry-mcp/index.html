@@ -20,6 +20,8 @@ dodo_product_id_live: ""
     knowledge base of the Cavalry JavaScript API and the full user docs.
   </p>
 
+  <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort).</p>
+
   <div class="store-example" aria-hidden="true">
     <div class="store-example-prompt">
       <div class="store-example-prompt-inner">
@@ -49,8 +51,6 @@ dodo_product_id_live: ""
       </ol>
     </div>
   </div>
-
-  <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic.</p>
 </div>
 
 <div class="store-highlights">
@@ -141,9 +141,9 @@ dodo_product_id_live: ""
 </div>
 
 {%- comment -%}
-  This page opts out of the layout's automatic purchase-box/doc-tabs generation
-  (see `custom_body` in _layouts/store.html), so the checkout-URL calculation
-  below mirrors the layout's own copy of it exactly.
+This page opts out of the layout's automatic purchase-box/doc-tabs generation
+(see `custom_body` in _layouts/store.html), so the checkout-URL calculation
+below mirrors the layout's own copy of it exactly.
 {%- endcomment -%}
 {% assign dodo_mode = "test" %}
 {% if jekyll.environment == "production" %}
