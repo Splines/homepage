@@ -16,7 +16,7 @@ dodo_product_id_live: ""
   An MCP server for Claude Desktop. It automatically installs a small bridge in Cavalry, such that the agent can read the current scene state and execute code in your project. The MCP server also bundles the entire Cavalry user docs including the JavaScript API, such that you get precise answers.
 </p>
 
-<p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort).</p>
+<p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort), unless otherwise stated.</p>
 
 <h2 id="unstuck">Get Unstuck</h2>
 
@@ -141,16 +141,21 @@ dodo_product_id_live: ""
   <div class="store-example-prompt">
     <div class="store-example-prompt-inner">
       <p class="store-prompt-label">Prompt</p>
-      <p class="store-prompt-text">Use the CavalryMCP. I want to make an artistic animated simulation of a black hole showcasing its accretion disk in shades of an orange/red/amber (and maybe yellow/white for very hot regions).<br>This does not need to be a physically accurate simulation. Prioritize a visually striking, atmospheric result over strict scientific correctness.<br>The accretion disk should be animated and feel continuously in motion. Create visible rotational flow around the black hole, with some variation in speed, density, turbulence and brightness, such that the movement feels organic. You may want to use particles, procedural noise, trails, blur, distortion, or similar techniques available in Cavalry.<br>You may look up reference images of black holes and accretion disks, and briefly consult the underlying physics for visual inspiration, but treat those references as a starting point rather than a constraint.
-      </p>
+      <p class="store-prompt-text">Use the CavalryMCP. I want to make an artistic animated simulation of a black hole showcasing its accretion disk in shades of an orange/red/amber (and maybe yellow/white for very hot regions).<br>This does not need to be a physically accurate simulation. Prioritize a visually striking, atmospheric result over strict scientific correctness.<br>The accretion disk should be animated and feel continuously in motion. Create visible rotational flow around the black hole, with some variation in speed, density, turbulence and brightness, such that the movement feels organic. You may want to use particles, procedural noise, trails, blur, distortion, or similar techniques available in Cavalry.<br>You may look up reference images of black holes and accretion disks, and briefly consult the underlying physics for visual inspiration, but treat those references as a starting point rather than a constraint.</p>
     </div>
   </div>
 
   <div class="store-example-video">
-    <p class="store-example-meta"> ~23m | ~9.6k Tokens<br>
-      Started with an empty scene and got a result that does not even remotely look like a black hole and its accretion disk. Here, more manual work or a better prompt with more physics input would be necessary to get better results.
+    <p class="store-example-meta"> ~23m | ~9.6k Tokens | Sonnet (medium effort)<br>
+      Started with an empty scene and got a result that does not even remotely look like a black hole. Sonnet did a ridiculous job here.
     </p>
     <video controls loop muted playsinline src="assets/black-hole.mp4"></video>
+
+    <p class="store-example-meta" style="margin-top: 2em;">
+      ~30m20s | ~18.6k Tokens | Opus (high effort)<br>
+      Opus produced a much more visually striking result, that has a lot of problems, but at least looks more like a black hole and is more "cinematic".
+    </p>
+    <video controls loop muted playsinline src="assets/black-hole-opus.mp4"></video>
   </div>
 </div>
 
