@@ -1,0 +1,266 @@
+---
+layout: store
+title: Claude Desktop Cavalry MCP
+title_on_page: Claude Desktop Cavalry MCP
+tagline: Get a helping hand by Claude Desktop for your Cavalry project.
+extra_css: style.css
+custom_body: true
+preview_image: assets/black-hole-preview.jpg
+price: "10€"
+price_note: "incl. VAT"
+buy_label: "Buy"
+dodo_product_id_test: ""
+dodo_product_id_live: ""
+---
+
+<p>
+  An MCP server for Claude Desktop. It automatically installs a small bridge in Cavalry, such that the agent can read the current scene state and execute code in your project. The MCP server also bundles the entire Cavalry user docs including the JavaScript API, such that you get precise answers.
+</p>
+
+<p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort), unless otherwise stated.</p>
+
+<h2 id="unstuck">Move forward</h2>
+
+<p>You're the artist with taste and ideas. It's frustrating when you can't get them out of your head the way you want, e.g. because you're new to Cavalry or just human and don't know every functionality of a complex program. With the CavalryMCP, you can ask Claude to help you with your project, while remaining in full control.</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. I made a path and a blue rectangle. Now I want that the rectangle follows along the path while changing its rotation according to the normal vector of the curve. Do this procedurally such that I can later change the path itself.</p>
+    </div>
+  </div>
+
+  <div class="store-example-video">
+    <p class="store-example-meta"> ~1m30s | ~840 Tokens<br>
+      Started with the scene that had the path and the blue rectangle defined, but no Pathfinder.
+    </p>
+    <video controls loop muted playsinline src="assets/follow-path-min.mp4"></video>
+  </div>
+</div>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. I have a bouncing ball animation using Forge Dynamics. But right now, the ball only bounces off the ground (composition bottom). Instead, I want it to bounce off the rectangle named "Ground". Fix that and also tell me how I could have achieved that in the UI on my own.</p>
+    </div>
+  </div>
+
+  <div class="store-example-video store-example-output">
+    <p class="store-example-meta">~1m10s | ~ 850 Tokens<br>
+      Started with the scene that had the bouncing ball and the rectangle named "Ground" defined. A basic Forge setup for the bouncing ball was in place, but the ground shape not added as body and no collision detection.
+    </p>
+    <video controls loop muted playsinline src="assets/bouncing-ball.mp4"></video>
+
+    <h2 style="padding-top: 0;">How to do it in the UI</h2>
+
+    <ol>
+      <li>Select the <strong>Forge Dynamics</strong> layer, open its Attributes.</li>
+      <li>Under <strong>Ground Mode</strong>, switch it to <strong>Off</strong> (Attributes panel, top-level settings).</li>
+      <li>Drag the <strong>Ground</strong> layer from the Scene/Assets into the Forge Dynamics <strong>Bodies (shapes)</strong> attribute — or right-click Ground → <strong>Add Body</strong> → Add to Forge Dynamics.</li>
+      <li>On the new Body entry for Ground, open its <strong>Body</strong> tab and change <strong>Body Type</strong> from <em>Dynamic</em> to <strong>Still</strong> (a Still body
+        participates in collisions but doesn't move or fall).</li>
+      <li>Scrub the timeline (or hit play)to re-simulate — the Ball should now bounce off the Ground rectangle's top edge instead of the composition's bottom edge.</li>
+    </ol>
+  </div>
+</div>
+
+<h2 id="better-understand">Better Understand Cavalry</h2>
+
+<p>
+  LLMs are also great for learning. You can ask Claude to explain how a certain feature works or how to achieve a certain effect. The MCP server gives Claude access to the current scene state and provides tools to search the bundled Cavalry docs.
+</p>
+
+<div class="store-example">
+
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. Is there a way in Cavalry to automatically animate text paragraph by paragraph? E.g. some snappy, staggered reveal animation?</p>
+    </div>
+  </div>
+
+  <div class="store-example-output store-example-fade">
+    <p class="store-example-meta">~25s | 760 Tokens</p>
+
+    <p>Yes — Cavalry has a built-in behavior made exactly for this: <strong>Auto-Animate</strong>, combined with Text's paragraph/line level splitting. Here's the recipe for a snappy, staggered paragraph-by-paragraph reveal:</p>
+
+    <h2 style="margin-top: 0; padding-top: 0;">Steps</h2>
+
+    <ol>
+      <li><strong>Create your Text Shape</strong> with each paragraph separated by a blank line (Cavalry treats a paragraph as text separated by an empty line).</li>
+      <li>Select the Text Shape, and click <strong>Auto-Animate</strong> in the Shelf (this auto-checks <strong>Use Levels</strong>, since Text is a sub-mesh).</li>
+      <li>
+        In Auto-Animate's <strong>Animation</strong> tab, set:
+        <ul>
+          <li><strong>Level Mode</strong> → <strong>Custom...</strong> with a <strong>Custom Level Range</strong> targeting <strong>Paragraph</strong>.</li>
+          <li><strong>Opacity Mode</strong> → <strong>Fade Up</strong> for a reveal.</li>
+        </ul>
+      </li>
+      <li>In the <strong>Timing</strong> tab, check <strong>Time Offset</strong> so each paragraph is staggered automatically.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. Unfortunately, I've lost the overview over my scene. Tell me what is going on in all these layers.</p>
+    </div>
+  </div>
+
+  <div class="store-example-output store-example-fade">
+    <p class="store-example-meta">~20s | 870 Tokens</p>
+
+    <p>Here's the picture of your scene, reconstructed from the scene graph:</p>
+
+    <p><strong>Concept:</strong> A particle-morphing animation that spells out a sequence of math symbols/words, one morphing into the next — like <code>sqrt → pi → e → integral → nabla → partial → delta → approx → infty → in → equiv → smaller → bigger → sum</code>.</p>
+
+    <p><strong>Core building blocks</strong></p>
+    <ul>
+      <li><strong><code>basicShape#1</code> "Particle"</strong> — the single source shape (a dot/particle) used by <em>every</em> duplicator below. Its fill color comes from <strong><code>colorArray#3</code> "Colors"</strong>.</li>
+      <li>14 <strong>Duplicators</strong>, one per symbol. Each one distributes copies of <code>basicShape#1</code>, is masked by its own <strong><code>editableShape</code></strong> (a vector shape of that symbol's glyph), and has its particle scale driven by an <strong>oscillator</strong>, giving a lively size-jitter per particle.</li>
+    </ul>
+
+    <p><strong>The morph chain</strong><br>Each duplicator's output feeds into a <strong><code>blendSubMeshPositions</code></strong> node that blends it toward the <em>next</em> duplicator in the sequence, which in turn becomes a <code>deformer</code> on the next duplicator. This creates one continuous pipeline from <code>sqrt</code> all the way to <code>sum</code>.</p>
+
+    <p><strong>Summary:</strong> It's a 14-stage particle text-morph rig, each stage a masked duplicator plus a blend transition to the next, all sharing one particle shape and one color source, with staggers/oscillators layered on top for organic timing and scale variation.</p>
+
+    <p>Want me to check current attribute values, or render a preview frame to see it visually?</p>
+  </div>
+</div>
+
+<h2 id="dream-bigger">Dream Bigger</h2>
+
+<p>
+  Why not aim even higher and let Claude implement a complex scene from scratch? Well, as expected, this pushes the limits and the results are doubtable. But still fun to see what is already possible and maybe useful to get started with a new project or to get inspiration for a new idea by quickly prototyping it.
+</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+      <p class="store-prompt-text">Use the CavalryMCP. I want to make an artistic animated simulation of a black hole showcasing its accretion disk in shades of an orange/red/amber (and maybe yellow/white for very hot regions).<br>This does not need to be a physically accurate simulation. Prioritize a visually striking, atmospheric result over strict scientific correctness.<br>The accretion disk should be animated and feel continuously in motion. Create visible rotational flow around the black hole, with some variation in speed, density, turbulence and brightness, such that the movement feels organic. You may want to use particles, procedural noise, trails, blur, distortion, or similar techniques available in Cavalry.<br>You may look up reference images of black holes and accretion disks, and briefly consult the underlying physics for visual inspiration, but treat those references as a starting point rather than a constraint.</p>
+    </div>
+  </div>
+
+  <div class="store-example-video">
+    <p class="store-example-meta"> ~23m | ~9.6k Tokens | Sonnet (medium effort)<br>
+      Started with an empty scene and got a result that does not even remotely look like a black hole. Sonnet did a ridiculous job here.
+    </p>
+    <video controls loop muted playsinline src="assets/black-hole.mp4"></video>
+
+    <p class="store-example-meta" style="margin-top: 2em;">
+      ~30m20s | ~18.6k Tokens | Opus (high effort)<br>
+      Opus produced a much more visually striking result, that still has a lot of problems, but at least looks more like a black hole and is more "cinematic".
+    </p>
+    <video controls loop muted playsinline src="assets/black-hole-opus.mp4"></video>
+  </div>
+</div>
+
+<p>Claude can read your images. So why not start your new project with a sketch on paper? Then let the agent give you some first working version of your idea in Cavalry.</p>
+
+<div class="store-example">
+  <div class="store-example-prompt">
+    <div class="store-example-prompt-inner">
+      <p class="store-prompt-label">Prompt</p>
+
+      <figure class="image clickable">
+        <img alt="Sketch of the braid animation storyboard" src="assets/braid-sketch.jpg">
+      </figure>
+
+      <p class="store-prompt-text">Use the CavalryMCP. Attached is a sketch of an animation storyboard I want to create in Cavalry. The strokes I drew should have some thickness to them and round caps. Arrows indicate in which direction they "flow". The animation should feel rather quick and organic. Whenever the two paths touch, a particle burst should be emitted from their position that spreads outwards in circles but quickly decays. Use two different bright and vibrant colors. The background should have a subtle gradient (with both colors contrasting those of the braid). Let the braid weave upwards, then rotate a camera later on. Afterwards (see second row), the braid reveals the text "CavalryMCP" from left to right. Finally, construct the animation such that it can loop, i.e. while the "CavalryMCP text" flies out to the top (staggered per character), the new paths of the new braid form from below. The whole animation should be around 8 to 10s long, with enough time to read the final text on screen.</p>
+    </div>
+  </div>
+
+  <div class="store-example-video">
+    <p class="store-example-meta">
+      ~23m40s | 8.0k Tokens | Sonnet 5 (medium effort)<br>
+      Well, what should I say, the result sucks. Sonnet disappointed me here.
+    </p>
+    <video controls loop muted playsinline src="assets/braid.mp4"></video>
+
+    <p class="store-example-meta" style="margin-top: 2em;">
+      ~15m40s | 11.1k Tokens | Opus (high effort)<br>
+      Compared to Sonnet, Opus produced a much nicer animation. Still, both LLMs failed to find out about the Auto-Animate Deformer and instead animated individual text characters.
+    </p>
+    <video controls loop muted playsinline src="assets/braid-opus.mp4"></video>
+  </div>
+</div>
+
+<div class="store-beta-banner">
+  <strong>Currently in beta.</strong> This product isn't available for purchase yet.
+  I'm aiming to ship it within the week starting on 2026-09-21, but can't make any promises. It will probably cost 10€ (incl. VAT).
+</div>
+
+<nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
+  <button type="button" class="doc-tab" aria-current="true" data-doc-target="overview">Overview</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="manual">Manual</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="releases">Releases</button>
+</nav>
+
+<div class="doc-content">
+
+  <div class="doc-panel" data-doc-panel="overview">
+
+    <div class="store-attention-banner">
+      <strong>Claude Desktop only.</strong> This MCP server is built to provide the best experience with the Claude Desktop app. It will not work with Claude.ai, Claude Code, the Claude API directly, or any other LLM or assistant. The product does not ship with a Claude subscription, which is required to make use of CavalryMCP.
+    </div>
+
+    <h2 id="features">Key Features</h2>
+
+    <ul>
+      <li><strong>Scene awareness.</strong> Claude can read the current state of your Cavalry scene: layers, attributes and the scene graph. This way, the agent can answer and edit based on your specific project. Less hallucinations, more relevant information.</li>
+      <li><strong>Code execution.</strong> Claude can write and run Cavalry JavaScript directly in your Cavalry project to modify existing layers, build new ones and wire them together.</li>
+      <li><strong>Bundled documentation.</strong> The full Cavalry user docs and JavaScript API reference ship with the extension, so Claude can search them for precise answers instead of relying on outdated training data.</li>
+    </ul>
+
+    <h2 id="how">How It Works</h2>
+
+    <p>
+      The product installs two pieces: an MCP server that plugs into Claude Desktop, and a small bridge script that runs inside Cavalry. The bridge opens a local connection between the two, over which the MCP server can query the current scene state and submit JavaScript for Cavalry to execute (which is the same scripting API you can use in the Script Editor). User docs and API reference are bundled with the MCP server. The MCP server provides tools to interact with your Cavalry project, but also to search the bundled docs and API reference effectively without having to load everything into context at once.
+    </p>
+
+    <h2 id="limitations">Known Limitations</h2>
+
+    <p>
+      <strong>No guaranteed results.</strong> Claude is an LLM (Large Language Model) with probabilistic outputs that depend a lot on your prompts and context. I can't guarantee that even with CavalryMCP you'll get the results you want, especially when asking for very complex scenes. Rather than "construct me this scene from scratch", I see its strengths in a search assistant for the docs and a fast collaborator for small and targeted edits in your project.
+    </p>
+
+    <h2 id="acknowledgements">Acknowledgements</h2>
+
+    <p>This project wouldn't exist without the Cavalry team building such a great animation tool, and Anthropic's work on Claude and the Model Context Protocol.</p>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="manual" hidden>
+
+    <h2>Installation</h2>
+
+    <p>
+      A download link is sent to you by email after checkout. It contains a <code>.mcpb</code> file (MCP Bundle). In Claude Desktop, open your preferences (by pressing <kbd>Cmd/Ctrl + ,</kbd>), go to the <strong>Extensions</strong> tab, and drag the downloaded <code>.mcpb</code> file into there to install CavalryMCP.
+    </p>
+
+    <figure class="image clickable">
+      <img alt="Claude Desktop Preferences, in it the Extensions tab with the installed CavalryMCP extension" src="assets/claude-desktop-install.jpg" width="400px">
+    </figure>
+
+    <h2>Usage</h2>
+
+    <p>
+      Start your prompt with "Use the CavalryMCP" (if you're in a new session). At the first time Claude tries to connect to your running Cavalry instance, it will install a small bridge UI script into Cavalry. This is done automatically. You only need to open <code>Scripts > CavalryMCP</code> in Cavalry and leave it open (Claude will you tell you this as well).
+    </p>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="releases" hidden>
+
+    <h2>Releases</h2>
+
+    <p>Not released yet — check back soon.</p>
+
+  </div>
+
+</div>

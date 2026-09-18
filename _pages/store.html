@@ -9,20 +9,69 @@ permalink: /store/
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta content="0; url={{ '/store/typstrider/' | relative_url }}" http-equiv="refresh">
   <title>Store – {{ site.title }}</title>
-  <link href="{{ '/store/typstrider/' | absolute_url }}" rel="canonical">
   <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
 </head>
 
 <body>
-  <article class="container store">
-    <p>
-      There is currently one product in the store. Redirecting you to
-      <a href="{{ '/store/typstrider/' | relative_url }}">TypstRider</a>…
-    </p>
+  <article class="container store store-overview">
+
+    <header>
+      <h1>Store</h1>
+      <p>Usually I code <a href="https://github.com/splines">open-source</a>. But that doesn't pay the bills. Here are some closed-source tools I've built and that I use myself. You can buy them to support my work.</p>
+
+      <p class="legal-link">
+        <a href="{{ '/impressum/' | relative_url }}">Impressum</a>
+        <span class="legal-link-hint">(legal notice)</span>
+        &middot;
+        <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a>
+        <span class="legal-link-hint">(privacy)</span>
+      </p>
+    </header>
+
+    <div class="store-back-top">
+      <a class="return-back" href="{{ '/' | relative_url }}">
+        <svg>
+          <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
+        </svg>
+        <i>Back</i>
+      </a>
+    </div>
+
+    <div class="store-index-grid">
+
+      <a class="store-tile" href="{{ '/store/typstrider/' | relative_url }}">
+        <img class="store-tile-image" alt="The TypstRider UI panel inside Cavalry" src="{{ '/store/typstrider/TypstRider-preview.jpg' | relative_url }}">
+        <div class="store-tile-body">
+          <h2 class="store-tile-title">TypstRider</h2>
+          <p class="store-tile-sub">Bring Typst to Cavalry</p>
+          <span class="store-tile-cta">See more details &rarr;</span>
+        </div>
+      </a>
+
+      {% comment %}
+      Cavalry MCP is still in beta, hide the store tile until it ships.
+      <a class="store-tile" href="{{ '/store/claude-cavalry-mcp/' | relative_url }}">
+        <img class="store-tile-image" alt="An artistic rendering of a black hole with an accretion disk, created with Cavalry" src="{{ '/store/claude-cavalry-mcp/assets/black-hole-preview.jpg' | relative_url }}">
+        <div class="store-tile-body">
+          <span class="store-tile-badge">New product</span>
+          <h2 class="store-tile-title">Claude Desktop Cavalry MCP</h2>
+          <p class="store-tile-sub">A helping hand by Claude Desktop for Cavalry</p>
+          <span class="store-tile-cta">See more details &rarr;</span>
+        </div>
+      </a>
+      {% endcomment %}
+
+    </div>
   </article>
+
+  <a class="return-back" href="{{ '/' | relative_url }}">
+    <svg>
+      <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
+    </svg>
+    <i>Back</i>
+  </a>
 
   <div class="whitespace-below"></div>
 </body>

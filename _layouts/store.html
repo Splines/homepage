@@ -10,8 +10,15 @@
   <title>{{ page.title }} – {{ site.title }}</title>
   {% vite_client_tag %}
   <meta content="{{ page.title }}" property="og:title">
+  {% if page.preview_image %}
+  <meta content="{{ page.url | append: page.preview_image | absolute_url }}" property="og:image">
+  {% endif %}
   <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
+
+  {% if page.extra_css %}
+  <link href="{{ page.url | append: page.extra_css | relative_url }}" rel="stylesheet">
+  {% endif %}
 
   {% if page.code %}
   <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
@@ -42,6 +49,10 @@
     </header>
 
     <hr class="header-content-separator">
+
+    {% if page.custom_body %}
+    {{ content }}
+    {% else %}
 
     {% if page.preview_image %}
     <figure class="store-video" data-video data-video-id="{{ page.youtube_id }}" data-video-title="{{ page.video_title | default: page.title | xml_escape }}">
@@ -172,6 +183,8 @@
     <div class="doc-content">
       {{ content }}
     </div>
+
+    {% endif %}
 
   </article>
 

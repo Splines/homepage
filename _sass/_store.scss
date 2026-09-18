@@ -1,7 +1,47 @@
 @use "variables" as v;
+@use "product-tile";
 
-// The demo video, intentionally a touch wider than the text column, echoing the
-// oversized figures used in the blog posts.
+// Store overview page: a simple grid of product tiles, with a "Back" link above
+// it mirroring the one legal pages show above their content.
+.store-back-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+
+  .return-back {
+    margin-top: 0;
+  }
+}
+
+.store-index-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.store-overview header {
+  text-align: left;
+}
+
+.legal-link {
+  margin-top: 0.4em;
+  font-family: v.$normal-font;
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+
+  a {
+    color: #8c7a6b;
+    text-decoration-color: #c9bbae;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+
+  .legal-link-hint {
+    color: #a3958a;
+  }
+}
+
 .store-video {
   position: relative;
   display: flex;
@@ -354,6 +394,44 @@
   code {
     font-family: v.$code-font;
     font-size: 0.95em;
+  }
+}
+
+.store-attention-banner {
+  margin: 1.5em 0;
+  padding: 1em 1.2em;
+
+  font-size: 0.9rem;
+  line-height: 1.45rem;
+  color: #7a1414;
+
+  background: #fdeaea;
+  border: 1px solid #e29a9a;
+  border-radius: 0.5em;
+  box-shadow: 0 0.3em 0.9em #cf373733, 0 0.05em 0.15em #00000015;
+
+  strong {
+    font-weight: 700;
+    color: #971d1d;
+  }
+}
+
+.store-beta-banner {
+  margin: 1.5em 0;
+  padding: 1em 1.2em;
+
+  font-size: 0.9rem;
+  line-height: 1.45rem;
+  color: #7a5a18;
+
+  background: #fdf6e6;
+  border: 1px solid #e0c894;
+  border-radius: 0.5em;
+  box-shadow: 0 0.3em 0.9em #cf9f3733, 0 0.05em 0.15em #00000015;
+
+  strong {
+    font-weight: 700;
+    color: #92670f;
   }
 }
 

@@ -1,10 +1,13 @@
-# `_store/<slug>/index.md` sits right next to the assets it references.
-# We infer `slug` and `permalink` from that folder path.
+# `_store/<slug>/index.md` (or `index.html`, for a product page written as plain
+# HTML instead of Markdown) sits right next to the assets it references. We infer
+# `slug` and `permalink` from that folder path.
 
-# Returns the slug for a `_store/<slug>/index.md` document, else nil.
+INDEX_FILENAMES = ["index.md", "index.html"].freeze
+
+# Returns the slug for a `_store/<slug>/index.{md,html}` document, else nil.
 def store_bundle_slug(doc)
   segments = doc.relative_path.sub(%r{\A\.?/?_store/}, "").split("/")
-  segments[0] if segments.length == 2 && segments.last == "index.md"
+  segments[0] if segments.length == 2 && INDEX_FILENAMES.include?(segments.last)
 end
 
 Jekyll::Hooks.register :store, :post_init do |doc|
