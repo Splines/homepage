@@ -220,16 +220,19 @@ dodo_product_id_live: ""
 
     <h2>Installation</h2>
 
-    <ol>
-      <li>Download the <code>CavalryMCP.zip</code> (a download link is sent to you by email after checkout).</li>
-      <li>Add the MCP server to Claude Desktop's configuration (<code>claude_desktop_config.json</code>) as described in the included <code>README</code>.</li>
-      <li>In Cavalry, navigate to <code>Scripts &gt; Show Scripts Folder</code> and drag the bundled bridge script in-place, then run it once from <code>Scripts &gt; CavalryMCP Bridge</code> with your project open.</li>
-      <li>Restart Claude Desktop and ask it to use the CavalryMCP tools.</li>
-    </ol>
+    <p>
+      A download link is sent to you by email after checkout. It contains a <code>.mcpb</code> file (MCP Bundle). In Claude Desktop, open your preferences (by pressing <kbd>Cmd/Ctrl + ,</kbd>), go to the <strong>Extensions</strong> tab, and drag the downloaded <code>.mcpb</code> file into there to install CavalryMCP.
+    </p>
+
+    <figure class="image clickable">
+      <img alt="Claude Desktop Preferences, in it the Extensions tab with the installed CavalryMCP extension" src="assets/claude-desktop-install.jpg" width="400px">
+    </figure>
 
     <h2>Usage</h2>
 
-    <p>Start your prompt with "Use the CavalryMCP" (or simply enable the MCP server for the conversation) so Claude reaches for the scene-state and documentation-search tools instead of guessing.</p>
+    <p>
+      Start your prompt with "Use the CavalryMCP" (if you're in a new session). At the first time Claude tries to connect to your running Cavalry instance, it will install a small bridge UI script into Cavalry. This is done automatically. You only need to open <code>Scripts > CavalryMCP</code> in Cavalry and leave it open (Claude will you tell you this as well).
+    </p>
 
   </div>
 
