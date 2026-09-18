@@ -65,7 +65,7 @@ dodo_product_id_live: ""
   </div>
 </div>
 
-<h2>Better Understand Cavalry</h2>
+<h2 id="better-understand">Better Understand Cavalry</h2>
 
 <p>
   LLMs are also great for learning. You can ask Claude to explain how a certain feature works or how to achieve a certain effect. The MCP server gives Claude access to the current scene state and provides tools to search the bundled Cavalry docs.
@@ -131,7 +131,7 @@ dodo_product_id_live: ""
   </div>
 </div>
 
-<h2>Dream Bigger.</h2>
+<h2 id="dream-bigger">Dream Bigger</h2>
 
 <p>
   Why not aim even higher and let Claude implement a complex scene from scratch? Well, as expected, this pushes the limits and the results are doubtable. But still fun to see what is already possible and maybe useful to get started with a new project or to get inspiration for a new idea by quickly prototyping it.
@@ -204,13 +204,31 @@ dodo_product_id_live: ""
 
   <div class="doc-panel" data-doc-panel="overview">
 
-    <h2 id="known-limitations">Known Limitations</h2>
+    <div class="store-attention-banner">
+      <strong>Claude Desktop only.</strong> This MCP server is built to provide the best experience with the Claude Desktop app. It will not work with Claude.ai, Claude Code, the Claude API directly, or any other LLM or assistant. The product does not ship with a Claude subscription, which is required to make use of CavalryMCP.
+    </div>
+
+    <h2 id="features">Key Features</h2>
 
     <ul>
-      <li><strong>Work in progress.</strong> This product page is a preview — pricing, the manual and the release notes below will be filled in before launch.</li>
+      <li><strong>Scene awareness.</strong> Claude can read the current state of your Cavalry scene: layers, attributes and the scene graph. This way, the agent can answer and edit based on your specific project. Less hallucinations, more relevant information.</li>
+      <li><strong>Code execution.</strong> Claude can write and run Cavalry JavaScript directly in your Cavalry project to modify existing layers, build new ones and wire them together.</li>
+      <li><strong>Bundled documentation.</strong> The full Cavalry user docs and JavaScript API reference ship with the extension, so Claude can search them for precise answers instead of relying on outdated training data.</li>
     </ul>
 
-    <h2>Acknowledgements</h2>
+    <h2 id="how">How It Works</h2>
+
+    <p>
+      The product installs two pieces: an MCP server that plugs into Claude Desktop, and a small bridge script that runs inside Cavalry. The bridge opens a local connection between the two, over which the MCP server can query the current scene state and submit JavaScript for Cavalry to execute (which is the same scripting API you can use in the Script Editor). User docs and API reference are bundled with the MCP server. The MCP server provides tools to interact with your Cavalry project, but also to search the bundled docs and API reference effectively without having to load everything into context at once.
+    </p>
+
+    <h2 id="limitations">Known Limitations</h2>
+
+    <p>
+      <strong>No guaranteed results.</strong> Claude is an LLM (Large Language Model) with probabilistic outputs that depend a lot on your prompt and context. I can't guarantee that even with CavalryMCP you'll get the results you want, especially when asking for very complex scenes. Rather than "construct me this scene from scratch", I see its strengths in a search assistant for the docs and a fast collaborator for small and targeted edits in your project.
+    </p>
+
+    <h2 id="acknowledgements">Acknowledgements</h2>
 
     <p>This project wouldn't exist without the Cavalry team building such a great animation tool, and Anthropic's work on Claude and the Model Context Protocol.</p>
 
