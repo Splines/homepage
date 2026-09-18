@@ -5,7 +5,7 @@ title_on_page: Claude Desktop Cavalry MCP
 tagline: Get a helping hand by Claude Desktop for your Cavalry project.
 extra_css: style.css
 custom_body: true
-price: "TBD"
+price: "10€"
 price_note: "incl. VAT"
 buy_label: "Buy"
 dodo_product_id_test: ""
@@ -189,98 +189,9 @@ dodo_product_id_live: ""
   </div>
 </div>
 
-{%- comment -%}
-This page opts out of the layout's automatic purchase-box/doc-tabs generation
-(see `custom_body` in _layouts/store.html), so the checkout-URL calculation
-below mirrors the layout's own copy of it exactly.
-{%- endcomment -%}
-{% assign dodo_mode = "test" %}
-{% if jekyll.environment == "production" %}
-{% assign dodo_mode = "live" %}
-{% endif %}
-{% if site.dodo_force_mode %}
-{% assign dodo_mode = site.dodo_force_mode %}
-{% endif %}
-
-{% if dodo_mode == "live" %}
-{% assign dodo_product = page.dodo_product_id_live %}
-{% assign dodo_host = "checkout.dodopayments.com" %}
-{% else %}
-{% assign dodo_product = page.dodo_product_id_test %}
-{% assign dodo_host = "test.checkout.dodopayments.com" %}
-{% endif %}
-
-{% if dodo_product and dodo_product != "" %}
-{% assign dodo_url = "https://" | append: dodo_host | append: "/buy/" | append: dodo_product %}
-{% endif %}
-
-<div class="store-purchase" data-checkout-url="{{ dodo_url }}">
-
-  <p class="store-purchase-note">
-    One-time purchase, includes all future updates for life.
-    <br>
-    A download link is sent to you by email after checkout.
-  </p>
-
-  <div class="store-agree">
-    <label class="store-agree-item">
-      <input type="checkbox" data-agree>
-      <span>
-        I have read and accept the
-        <a href="{{ page.url | append: 'terms/' | relative_url }}" rel="noopener" target="_blank">Terms &amp; License</a>
-        and the
-        <a href="{{ '/datenschutz/' | relative_url }}" rel="noopener" target="_blank">privacy policy</a>,
-        including the
-        <a href="#known-limitations">known limitations</a>
-        of this product.
-      </span>
-    </label>
-
-    <label class="store-agree-item">
-      <input type="checkbox" data-agree>
-      <span>
-        I understand that this license is for a <strong>single user</strong>: I will
-        not share, resell or publish {{ page.title }} or my download link, and I will
-        not let other people use it alongside me.
-      </span>
-    </label>
-
-    <p class="store-agree-hint" data-agree-hint>
-      Please confirm both points to continue to the checkout.
-    </p>
-  </div>
-
-  <div class="store-purchase-main">
-    <span class="store-price">{{ page.price }}</span>
-    <span class="store-tax-note">{{ page.price_note | default: "incl. VAT" }}</span>
-    <button type="button" class="store-buy" aria-describedby="checkout-notice" data-buy disabled>{{ page.buy_label | default: "Buy now" }}</button>
-  </div>
-
-  <p class="store-currency-note">
-    Prices are in euro. If you choose another currency on the checkout page, the
-    amount is converted by Dodo Payments and a currency-conversion fee may be
-    added on top.
-  </p>
-
-  {% if dodo_mode == "live" and jekyll.environment != "production" %}
-  <p class="store-checkout-warning">
-    <strong>Live mode forced locally.</strong>
-    The checkout this opens takes <em>real</em> payments and test cards will be
-    declined. Apply your 100% discount code before paying, then comment out
-    <code>dodo_force_mode</code> in <code>_config.yml</code> again.
-  </p>
-  {% endif %}
-
-  <p id="checkout-notice" class="store-checkout-consent">
-    Payments are processed by
-    <a href="https://dodopayments.com" rel="noopener">Dodo Payments</a>,
-    the merchant of record. Pressing &ldquo;{{ page.buy_label | default: "Buy now" }}&rdquo;
-    opens their checkout at <code>{{ dodo_host }}</code> in a new tab. Nothing is
-    loaded from them into this page, so they only receive your data once you are
-    over there.
-  </p>
-
-  <p class="store-checkout-status" data-checkout-status hidden></p>
+<div class="store-beta-banner">
+  <strong>Currently in beta.</strong> This product isn't available for purchase yet.
+  I'm aiming to ship it within the next week, but can't make any promises. It will probably cost 10€ (incl. VAT).
 </div>
 
 <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
