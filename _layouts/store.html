@@ -55,6 +55,15 @@
         brought to you by
         <a href="{{ '/' | relative_url }}">Splines</a>
       </p>
+
+      <div class="store-back-top">
+        <a class="return-back" href="{{ '/store/' | relative_url }}">
+          <svg>
+            <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
+          </svg>
+          <i>Back to Store</i>
+        </a>
+      </div>
     </header>
 
     <hr class="header-content-separator">
@@ -110,11 +119,11 @@
 
   </article>
 
-  <a class="return-back" href="/">
+  <a class="return-back" href="{{ '/store/' | relative_url }}">
     <svg>
-      <use xlink:href="/assets/icons/basics.svg#icon-back"></use>
+      <use xlink:href="{{ '/assets/icons/basics.svg' | relative_url }}#icon-back"></use>
     </svg>
-    <i>Back</i>
+    <i>Back to Store</i>
   </a>
 
   <section
