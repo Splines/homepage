@@ -16,7 +16,7 @@ dodo_product_id_live: ""
 <video autoplay controls muted playsinline src="assets/teaser.mp4"></video>
 
 <p>
-  An MCP server for Claude Desktop. It automatically installs a small bridge in Cavalry, such that the agent can read the current scene state and execute code in your project. The MCP server also bundles the entire Cavalry user docs including the JavaScript API, such that you get precise answers.
+  An MCP server for Claude Desktop. It automatically installs a small bridge in Cavalry, such that the agent can read the current scene state and execute code in your project. The MCP server also bundles the entire Cavalry user docs, node reference and JavaScript API, and searches across all of it at once, so Claude gives you precise, up-to-date answers instead of guessing.
 </p>
 
 <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry, nor by Anthropic. All prompts were tested with Sonnet 5 (medium effort), unless otherwise stated.</p>
@@ -87,7 +87,7 @@ dodo_product_id_live: ""
     <h2 id="better-understand">Better Understand Cavalry</h2>
 
     <p>
-      LLMs are also great for learning. You can ask Claude to explain how a certain feature works or how to achieve a certain effect. The MCP server gives Claude access to the current scene state and provides tools to search the bundled Cavalry docs.
+      LLMs are also great for learning. You can ask Claude to explain how a certain feature works or how to achieve a certain effect. The MCP server gives Claude access to the current scene state and its own search engine over the bundled Cavalry docs: the full user documentation, the node/layer reference, and the JavaScript API.
     </p>
 
     <div class="store-example">
@@ -213,13 +213,17 @@ dodo_product_id_live: ""
     <ul>
       <li><strong>Scene awareness.</strong> Claude can read the current state of your Cavalry scene: layers, attributes and the scene graph. This way, the agent can answer and edit based on your specific project. Less hallucinations, more relevant information.</li>
       <li><strong>Code execution.</strong> Claude can write and run Cavalry JavaScript directly in your Cavalry project to modify existing layers, build new ones and wire them together.</li>
-      <li><strong>Bundled documentation.</strong> The full Cavalry user docs and JavaScript API reference ship with the extension, so Claude can search them for precise answers instead of relying on outdated training data.</li>
+      <li><strong>Bundled documentation, with a search engine built for it.</strong> The full Cavalry user docs, node/layer reference and the JavaScript API ship with the extension. A single query can search across all of it at once, and the results are ranked by relevance to your question. This way, Claude spends less tokens and less time guessing, and can give you more precise answers.</li>
     </ul>
 
     <h2 id="how">How It Works</h2>
 
     <p>
-      The product installs two pieces: an MCP server that plugs into Claude Desktop, and a small bridge script that runs inside Cavalry. The bridge opens a local connection between the two, over which the MCP server can query the current scene state and submit JavaScript for Cavalry to execute (which is the same scripting API you can use in the Script Editor). User docs and API reference are bundled with the MCP server. The MCP server provides tools to interact with your Cavalry project, but also to search the bundled docs and API reference effectively without having to load everything into context at once.
+      The product installs two pieces: an MCP server that plugs into Claude Desktop, and a small bridge script that runs inside Cavalry. The bridge opens a local connection between the two, over which the MCP server can query the current scene state and submit JavaScript for Cavalry to execute (which is the same scripting API you can use in the Script Editor).
+    </p>
+
+    <p>
+      The full Cavalry user docs, node/layer reference and JavaScript API are bundled with the MCP server and pre-processed at build time into a single searchable index. This lets the MCP server's search tools jump straight to the passage that answers a question, instead of Claude having to load whole manuals into its context window or guess method names. The same index also helps during scene inspection, such that Claude can for example explain what a specific attribute on a layer actually does.
     </p>
 
     <h2 id="known-limitations">Known Limitations</h2>
