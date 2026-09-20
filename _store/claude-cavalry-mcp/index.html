@@ -228,6 +228,14 @@ dodo_product_id_live: ""
       <strong>No guaranteed results.</strong> Claude is an LLM (Large Language Model) with probabilistic outputs that depend a lot on your prompts and context. I can't guarantee that even with CavalryMCP you'll get the results you want, especially when asking for very complex scenes. Rather than "construct me this scene from scratch", I see its strengths in a search assistant for the docs and a fast collaborator for small and targeted edits in your project.
     </p>
 
+    <p>
+      <strong>Single Composition awareness.</strong> Claude can only read the scene state of your currently active Composition, not other Compositions in your project.
+    </p>
+
+    <p>
+      <strong>Long-running actions may time out.</strong> Claude waits up to 2 minutes for Cavalry to finish executing a command. Very heavy operations (e.g. rendering many frames) may exceed this and appear to fail even though Cavalry is still working.
+    </p>
+
     <h2 id="acknowledgements">Acknowledgements</h2>
 
     <p>This project wouldn't exist without the Cavalry team building such a great animation tool, and Anthropic's work on Claude and the Model Context Protocol. Special thanks also for the devs behind <a href="https://github.com/scenery-io/">Scenery</a> for their development tools and their and their <a href="https://github.com/scenery-io/cavalry-types">TypeScript definitions</a> for Cavalry.</p>
