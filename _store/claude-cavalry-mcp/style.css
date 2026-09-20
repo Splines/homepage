@@ -141,6 +141,15 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
 }
 
+/* The top-level teaser video, outside any .store-example wrapper. */
+.store > video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  background: #000;
+}
+
 .store-example-video .store-inline-video {
   margin: 0;
 }
