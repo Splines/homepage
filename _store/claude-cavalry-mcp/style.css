@@ -141,6 +141,18 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
 }
 
+/* The top-level teaser video, outside any .store-example wrapper.
+   aspect-ratio reserves its box before metadata loads, so it doesn't grow later
+   and shift an in-page anchor scroll (e.g. #manual, #usage) out of place. */
+.store > video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  background: #000;
+}
+
 .store-example-video .store-inline-video {
   margin: 0;
 }
