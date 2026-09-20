@@ -29,7 +29,7 @@ back_label: Back to Claude Desktop Cavalry MCP
     <li><a href="#delivery">Delivery</a></li>
     <li><a href="#license">Your license: what you may do</a></li>
     <li><a href="#restrictions">What you may not do</a></li>
-    <li><a href="#opensource">Open-source components</a></li>
+    <li><a href="#opensource">Bundled third-party content</a></li>
     <li><a href="#updates">Updates and lifetime upgrades</a></li>
     <li><a href="#guarantee">14-day money-back guarantee</a></li>
     <li><a href="#withdrawal">Your statutory right of withdrawal</a></li>
@@ -340,21 +340,43 @@ back_label: Back to Claude Desktop Cavalry MCP
   broader permissions.
 </p>
 
-<h2 id="opensource">8. Open-source components</h2>
+<h2 id="opensource">8. Bundled third-party content</h2>
 
 <p>
-  The download may contain third-party open-source or freely licensed components used to
-  build the MCP server and the Cavalry bridge script, for example TypeScript type
-  definitions for the Cavalry API. Where such components are included, they remain under
-  their own licenses, and the license texts are included with the download.
+  The download contains two kinds of content that are not my own work, bundled so that
+  Claude can look things up about Cavalry without a network round trip for every question.
+  Both are listed, with their attribution and license texts, in
+  <code>THIRD-PARTY-NOTICES.txt</code>, included with the download.
 </p>
 
+<ul>
+  <li>
+    <strong>Open-source components</strong>, such as TypeScript type definitions for the
+    Cavalry scripting API (<code>@scenery/cavalry-types</code>, MIT licensed), used to build
+    the MCP server and to let Claude look up exact API signatures. These remain under their
+    own licenses, reproduced in full in <code>THIRD-PARTY-NOTICES.txt</code>.
+  </li>
+  <li>
+    <strong>Cavalry&rsquo;s own user documentation.</strong> CavalryMCP bundles a converted
+    (HTML-to-Markdown) copy of Cavalry&rsquo;s public documentation from
+    <a href="https://cavalry.studio/docs/" rel="noopener">cavalry.studio/docs</a>, so that
+    Claude can search and read it offline. That documentation is not my work; it remains the
+    copyrighted content of Scene Group Ltd, the maker of Cavalry, reproduced here only to let
+    CavalryMCP describe Cavalry&rsquo;s own interface and scripting API accurately. I claim
+    no ownership in it, and CavalryMCP is not affiliated with, endorsed by or sponsored by
+    Scene Group Ltd; see section 14.
+  </li>
+</ul>
+
 <p>
-  Where such a license grants you more rights in a component than these terms do &mdash;
-  for example the right to copy, modify or redistribute that component on its own &mdash;
-  that license governs for that component. So section 7 restricts my own work and
+  Where an open-source license grants you more rights in a component than these terms do
+  &mdash; for example the right to copy, modify or redistribute that component on its own
+  &mdash; that license governs for that component. So section 7 restricts my own work and
   CavalryMCP as a package, but it does not reach into what a third-party license already
-  allows you to do with that component.
+  allows you to do with that component. The bundled Cavalry documentation is not licensed to
+  you by me at all: your right to it, if any, comes from your own relationship with Scene
+  Group Ltd, such as your Cavalry license or your access to their public docs site, not from
+  your CavalryMCP purchase.
 </p>
 
 <h2 id="updates">9. Updates and lifetime upgrades</h2>
@@ -392,8 +414,11 @@ back_label: Back to Claude Desktop Cavalry MCP
     purchase price for that.
   </li>
   <li>
-    <strong>An update does not guarantee compatibility with newer Cavalry or Claude Desktop
-    releases.</strong> CavalryMCP runs inside two pieces of third-party software that I do
+    <strong>
+      An update does not guarantee compatibility with newer Cavalry or Claude Desktop
+      releases.
+    </strong>
+    CavalryMCP runs inside two pieces of third-party software that I do
     not control: Cavalry and Claude Desktop (including the Claude models it uses). Both are
     updated on their own schedules, and either of them can change its scripting API,
     extension format or behavior in a way that breaks CavalryMCP. Getting free updates means
@@ -560,6 +585,7 @@ back_label: Back to Claude Desktop Cavalry MCP
   Cavalry are independent third-party offerings. This project is not affiliated with,
   endorsed by or sponsored by Anthropic or Scene Group Ltd; their names and trademarks
   belong to their respective owners and are used here only to describe compatibility.
+  Section 8 covers the Cavalry documentation content bundled with the download.
 </p>
 
 <p>
