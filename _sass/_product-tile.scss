@@ -30,7 +30,10 @@
   width: 100%;
   height: 170px;
   object-fit: cover;
+  border: 0;
   border-bottom: 2px solid v.$primary;
+  border-radius: 0;
+  box-shadow: none;
 
   @media (min-width: 620px) {
     width: 44%;
@@ -87,6 +90,11 @@
 }
 
 .store-tile-title {
+  // Overrides `_page.scss`'s global `h2` padding-top (anchor-link heading
+  // spacing), which the store page pulls in but the tile itself doesn't need.
+  padding-top: 0;
+  margin-bottom: 0;
+
   font-size: 1.7rem;
   line-height: 1.1;
 }
