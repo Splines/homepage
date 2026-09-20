@@ -10,9 +10,18 @@
   <title>{{ page.title }} – {{ site.title }}</title>
   {% vite_client_tag %}
   <meta content="{{ page.title }}" property="og:title">
+  <meta content="website" property="og:type">
+  <meta content="{{ page.url | absolute_url }}" property="og:url">
+  {% if page.tagline %}
+  <meta content="{{ page.tagline }}" property="og:description">
+  <meta content="{{ page.tagline }}" name="twitter:description">
+  {% endif %}
   {% if page.preview_image %}
   <meta content="{{ page.url | append: page.preview_image | absolute_url }}" property="og:image">
+  <meta content="summary_large_image" name="twitter:card">
+  <meta content="{{ page.url | append: page.preview_image | absolute_url }}" name="twitter:image">
   {% endif %}
+  <meta content="{{ page.title }}" name="twitter:title">
   <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
 
