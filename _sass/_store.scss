@@ -89,6 +89,17 @@
   }
 }
 
+// Slim strip below the preview image while there is no video yet.
+.store-video-soon {
+  aspect-ratio: auto;
+  margin-top: -1.2em;
+  padding: 0.25em 0;
+
+  span {
+    font-size: 0.8rem;
+  }
+}
+
 // Consent bar pinned to the lower edge of the poster. Nothing is requested from
 // YouTube until the button is pressed.
 .store-video-gate {
