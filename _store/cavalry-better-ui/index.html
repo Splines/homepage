@@ -67,11 +67,11 @@ Part of the reason I turned my back on Adobe products is that their UI scaling i
     <h2 id="known-limitations">Known Limitations</h2>
 
     <p>
-      <strong>Windows only.</strong> The extension relies on Windows internals and the Windows build of Cavalry.
+      <strong>Windows only.</strong> The extension relies on Windows internals and the Windows build of Cavalry. MacOS is not supported, and there are no plans for it at the moment, I'm sorry.
     </p>
 
     <p>
-      <strong>Tied to Cavalry's Qt version.</strong> This extension is built for the Qt version that ships with the current Cavalry release. A Cavalry update might update it or some of its internals, which could break the extension. If that happens, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
+      <strong>Tied to Cavalry's Qt version.</strong> This extension is built for the Qt version that ships with the current Cavalry release. A Cavalry update can update it or parts of its internal structure, which could break the extension. If that happens, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
     </p>
 
     <h2 id="acknowledgements">Acknowledgements</h2>
@@ -96,10 +96,10 @@ Part of the reason I turned my back on Adobe products is that their UI scaling i
 
     <ul>
       <li>
-        <kbd>F11</kbd> to put the whole Cavalry window fullscreen, and back. This is remembered between runs.
+        <kbd>F11</kbd> to put the whole Cavalry window fullscreen, and back.
       </li>
       <li>
-        <kbd>F11</kbd> in a viewport window (or click the icon at the right end of its footer bar), to put the viewport to fullscreen. Press <kbd>F11</kbd> again or click the button in the top right corner to go back.
+        <kbd>F11</kbd> in a viewport window to put it to fullscreen (or click on the icon in the footer bar). Press <kbd>F11</kbd> again or click the button in the top right corner to go back.
       </li>
       <li>
         <kbd>Ctr+Plus</kbd> and <kbd>Ctrl+Minus</kbd> to scale the UI up or down increments of 5%.
@@ -108,7 +108,7 @@ Part of the reason I turned my back on Adobe products is that their UI scaling i
         In <code>Preferences &gt; UI</code>, you can choose a UI scaling from 90 % to 150 % (default 110 %), and a theme: <em>Default</em>, <em>Darker</em> or <em>Nebula</em>. The theme change requires a restart. The folder button next to the setting shows the file <code>themes.ini</code>. Open it in a text editor to add your own themes.
       </li>
       <li>
-        All settings are stored in <code>%APPDATA%\Cavalry Better UI</code> and survive moving or replacing the exe. To remove everything, delete the exe and that folder, plus <code>%LOCALAPPDATA%\Cavalry Better UI</code>.
+        All settings are stored in <code>%APPDATA%\Cavalry Better UI</code> and survive moving or replacing the exe. To remove the product, delete the exe and that folder, plus <code>%LOCALAPPDATA%\Cavalry Better UI</code>.
       </li>
     </ul>
 
