@@ -22,7 +22,7 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
 </div>
 
 <p>
-  Part of the reason I turned my back on Adobe products is that their UI scaling is terrible. On my 4K monitor, After Effects was so tiny that I spent my days squinting at labels and keyframes. Cavalry at least has a font size setting, but the rest of the interface is still a bit small. So I sat down and wrote a little extension that hooks into Cavalry. Now you get a UI scaling setting that scales the whole interface. Additionally, you can now also theme the interface to your liking (my new default theme is now darker, improving the contrast of text elements). And last but not least, you can go fullscreen with the viewport. "Cavalry Better UI" bundles all of these improvements into a single small program.
+  Part of the reason I turned my back on Adobe products is that their UI scaling is terrible. On my 4K monitor, After Effects was so tiny that I spent my days squinting at labels and keyframes. Cavalry at least has a font size setting, but the rest of the interface is still a bit small. So I sat down and wrote a little extension for Cavalry. Now you get a UI scaling setting that scales the whole interface. Additionally, you can now also theme the interface to your liking (my new default theme is now darker, improving the contrast of text elements). And last but not least, you can go fullscreen with the viewport. "Cavalry Better UI" bundles all of these improvements into a single small program.
 </p>
 
 <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry.</p>
@@ -32,7 +32,7 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
 </div>
 
 <div class="store-beta-banner">
-  <strong>Currently in beta.</strong> I've tested the extension both on Windows 10 and Windows 11 (two different devices) and it works well. I still label it as beta because I need further feedback from users. The extension hooks into some internal Cavalry mechanisms, and this might break due to unforeseen differences on different devices. That being said, hopefully everything goes smoothly. If not, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
+  <strong>Currently in beta.</strong> I've tested the extension both on Windows 10 and Windows 11 (two different devices) and it works well. I still label it as beta because I need further feedback from users. The extension works closely with Cavalry's interface, and this might break due to unforeseen differences on different devices. That being said, hopefully everything goes smoothly. If not, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
 </div>
 
 {% include store-purchase-box.html %}
@@ -74,7 +74,7 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
     <h2 id="how">How It Works</h2>
 
     <p>
-      Cavalry has no plugin API for any of this, so getting here took a good amount of digging through Cavalry's internals (with a big help from Claude). Cavalry is built with the Qt framework. When you start Cavalry Better UI, it first finds Cavalry's executable and starts it. The extension then injects itself into Cavalry's process, and from there it can access the same Qt objects that Cavalry uses to build its interface. This is how it can scale the whole interface, recolor it with themes, and put the viewport to fullscreen.
+      Cavalry is built with the Qt framework, and so is this extension. When you start Cavalry Better UI, it finds your Cavalry installation and starts it as usual. While Cavalry starts, the extension is loaded alongside it and works with the same Qt windows and widgets that make up Cavalry's interface. That is how it scales the whole interface, recolors it with themes, and puts the viewport into fullscreen. No file of your Cavalry installation is changed, and if you start Cavalry the usual way, you get the original Cavalry, exactly as shipped.
     </p>
 
     <h2 id="known-limitations">Known Limitations</h2>
