@@ -1,0 +1,145 @@
+---
+layout: store
+title: Cavalry Better UI
+title_on_page: Cavalry Better UI
+tagline: The UI tweaks I wished Cavalry had. Scale the whole interface and recolor it with themes. Put Cavalry or the viewport to fullscreen.
+custom_body: true
+price: "8€"
+price_note: "incl. VAT"
+buy_label: "Buy"
+dodo_product_id_test: ""
+dodo_product_id_live: ""
+---
+
+<figure class="store-video store-video-empty">
+  <span>Video coming soon</span>
+</figure>
+
+<p>
+</p>
+Part of the reason I turned my back on Adobe products is that their UI scaling is terrible. On my 4K monitor, After Effects was so tiny that I spent my days squinting at labels and keyframes. Cavalry at least has a font size setting, but the rest of the interface is still a bit small. So I sat down and wrote a little extension that hooks into Cavalry. Now you get a UI scaling setting that scales the whole interface. Additionally, you can now also theme the interface to your liking (my new default theme is now darker, improving the contrast of text elements). And last but not least, you can go full-screen with the viewport. "Cavalry Better UI" bundles all of these improvements into a single small program.
+
+<p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry.</p>
+
+<div class="store-attention-banner">
+  <strong>Windows 10 and 11 only.</strong> Cavalry Better UI does not work on macOS, and there are no plans for it at the moment, simply because I don't have a Mac to develop and test it on. It is built for the Windows build of Cavalry, and it relies on Windows internals.
+</div>
+
+<div class="store-beta-banner">
+  <strong>Currently in beta.</strong> I've tested the extension both on Windows 10 and Windows 11 (two different devices) and it works well. I still label it as beta because I need further feedback from users. The extension hooks into some internal Cavalry mechanisms, and this might break due to unforeseen differences on different devices. That being said, hopefully everything goes smoothly. If not, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
+</div>
+
+{% include store-purchase-box.html %}
+
+<nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>
+  <button type="button" class="doc-tab" aria-current="true" data-doc-target="overview">Overview</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="manual">Manual</button>
+  <button type="button" class="doc-tab" aria-current="false" data-doc-target="releases">Releases</button>
+</nav>
+
+<div class="doc-content">
+
+  <div class="doc-panel" data-doc-panel="overview">
+
+    <h2 id="features">Key Features</h2>
+
+    <ul>
+      <li>
+        <strong>Scale the entire UI.</strong> Choose 90 % to 150 % in steps of 5 %, in the Preferences or with <kbd>Ctrl</kbd>+<kbd>Plus</kbd> and <kbd>Ctrl</kbd>+<kbd>Minus</kbd>. Text, icons and spacing grow together and the change applies instantly (no restart required).
+      </li>
+      <li>
+        <strong>UI themes.</strong> The new default theme is darker and has a higher contrast. You can pick between "Default", "Darker" and "Nebula" in the Preferences, or define your own. Switching themes needs a restart.
+      </li>
+      <li>
+        <strong>Fullscreen app.</strong> I mean, come on Cavalry, why can't we put the app into fullscreen? Now you can by simply pressing <kbd>F11</kbd>.
+      </li>
+      <li>
+        <strong>Fullscreen viewports.</strong> Floating viewports (<code>Window &gt; Add Viewport</code>) are now independent windows. Press <kbd>F11</kbd> or click the button in the viewport's footer, and the viewport goes to full-screen (with the composition zoomed to fit your monitor). This is especially helpful when you work with multiple monitors (or for projecting mapping 😅).
+      </li>
+    </ul>
+
+    <h2 id="small-niceties">Small niceties</h2>
+
+    <ul>
+      <li>
+        <strong>Full-screen main viewport.</strong> The viewport docked in Cavalry's main window also gets a fullscreen button. When clicked, it opens a new viewport window and puts it fullscreen right away.
+      </li>
+      <li>
+        <strong>One-click install. </strong> You will receive just one <code>.exe</code>, put it wherever you like, and double-click it to start Cavalry with the extension. While we hook into Cavalry's internals, no file in your Cavalry installation is changed. You can start Cavalry the normal way and get the original UI back at any point.
+      </li>
+    </ul>
+
+    <h2 id="how">How It Works</h2>
+
+    <p>
+      Cavalry has no plugin API for any of this, so getting here took a good amount of digging through Cavalry's internals (with a big help from Claude). Cavalry is built with the Qt framework. When you start Cavalry Better UI, it first finds Cavalry's executable and starts it. The extension then injects itself into Cavalry's process, and from there it can access the same Qt objects that Cavalry uses to build its interface. This is how it can scale the whole interface, recolor it with themes, and put the viewport to fullscreen.
+    </p>
+
+    <h2 id="known-limitations">Known Limitations</h2>
+
+    <p>
+      <strong>Windows only.</strong> The extension relies on Windows internals and the Windows build of Cavalry.
+    </p>
+
+    <p>
+      <strong>Tied to Cavalry's Qt version.</strong> This extension is built for the Qt version that ships with the current Cavalry release. A Cavalry update might update it or some of its internals, which could break the extension. If that happens, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
+    </p>
+
+    <h2 id="acknowledgements">Acknowledgements</h2>
+
+    <p>This project wouldn't exist without the Cavalry team, who built a really nice animation software. Also thanks to the Qt project for the framework that makes this possible.</p>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="manual" hidden>
+
+    <h2 id="installation">Installation</h2>
+
+    <p>
+      Download <code>Cavalry Better UI.exe</code> and put it wherever you like, for instance on your Desktop. Double-click it to start Cavalry with the extension. If Cavalry is not installed in <code>C:\Program Files\Cavalry</code>, you are asked once where <code>Cavalry.exe</code> is.
+    </p>
+
+    <p>
+      <strong>The exe is not code-signed</strong>. This is a small project and those certificates are too expensive and too much of a hassle to set up (there is a lot of politics and bureaucracy involved). Therefore, Windows will warn you when you start the app for the first time (&ldquo;Windows protected your PC&rdquo; by SmartScreen, or an unknown publisher). To continue, click <strong>More info</strong> and then <strong>Run anyway</strong>. If you'd rather not run an unsigned program, don't buy this product.
+    </p>
+
+    <h2 id="usage">Usage</h2>
+
+    <ul>
+      <li>
+        <kbd>F11</kbd> to put the whole Cavalry window fullscreen, and back. This is remembered between runs.
+      </li>
+      <li>
+        <kbd>F11</kbd> in a viewport window (or click the icon at the right end of its footer bar), to put the viewport to fullscreen. Press <kbd>F11</kbd> again or click the button in the top right corner to go back.
+      </li>
+      <li>
+        <kbd>Ctr+Plus</kbd> and <kbd>Ctrl+Minus</kbd> to scale the UI up or down increments of 5%.
+      </li>
+      <li>
+        In <code>Preferences &gt; UI</code>, you can choose a UI scaling from 90 % to 150 % (default 110 %), and a theme: <em>Default</em>, <em>Darker</em> or <em>Nebula</em>. The theme change requires a restart. The folder button next to the setting shows the file <code>themes.ini</code>. Open it in a text editor to add your own themes.
+      </li>
+      <li>
+        All settings are stored in <code>%APPDATA%\Cavalry Better UI</code> and survive moving or replacing the exe. To remove everything, delete the exe and that folder, plus <code>%LOCALAPPDATA%\Cavalry Better UI</code>.
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="doc-panel" data-doc-panel="releases" hidden>
+
+    <h2 id="releases">Releases</h2>
+
+    <h3>0.1.0 (beta) — 2026-10-07</h3>
+
+    <p>Initial beta release.</p>
+
+    <ul>
+      <li>Fullscreen for viewport windows.</li>
+      <li>F11 fullscreen for the main window, remembered between runs.</li>
+      <li>UI scaling from 90 % to 150 % in 5 % steps, also via <kbd>Ctrl</kbd>+<kbd>Plus</kbd> and <kbd>Ctrl</kbd>+<kbd>Minus</kbd>.</li>
+      <li>UI themes (Darker, Nebula and your own).</li>
+    </ul>
+
+  </div>
+
+</div>
