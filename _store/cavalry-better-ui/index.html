@@ -13,26 +13,31 @@ dodo_product_id_test: ""
 dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
 ---
 
-<figure class="store-video">
+<figure class="store-video" data-video data-video-id="Gw1kcbsMwco" data-video-title="Cavalry Better UI">
   <img class="store-video-poster" alt="Cavalry with the darker theme and a larger UI scale" src="assets/cavalry-better-ui-preview.jpg">
+
+  <div class="store-video-gate">
+    <button type="button" class="store-video-play" data-video-play>
+      <span class="store-video-play-icon" aria-hidden="true"></span>
+      Play video
+    </button>
+    <p class="store-video-consent">
+      Loads the video from YouTube (Google), which then receives your IP address and
+      may set cookies.
+      <br>
+      Embedded via youtube-nocookie.com.
+    </p>
+  </div>
 </figure>
 
-<div class="store-video store-video-empty store-video-soon">
-  <span>Video coming soon</span>
-</div>
-
 <p>
-  Part of the reason I turned my back on Adobe products is that their UI scaling is terrible. On my 4K monitor, After Effects was so tiny that I spent my days squinting at labels and keyframes. Cavalry at least has a font size setting, but the rest of the interface is still a bit small. So I sat down and wrote a little extension for Cavalry. Now you get a UI scaling setting that scales the whole interface. Additionally, you can now also theme the interface to your liking (my new default theme is now darker, improving the contrast of text elements). And last but not least, you can go fullscreen with the viewport. "Cavalry Better UI" bundles all of these improvements into a single small program.
+  Part of the reason I turned my back on Adobe products is that their UI scaling is terrible. On my 4K monitor, After Effects was so tiny I had to squint to read the text. Cavalry at least has a font size setting, but the rest of the interface is still a bit small. So I sat down and wrote an extension for it, allowing you to scale the whole interface to your liking. Additionally, you can put the whole app or just the viewport into fullscreen. And last but not least, you can theme the interface (my new default theme is now darker, improving the contrast of text elements). "Cavalry Better UI" bundles all of these improvements into a single small program.
 </p>
 
 <p class="store-disclaimer">This project is not affiliated with or endorsed by Cavalry.</p>
 
 <div class="store-attention-banner">
-  <strong>Windows 10 and 11 only.</strong> Cavalry Better UI does not work on macOS, and there are no plans for it at the moment, simply because I don't have a Mac to develop and test it on. It is built for the Windows build of Cavalry, and it relies on Windows internals.
-</div>
-
-<div class="store-beta-banner">
-  <strong>Currently in beta.</strong> I've tested the extension both on Windows 10 and Windows 11 (two different devices) and it works well. I still label it as beta because I need further feedback from users. The extension works closely with Cavalry's interface, and this might break due to unforeseen differences on different devices. That being said, hopefully everything goes smoothly. If not, please <a href="{{ '/impressum/' | relative_url }}">let me know</a> and I'll fix it.
+  <strong>Windows 10 and 11 only.</strong> Cavalry Better UI does not work on macOS, and there are no plans for it at the moment. It is built for the Windows build of Cavalry, and it relies on Windows internals.
 </div>
 
 {% include store-purchase-box.html %}
@@ -67,14 +72,14 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
         <strong>Fullscreen app.</strong> I mean, come on Cavalry, why can't we put the app into fullscreen? Now you can by simply pressing <kbd>F11</kbd>.
       </li>
       <li>
-        <strong>Fullscreen viewports.</strong> Floating viewports (<code>Window &gt; Add Viewport</code>) are now independent windows. Press <kbd>F11</kbd> or click the button in the viewport's footer, and the viewport goes to fullscreen (with the composition zoomed to fit your monitor). This is especially helpful when you work with multiple monitors (or for projecting mapping 😅).
+        <strong>Fullscreen viewports.</strong> Floating viewports (<code>Window &gt; Add Viewport</code>) are now independent windows. Press <kbd>F11</kbd> or click the button in the viewport's footer, and the viewport goes to fullscreen (with the composition zoomed to fit your monitor). This is especially helpful when you work with multiple monitors (or for projection mapping 😅).
       </li>
     </ul>
 
     <h2 id="how">How It Works</h2>
 
     <p>
-      Cavalry is built with the Qt framework, and so is this extension. When you start Cavalry Better UI, it finds your Cavalry installation and starts it as usual. While Cavalry starts, the extension is loaded alongside it and works with the same Qt windows and widgets that make up Cavalry's interface. That is how it scales the whole interface, recolors it with themes, and puts the viewport into fullscreen. No file of your Cavalry installation is changed, and if you start Cavalry the usual way, you get the original Cavalry, exactly as shipped.
+      Cavalry is built with the Qt framework, and so is this extension. When you start Cavalry Better UI, it finds your Cavalry installation and starts it as usual. While Cavalry starts, the extension is loaded alongside it and works with the same Qt windows and widgets that make up Cavalry's interface. That is how it scales the whole interface, recolors it with themes, and puts the viewport into fullscreen. No file of your Cavalry installation is changed, and if you start Cavalry the usual way, you get the original Cavalry.
     </p>
 
     <h2 id="known-limitations">Known Limitations</h2>
@@ -102,7 +107,7 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
     </p>
 
     <p>
-      <strong>The exe is not code-signed</strong>. This is a small project and those certificates are too expensive and too much of a hassle to set up (there is a lot of politics and bureaucracy involved). Therefore, Windows will warn you when you start the app for the first time (&ldquo;Windows protected your PC&rdquo; by SmartScreen, or an unknown publisher). To continue, click <strong>More info</strong> and then <strong>Run anyway</strong>. If you'd rather not run an unsigned program, don't buy this product.
+      <strong>The exe is not signed</strong>. This is a small project and those certificates are too expensive and too much of a hassle to set up (there is a lot of politics and bureaucracy involved). Therefore, Windows will warn you when you start the app for the first time (&ldquo;Windows protected your PC&rdquo; by SmartScreen, or an unknown publisher). To continue, click <strong>More info</strong> and then <strong>Run anyway</strong>. If you'd rather not run an unsigned program, don't buy this product.
     </p>
 
     <h2 id="usage">Usage</h2>
@@ -131,9 +136,9 @@ dodo_product_id_live: "pdt_0NpEScScOgGqNBotLI2F9"
 
     <h2 id="releases">Releases</h2>
 
-    <h3>0.1.0 (beta) — 2026-10-07</h3>
+    <h3>1.0.0 — 2026-10-08</h3>
 
-    <p>Initial beta release for Cavalry version 2.8. Older versions are not supported.</p>
+    <p>Initial release for Cavalry version 2.8. Older versions are not supported.</p>
 
     <ul>
       <li>Fullscreen for viewport windows.</li>
