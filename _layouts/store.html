@@ -103,6 +103,12 @@
     </div>
     {% endif %}
 
+    {% if page.warning %}
+    <div class="store-warning-banner">
+      {{ page.warning | markdownify }}
+    </div>
+    {% endif %}
+
     {% include store-purchase-box.html %}
 
     <nav class="doc-tabs" aria-label="Documentation sections" data-doc-tabs>

@@ -427,6 +427,29 @@
   }
 }
 
+.store-warning-banner {
+  margin: 1.5em 0;
+  padding: 1em 1.2em;
+
+  font-size: 0.9rem;
+  line-height: 1.45rem;
+  color: #6b4e00;
+
+  background: #fff8db;
+  border: 1px solid #e6c84d;
+  border-radius: 0.5em;
+  box-shadow: 0 0.3em 0.9em #e6c84d33, 0 0.05em 0.15em #00000015;
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    font-weight: 700;
+    color: #5a3f00;
+  }
+}
+
 .store-checkout-status {
   padding-inline: var(--store-checkout-bleed, 0px);
   margin: 0.8em 0 0;
