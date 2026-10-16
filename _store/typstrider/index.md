@@ -20,6 +20,11 @@ intro: |
 
   This project is not affiliated with or endorsed by Typst or Cavalry.
   {:.store-disclaimer}
+warning: |
+  **Cavalry 2.8 not supported (yet).** TypstRider doesn't seem to work with Cavalry 2.8,
+  as WebAssembly was disabled there. We are looking for a solution to still make it work.
+  If you'd like to see this fixed in Cavalry, please
+  [vote for the feature request on Discord](https://discord.com/channels/538287787649007618/1560680039312527361/1560680039312527361).
 dodo_product_id_test: "pdt_0Nn1eRhajGZz1V6UUPx8F"
 dodo_product_id_live: "pdt_0Nn7F12p1FYerNKuKB3JS"
 ---
