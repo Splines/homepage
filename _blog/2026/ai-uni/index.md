@@ -12,7 +12,7 @@ excerpt: >
 
 ## All or nothing
 
-I don't like the black & white framing some professors evoke at my university with regards to the usage of AI. "Please don't use any AI when working on exercise sheets. In the exam you also won't have access to it.", they point out. Besides the whole concept of exams (TODO Link to other blog post) being moot in my opinion, I'd argue that one can choose the granularity of "using AI in your work" in $[0,1] \subseteq \mathbb{R}$ (instead of a binary decision) and that the sweet spot is not at the endpoints of this interval.
+I don't like the black & white framing some professors evoke at my university with regards to the usage of AI. "Please don't use any AI when working on exercise sheets. In the exam you also won't have access to it.", they point out. Besides the whole concept of [exams]({% link _blog/2026/exams/index.md %}) being moot in my opinion, I'd argue that one can choose the granularity of "using AI in your work" in $[0,1] \subseteq \mathbb{R}$ (instead of a binary decision) and that the sweet spot is not at the endpoints of this interval.
 
 If you fully embrace the "vibe-coding" spirit and choose the $1$-endpoint, you would tell the agent: "Solve this exercise sheet for me" and then hand in that solution unmodified to your poor tutor, just to get your eligibility points for an exam. I think it's clear that for your personal skills, you won't get much out of this approach.
 
@@ -83,7 +83,7 @@ We also speak of a joint distribution.
 
 Whatever tool you use, you should get a textual representation of the PDFs. Then, I put them into `knowledge-base/` subfolders. For example, `stat-phys/knowledge-base/`. In there, I usually have subfolders for different books and the lecture script.
 
-Last but not least, we need a way for the agent to communicate its answers including equations. I discovered [Typst](https://typst.app) when [I wrote my Bachelor thesis](TODO link to blog post), and I call it the "New LaTeX". Besides an easier syntax, the main advantage for our purposes is that I don't need to download 6GB of packages, that the installation is one-click and that documents usually compile in less than 200ms. All I do is install the great [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) VSCode extension and create one `.typ` file for every lecture, e.g. `stat-phys/stat.typ` that the agent can write to.
+Last but not least, we need a way for the agent to communicate its answers including equations. I discovered [Typst](https://typst.app) when [I wrote my Bachelor thesis]({% link _blog/2026/bachelor-thesis-typst/index.md %}), and I call it the "New LaTeX". Besides an easier syntax, the main advantage for our purposes is that I don't need to download 6GB of packages, that the installation is one-click and that documents usually compile in less than 200ms. All I do is install the great [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) VSCode extension and create one `.typ` file for every lecture, e.g. `stat-phys/stat.typ` that the agent can write to.
 
 Finally, tell the agent what to do in an `AGENTS.md` file at the project root, e.g.
 
