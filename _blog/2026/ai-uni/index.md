@@ -1,9 +1,9 @@
 ---
 layout: page
-date: 2026-10-30
+date: 2026-11-02
 draft: true
 permalink: /blog/drafts/d3d1bb6ef205a51a
-title: "How AI helps me at university"
+title: "How AI helps me at University"
 code: true
 katex:
   enabled: true
@@ -38,7 +38,7 @@ All these points have in common that you take your time to think something throu
 
 ## Painful friction
 
-But then you hit a blocker. At least I do frequently when I read lecture scripts. More often than not, it's the tiny things that trip you up: some different unusual notation here that suddenly makes the whole step feel out of place for you. Or some misplaced comma and a grammar mistake there and you don't get what the sentence is trying to tell you. Or just a level of abstraction the script uses, but which assumes you already know all the levels below, even though you don't. Or sometimes real mistakes, missing assumptions or left out (trivial?) steps.
+But then you hit a blocker. At least I do frequently when I read lecture scripts. More often than not, it's the tiny things that trip you up: some different unusual notation here that suddenly makes the whole step feel out of place for you. Or some misplaced comma and a grammar mistake there and you don't get what the sentence is trying to tell you. Or just a level of abstraction the script uses, but which assumes you already know all the levels below, even though you don't. Or sometimes real mistakes, missing assumptions or left out (trivial?) steps. In cognitive load theory, this is called _extraneous_ cognitive load. Wikipedia [notes](https://en.wikipedia.org/wiki/Cognitive_load) that it "refers to the way information or tasks are presented to a learner".
 
 All of this makes learning harder and a lot more time-consuming, which is not inherently bad, see _friction_. But sometimes this friction can become painful. If you frequently don't understand some steps in a proof, maybe you sit down longer to try to reason about them. But in the end, time is a scarce commodity and at some point, you have to move on, leaving a bad experience with proofs behind. Next time, you may be even less motivated to understand every single step. And while I talk about proofs here, I feel this is somewhat universal to other problems as well.
 
@@ -122,6 +122,7 @@ LLMs are a double-edged sword and there are many risks. But also infinitely many
 
 I don't like the approach of profs telling students to "not use LLMs at all". It's just naive. Students will use it anyway, especially when one is overloaded with so many exciting things to learn about, but has too little time besides attending lectures, reviewing them afterwards, answering the exercise sheets and maybe earning some money on the side. Some profs already adapt and conceive exercise questions where one is supposed to use the agent in some parts and asked to do it completely on one's own in other parts. As long as we still think for ourselves and engage with the material in some form, I don't see a reason to not use LLMs as a tool that supports me in what I do[^2].
 
+<small>_Thanks to Jannis for having reviewed this post._</small>
 
 [^1]: This is not at all to discourage picking up an instrument at a later age. I've started playing the viola at 23. The argument here is just that they picked it up when they were very young, so they had a lot of time to practice until they played in a professional context.
 
