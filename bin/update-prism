@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Rebuilds vendor/prism.js with the languages below, equivalent to the bundle
+# from https://prismjs.com/download (which assembles it in the browser).
+# Components come from the prismjs npm package on jsDelivr; dependencies are
+# resolved and ordered via its components.json, like the download page does.
+#
+# Usage (from the repo root): bin/update-prism
+
+require 'json'
+require 'net/http'
+
+PRISM_VERSION = '1.30.0'
+
+# Language ids as on https://prismjs.com/download. Required dependencies
+# (e.g. clike for javascript) are added automatically, but are listed here
+# anyway so the header URL matches the download page.
+LANGUAGES = %w[
+  markup
+  css
+  clike
+  javascript
+  docker
+  erb
+  json
+  latex
+  markup-templating
+  python
+  ruby
+  scss
+  yaml
+].freeze
+
+OUTPUT = File.expand_path('../vendor/prism.js', __dir__)
+CDN = "https://cdn.jsdelivr.net/npm/prismjs@#{PRISM_VERSION}"
+
+def fetch(path)
+  response = Net::HTTP.get_response(URI("#{CDN}/#{path}"))
+  raise "GET #{path} failed: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
+
+  response.body.force_encoding(Encoding::UTF_8)
+end
+
+def ids(value) = Array(value)
+
+def resolve(selected, components)
+  known = components.except('meta')
+  unknown = selected - known.keys
+  raise "Unknown Prism languages: #{unknown.join(', ')}" if unknown.any?
+
+  # Add required dependencies transitively
+  all = selected.dup
+  all.each { |id| ids(known[id]['require']).each { |dep| all << dep unless all.include?(dep) } }
+
+  # Order so that required, optional and modified components come first
+  ordered = []
+  visit = lambda do |id|
+    return if ordered.include?(id)
+
+    entry = known[id]
+    (ids(entry['require']) + ids(entry['optional']) + ids(entry['modify']))
+      .select { |dep| all.include?(dep) }
+      .each { |dep| visit.call(dep) }
+    ordered << id
+  end
+  all.each { |id| visit.call(id) }
+  ordered
+end
+
+components = JSON.parse(fetch('components.json'))
+languages = resolve(LANGUAGES, components['languages'])
+
+header = <<~HEADER.chomp
+  /* PrismJS #{PRISM_VERSION}
+  https://prismjs.com/download#themes=prism&languages=#{LANGUAGES.join('+')} */
+HEADER
+parts = [header, fetch('components/prism-core.min.js')]
+parts += languages.map { |id| fetch("components/prism-#{id}.min.js") }
+
+File.write(OUTPUT, "#{parts.join("\n")}\n")
+puts "Wrote #{OUTPUT} (Prism #{PRISM_VERSION}: #{languages.join(', ')})"
