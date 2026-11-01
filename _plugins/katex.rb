@@ -11,13 +11,26 @@ module Katex
     JS_CTX = MiniRacer::Context.new
     JS_CTX.eval(File.read(JS_FILENAME))
 
-    INLINE_REGEX = /\$(.*?)\$/m.freeze
-    DISPLAY_REGEX = /\$\$(.*?)\$\$/m.freeze
+    # Tried in order at each position (\x60 is a backtick):
+    #   code:    `...`, ``...`` or ```...``` fences, left untouched
+    #   escaped: \$ or \\$, becomes a literal dollar sign
+    #   display: $$...$$
+    #   inline:  $...$
+    TOKEN_REGEX = /(?<code>(?<ticks>\x60+).*?\k<ticks>)|(?<escaped>\\{1,2}\$)|\$\$(?<display>.*?)\$\$|\$(?<inline>.*?)\$/m.freeze
 
     def process(text, macros)
-      text
-        .gsub(DISPLAY_REGEX) { render_display($1, macros) }
-        .gsub(INLINE_REGEX) { render_inline($1, macros) }
+      text.gsub(TOKEN_REGEX) do
+        m = Regexp.last_match
+        if m[:code]
+          m[0]
+        elsif m[:escaped]
+          '&#36;'
+        elsif m[:display]
+          render_display(m[:display], macros)
+        else
+          render_inline(m[:inline], macros)
+        end
+      end
     end
 
     def render_inline(text, macros)

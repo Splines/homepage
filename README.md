@@ -38,10 +38,8 @@ permalink: /blog/drafts/<your-random-hash>
 
 ## How to add a new language for code blocks
 
-Download [prismjs](https://prismjs.com/download#themes=prism) and place the JS as `vendor/prism.js` to allow for server-side rendering of code blocks. Toggle these languages:
+Code blocks are rendered server-side with [prismjs](https://prismjs.com/download), bundled as `vendor/prism.js`. To add a language, add its id (as on the Prism download page) to `LANGUAGES` in `bin/update-prism`, then run:
 
-```text
-JavaScript (needs C-like), HTML (and other markup languages), ERB, CSS, Sass (SCSS), Ruby, JSON + Web App Manifest, YAML, Docker, Python
+```sh
+bin/update-prism
 ```
-
-You can also directly use [this link](https://prismjs.com/download#themes=prism&languages=markup+css+clike+javascript+docker+erb+json+markup-templating+python+ruby+scss+yaml).

@@ -15,6 +15,9 @@ module Prism
     prism_code += "\n" + File.read(PRISM_TYPST_JS)
     JS_CTX = MiniRacer::Context.new
     JS_CTX.eval(prism_code)
+    # Code is passed as an argument rather than spliced into JS source, so
+    # backslashes, backticks and ${ in code blocks survive unchanged.
+    JS_CTX.eval('function highlight(code, lang) { return Prism.highlight(code, Prism.languages[lang], lang); }')
 
     # Jekyll wraps code blocks in <pre><code> tags
     CODE_REGEX = /<pre><code(.*?)class="language-(.*?)"(.*?)>(.*?)<\/code><\/pre>/m.freeze
@@ -32,7 +35,7 @@ module Prism
     
     def render_code(language, code)
       code = strip_newlines_in_beginning_and_end(code)
-      JS_CTX.eval("Prism.highlight(`#{code}`, Prism.languages.#{language}, '#{language}')")
+      JS_CTX.call('highlight', code, language)
     end
 
     def extract_filename!(code)
