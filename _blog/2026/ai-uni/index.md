@@ -1,6 +1,8 @@
 ---
 layout: page
 date: 2026-10-30
+draft: true
+permalink: /blog/drafts/d3d1bb6ef205a51a
 title: "How AI helps me at university"
 code: true
 katex:
