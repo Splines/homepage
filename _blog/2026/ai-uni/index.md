@@ -67,9 +67,9 @@ I am sure there are million ways to achieve a good LLM-setup that respects these
 
 The agent having access to all necessary context on multiple devices is easily solved by creating a private GitHub/GitLab/whatever repo (creatively, I have called mine "uni"). This repo is just for me, so I work on the "main" branch and just push commits directly to it (e.g. after a lecture is over where I asked some questions to the agent). In this repo, I put one folder for each course, e.g. `quantum-chemistry/` or `fluid-dynamics/`.
 
-Next, for the agent to run its own experiments and generate figures, I set up a Python environment. My go-to Python package/project manager is [`uv`](https://docs.astral.sh/uv/), its amazingly fast and easy to use. Just run `uv init` and `uv venv --python <version>` to bootstrap the project including a virtual environment, then `uv add <package>` to add a Python package and lock its version. On another machine, all you need is then `uv sync` to get the exact same version. Having a reproducible setup is a blessing.
+Next, for the agent to run its own experiments and generate figures, I set up a Python environment. My go-to Python package/project manager is [`uv`](https://docs.astral.sh/uv/), its blazing fast and easy to use. Just run `uv init` and `uv venv --python <version>` to bootstrap the project including a virtual environment, then `uv add <package>` to add a Python package and lock its version. On another machine, all you need is `uv sync` to get the exact same version. Having a reproducible setup is a blessing.
 
-Furthermore, we need the agent to access the lecture script and literature, which I have available as PDF files. PDF is a versatile document format, but unfortunately with binary content. Yes, modern agents are smart enough to extract the content on their own, but I don't trust this conversion enough to accurately preserve math-content. I am sure there a good open-source tools out there to achieve this. So far, I've been using MathPix for that (not at all sponsored). At the beginning of the semester, I usually pay the \$4.99 for one month (don't forget to cancel directly), such that I can extract up to 1000 PDF pages (and get extra usage for \$0.0035 per page). I just find this service to be very reliable and to faithfully extract any math equation and the images of the PDF. I get back a zip file with the content in a "MathPix Markdown" format, which is just plain Markdown, enriched with $\LaTeX$-like syntax, which even preserves section and equation numbering. Here is an excerpt:
+Furthermore, we need the agent to access the lecture script and literature, which I have available as PDF files. PDF is a versatile document format, but unfortunately with binary content. Yes, modern agents are smart enough to extract the content on their own, but they will use whatever you have available in your OS, and I don't trust this process to accurately preserve math-content. I am sure there are good open-source tools out there to achieve this. So far, I've been using MathPix for that (not at all sponsored). At the beginning of the semester, I usually pay the \$4.99 for one month (don't forget to cancel directly), such that I can extract up to 1000 PDF pages (and get extra usage for \$0.0035 per page). I just find this service to be very reliable and to faithfully extract any math equation and the images of the PDF. I get back a zip file that contains an `images/` folder and the content in a "MathPix Markdown" format, which is plain Markdown, enriched with $\LaTeX$-like syntax, that even preserves section and equation numbering. Here is an excerpt:
 
 ```latex
 \subsection*{1.5 Joint, marginal and conditional probabilities}
@@ -81,6 +81,23 @@ $$
 We also speak of a joint distribution.
 ```
 
+Whatever tool you use, you should get a textual representation of the PDFs. Then, I put them into `knowledge-base/` subfolders. For example, `stat-phys/knowledge-base/`. In there, I usually have subfolders for different books and the lecture script.
+
+Last but not least, we need a way for the agent to communicate its answers including equations. I discovered [Typst](https://typst.app) when [I wrote my Bachelor thesis](TODO link to blog post), and I call it the "New LaTeX". Besides an easier syntax, the main advantage for our purposes is that I don't need to download 6GB of packages, that the installation is one-click and that documents usually compile in less than 200ms. All I do is install the great [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) VSCode extension and create one `.typ` file for every lecture, e.g. `stat-phys/stat.typ` that the agent can write to.
+
+Finally, tell the agent what to do in an `AGENTS.md` file at the project root, e.g.
+
+```text
+Reuse our uv environment, e.g. run Python files via "uv run <file.py>".
+
+Don't compile any Typst documents on your own, just look for problems in the Typst source code at the end via the VSCode problems tab.
+
+Use Typst instead of LaTeX. Note that you have to include a space after subscripts, e.g. "f_a (x)" instead of "f_a(x)".
+
+Answers to questions about statistical physics go into stat-phys/stat.typ (append a new section, separated by a pagebreak). Before answering such a question, read the knowledge base in stat-phys/knowledge-base. Do the same for the other topic folders: answer in that folder's own Typst file and consult its knowledge base if it has one (e.g. machine-learning/knowledge-base, answers in machine-learning/ml.typ).
+```
+
+If you're using Claude, put a `CLAUDE.md` file at the project root and write `@AGENTS.md` in it to reference the agents file.
 
 
 ## Caveats
