@@ -94,13 +94,21 @@ Don't compile any Typst documents on your own, just look for problems in the Typ
 
 Use Typst instead of LaTeX. Note that you have to include a space after subscripts, e.g. "f_a (x)" instead of "f_a(x)".
 
-Answers to questions about statistical physics go into stat-phys/stat.typ (append a new section, separated by a pagebreak). Before answering such a question, read the knowledge base in stat-phys/knowledge-base. Do the same for the other topic folders: answer in that folder's own Typst file and consult its knowledge base if it has one (e.g. machine-learning/knowledge-base, answers in machine-learning/ml.typ).
+All answers to questions about statistical physics go into stat-phys/stat.typ (append a new section, separated by a pagebreak). Before answering such a question, read the knowledge base in stat-phys/knowledge-base. Do the same for the other topic folders: answer in that folder's own Typst file and consult its knowledge base if it has one (e.g. machine-learning/knowledge-base, answers in machine-learning/ml.typ).
 ```
 
 If you're using Claude, put a `CLAUDE.md` file at the project root and write `@AGENTS.md` in it to reference the agents file.
 
+Here is now how the setup can look like. In short, it is basically just giving the agent enough context and telling it to output its answers into a Typst document. As easy as that, yet I find this incredibly useful in day-to-day uni life.
 
-## Caveats
+<video controls width="100%">
+  <source src="/blog/2026/ai-uni/vscode-uni-setup.mp4" type="video/mp4" />
+</video>
+
+
+## Closing words
+
+If you think
 
 But even at the $0$-endpoint, you may use a search engine to look up a mathematical definition on Wikipedia and read through the lecture script again, which can give you a lot of hints and maybe even parts of the solution you need. Why restrict yourself to this far end of the interval $[0,1]$? How could a $0.3$ approach look like?
 
