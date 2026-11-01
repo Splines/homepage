@@ -164,7 +164,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (~> 4.4)
-  jekyll-feed (~> 0.17)
+  jekyll-feed (~> 0.18)
   jekyll-vite (~> 3.0)
   mini_racer (~> 0.22)
   rspec (~> 3.13)
