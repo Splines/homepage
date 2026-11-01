@@ -40,13 +40,30 @@ But then you hit a blocker. At least I do frequently when I read lecture scripts
 
 All of this makes learning harder and a lot more time-consuming, which is not inherently bad, see _friction_. But sometimes this friction can become painful. If you frequently don't understand some steps in a proof, maybe you sit down more to try to reason about them. But in the end, time is a scarce commodity and at some point, you have to move on, leaving a bad experience with proofs behind. Next time, you may be even less motivated to understand every single step. And while I talk about proofs here, I feel this is somewhat universal to other problems as well.
 
-## A little bit of AI
+## A little bit of AI & Constraints
 
 And this is where I think Large Language Models (LLMs) are so helpful. When used "correctly", they can alleviate the painful friction for you, while still letting you experience the "good" friction necessary for learning. They can create a positive learning environment, pushing you to engage even more with the lecture material and reverse the vicious circle to a positive feedback loop. Because from my experience, continuing with a course is a lot more fun when you have understood the previous lectures, thus letting you more easily build upon that and make connections to previous topics in the next sessions.
 
-## Axioms
+Of course, this presumes the agent to be actually helpful. Here is what I mean by that, i.e. the constraints for my agent setup:
 
-## My setup with VSCode
+- The agent uses the notation from the lecture. Especially in maths and physics, where for one concept there are many different possible variable names and different conventions, it is important that the agent talks the language we use in the lecture.
+
+- The agent knows exact section and equation numbers from the script (if there is one), such that I can ask questions like "How to get from equation 2.66 to 2.67?").
+
+- The agent refers to actual literature I care about, and not only the literature implicitly stored as model weights. Especially, when profs even tell you about relevant literature to their course, I want the agent to know it. This way, I can also ask specifically about where notation is different, or which section of the literature deserves a closer look.
+
+- The agent uses correctly formatted $\LaTeX$-like math output, instead of typesetting with weird Unicode symbols that try to mimick $\LaTeX$.
+
+- The agent knows which past questions I have answered and can thus build on my previous knowledge. So agent responses should be persisted for future use.
+
+- The agent should have access to all necessary context on multiple devices.
+
+
+## My simple VSCode setup
+
+To 
+
+
 
 ## Caveats
 
