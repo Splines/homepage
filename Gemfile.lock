@@ -171,4 +171,4 @@ DEPENDENCIES
   ruby-lsp-rspec (~> 0.1)
 
 BUNDLED WITH
-  4.0.20
+  4.1.0.beta3
