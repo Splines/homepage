@@ -61,7 +61,7 @@ Of course, this presumes the agent to be actually helpful. Here is what I mean b
 - The agent should be able to generate figures for me and run its own computer experiments such that its output is based on facts.
 
 
-## My simple VSCode agent setup
+## My simple VSCode agent setup for uni
 
 I am sure there are million ways to achieve a good LLM-setup that respects these constraints. And also more sophisticated ones that use knowledge graphs and what not. I intentionally wanted to keep my setup minimal and not invest too much work into it. It is functional, this is what counts to me here as I then want to move on _using_ it, not just _tweaking_ my setup.
 
@@ -108,14 +108,15 @@ Here is now how the setup can look like. In short, it is basically just giving t
 
 ## Closing words
 
-If you think
+Coming back to our $[0,1]$ interval. Even at the $0$-endpoint, you may use a search engine to look up a mathematical definition on Wikipedia and read through the lecture script again, which can give you a lot of hints and maybe even parts of the solution you need. So I don't see why we shouldn't sprinkle in a bit of AI. It can also look up definitions for you, and even recast them to the notation used in the lecture. It can outline totally new connections between topics you already know that you may have never stumbled upon before.
 
-But even at the $0$-endpoint, you may use a search engine to look up a mathematical definition on Wikipedia and read through the lecture script again, which can give you a lot of hints and maybe even parts of the solution you need. Why restrict yourself to this far end of the interval $[0,1]$? How could a $0.3$ approach look like?
+While this sounds glorious, there are certainly dangers to this approach. History teaches us how many physics discoveries were made by chance, by randomly stumbling upon something and drawing lines to what you've done before. This process may fall short if an agent can always directly give you an answer, such that you don't even look left or right anymore. I find it very fruitful to still look into books, get to know the authors language, how they describe a phenomenon, what figures they show using their own styles and how they structure their content.
 
-because you hold some mental model in your head, which can conflict with what you read.
+I see LLMs rather as helping hand when you're stuck, e.g. you don't understand a notation and want to see how it relates to the notation used in the lecture. Or when you want to explore more and don't know where to start, e.g. ask the agent to give you some keywords you can look up. Or to generate new learning materials for you, e.g. ask it to create an interactive website allowing you to play around with some parameters of an equation and see visually what changes.
 
-resolve your internal knowledge gaps
+LLMs are a double-sided sword and there are many risk. But there's infinitely many numbers in $[0,1]$: we can choose the granularity with which we make use of it. Not to do everything from start to finish for you, but as a tool to enrich your learning experience. One example, for this choice of granularity is this blog post itself. I refuse to use any LLM when I write text for my blog posts. But I still use LLMs in the process, e.g. for mundane tasks like these:
 
+> Where I put "TODO VIDEO", I want to put a video of a screen recording I made. For that purpose, please change the resolution of the /home/splines/Videos/vscode-uni-setup.mp4 video to Full HD instead of 4K, then copy it over into this repo next to the blog post index.md file and include it on the page.
 
 
 [^1]: This is not at all to discourage picking up an instrument at a later age. I've started playing the viola at 23. The argument here is just that they picked it up when they were very young, so they had a lot of time to practice until they played in a professional context.
