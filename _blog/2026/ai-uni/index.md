@@ -1,18 +1,18 @@
 ---
 layout: page
 date: 2026-10-30
-title: "AI @ Uni Setup TODO"
+title: "How AI helps me at university"
 code: true
 katex:
   enabled: true
 excerpt: >
-  TODO
+  Some profs tell you to not use AI at all for their lecture. But why not tastfully include it into your learning process where it makes sense. Here, I also present my simple VSCode setup I use for university.
 ---
 
 
 ## All or nothing
 
-I don't like the black & white framing some professors evoke at my university with regards to the usage of AI. "Please don't use any AI when working on exercise sheets. In the exam you also won't have access to it.", they point out. Besides the whole concept of [exams]({% link _blog/2026/exams/index.md %}) being moot in my opinion, I'd argue that one can choose the granularity of "using AI in your work" in $[0,1] \subseteq \mathbb{R}$ (instead of a binary decision) and that the sweet spot is not at the endpoints of this interval.
+I don't like the black & white framing some professors evoke at my university with regards to the usage of AI. "Please don't use any AI for this course and when working on exercise sheets. In the exam you also won't have access to it.", they point out. Besides the whole concept of [exams]({% link _blog/2026/exams/index.md %}) being moot in my opinion, I'd argue that one can choose the granularity of "using AI in your work" in $[0,1] \subseteq \mathbb{R}$ (instead of a binary decision) and that the sweet spot is not at the endpoints of this interval.
 
 If you fully embrace the "vibe-coding" spirit and choose the $1$-endpoint, you would tell the agent: "Solve this exercise sheet for me" and then hand in that solution unmodified to your poor tutor, just to get your eligibility points for an exam. I think it's clear that for your personal skills, you won't get much out of this approach.
 
