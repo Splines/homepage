@@ -58,10 +58,28 @@ Of course, this presumes the agent to be actually helpful. Here is what I mean b
 
 - The agent should have access to all necessary context on multiple devices.
 
+- The agent should be able to generate figures for me and run its own computer experiments such that its output is based on facts.
 
-## My simple VSCode setup
 
-To 
+## My simple VSCode agent setup
+
+I am sure there are million ways to achieve a good LLM-setup that respects these constraints. And also more sophisticated ones that use knowledge graphs and what not. I intentionally wanted to keep my setup minimal and not invest too much work into it. It is functional, this is what counts to me here as I then want to move on _using_ it, not just _tweaking_ my setup.
+
+The agent having access to all necessary context on multiple devices is easily solved by creating a private GitHub/GitLab/whatever repo (creatively, I have called mine "uni"). This repo is just for me, so I work on the "main" branch and just push commits directly to it (e.g. after a lecture is over where I asked some questions to the agent). In this repo, I put one folder for each course, e.g. `quantum-chemistry/` or `fluid-dynamics/`.
+
+Next, for the agent to run its own experiments and generate figures, I set up a Python environment. My go-to Python package/project manager is [`uv`](https://docs.astral.sh/uv/), its amazingly fast and easy to use. Just run `uv init` and `uv venv --python <version>` to bootstrap the project including a virtual environment, then `uv add <package>` to add a Python package and lock its version. On another machine, all you need is then `uv sync` to get the exact same version. Having a reproducible setup is a blessing.
+
+Furthermore, we need the agent to access the lecture script and literature, which I have available as PDF files. PDF is a versatile document format, but unfortunately with binary content. Yes, modern agents are smart enough to extract the content on their own, but I don't trust this conversion enough to accurately preserve math-content. I am sure there a good open-source tools out there to achieve this. So far, I've been using MathPix for that (not at all sponsored). At the beginning of the semester, I usually pay the \$4.99 for one month (don't forget to cancel directly), such that I can extract up to 1000 PDF pages (and get extra usage for \$0.0035 per page). I just find this service to be very reliable and to faithfully extract any math equation and the images of the PDF. I get back a zip file with the content in a "MathPix Markdown" format, which is just plain Markdown, enriched with $\LaTeX$-like syntax, which even preserves section and equation numbering. Here is an excerpt:
+
+```latex
+\subsection*{1.5 Joint, marginal and conditional probabilities}
+
+A multidimensional distribution $\vec{x}=\left(x_{1}, \ldots x_{n}\right)$ is called a multivariate distribution, if
+$$
+p(\vec{x}) \mathrm{d} x_{1} \ldots \mathrm{~d} x_{n} \text { is the probability for } x_{i} \in\left[x_{i}, x_{i}+\mathrm{d} x_{i}\right]
+$$
+We also speak of a joint distribution.
+```
 
 
 
