@@ -64,7 +64,7 @@ function setupDocTabs(): void {
   const applyHash = (): void => {
     const id = decodeURIComponent(location.hash.slice(1));
     const heading = document.getElementById(id);
-    const named = panels.find((candidate) => candidate.dataset.docPanel === id);
+    const named = panels.find(candidate => candidate.dataset.docPanel === id);
     const panel = named ?? heading?.closest<HTMLElement>("[data-doc-panel]");
     if (!panel) return;
 
@@ -78,7 +78,7 @@ function setupDocTabs(): void {
   for (const tab of tabs) {
     tab.addEventListener("click", () => {
       const target = tab.dataset.docTarget;
-      const panel = panels.find((candidate) => candidate.dataset.docPanel === target);
+      const panel = panels.find(candidate => candidate.dataset.docPanel === target);
       if (!panel) return;
 
       showPanel(panel);

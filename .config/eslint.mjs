@@ -92,6 +92,9 @@ export default defineConfig([
       "@html-eslint/id-naming-convention": ["error", "kebab-case"],
       "@html-eslint/indent": ["error", 2, { tagChildrenIndent: { html: 0 } }],
       "@html-eslint/sort-attrs": "error",
+      // Conflicts with `enforceBeforeSelfClose` below (it forbids the space
+      // before `/>` that no-extra-spacing-attrs requires), causing circular fixes.
+      "@html-eslint/no-extra-spacing-tags": "off",
       "@html-eslint/no-extra-spacing-attrs": ["error", {
         enforceBeforeSelfClose: true,
         disallowMissing: true,
