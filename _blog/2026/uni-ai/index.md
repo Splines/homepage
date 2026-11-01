@@ -6,7 +6,7 @@ code: true
 katex:
   enabled: true
 excerpt: >
-  Some profs tell you to not use AI at all for their lecture. But why not tastefully include it in your learning process where it makes sense. Here, I also present my simple VSCode setup I use for university.
+  Some profs request you not to use AI at all for their lecture. But why not tastefully include it in your learning process where it makes sense. Here, I also present my simple VSCode setup I use for university.
 ---
 
 
@@ -102,7 +102,7 @@ If you're using Claude, put a `CLAUDE.md` file at the project root and write `@A
 Here is how the setup can look like. In short, it is basically just giving the agent enough context and telling it to output its answers into a Typst document. As easy as that, yet I find this incredibly useful in day-to-day university life.
 
 <video controls width="100%">
-  <source src="/blog/2026/ai-uni/vscode-uni-setup.mp4" type="video/mp4" />
+  <source src="/blog/2026/uni-ai/vscode-uni-setup.mp4" type="video/mp4" />
 </video>
 
 
