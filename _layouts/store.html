@@ -22,15 +22,15 @@
   <meta content="{{ page.url | append: page.preview_image | absolute_url }}" name="twitter:image">
   {% endif %}
   <meta content="{{ page.title }}" name="twitter:title">
-  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/store.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+  <link href="{{ '/assets/css/store.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
 
   {% if page.extra_css %}
   <link href="{{ page.url | append: page.extra_css | relative_url }}" rel="stylesheet">
   {% endif %}
 
   {% if page.code %}
-  <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/code.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
   <script defer src="{{ '/assets/js/code.js' | relative_url }}"></script>
   {% endif %}
 

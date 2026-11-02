@@ -11,8 +11,8 @@
   {% vite_client_tag %}
   <!-- for Giscus mapping between blog post and GitHub Discussion -->
   <meta content="{{ page.title }}" property="og:title">
-  <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
-  <link href="{{ '/assets/css/page.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+  <link href="{{ '/assets/css/page.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
 
   {% if page.custom_css %}
   <link href="{{ page.custom_css | relative_url }}" rel="stylesheet">
@@ -23,7 +23,7 @@
   {% endif %}
 
   {% if page.code %}
-  <link href="{{ '/assets/css/code.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/assets/css/code.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
   <script defer src="{{ '/assets/js/code.js' | relative_url }}"></script>
   {% endif %}
 
