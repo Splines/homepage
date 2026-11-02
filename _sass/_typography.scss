@@ -101,6 +101,11 @@ p {
   font-size: 1rem;
   line-height: 1.5rem;
   color: #0f1b24;
+
+  // slightly heavier text for better readability on small screens
+  @media (max-width: 559px) {
+    font-weight: 425;
+  }
 }
 
 a {

@@ -20,19 +20,7 @@ body {
 }
 
 :root {
-  font-size: 15px;
-
-  @media (min-width: 470px) {
-    font-size: 16px;
-  }
-
-  @media(min-width: 560px) {
-    font-size: 17px;
-  }
-
-  @media(min-width: 800px) {
-    font-size: 18px;
-  }
+  font-size: 18px;
 
   @media(min-width: 900px) {
     font-size: 19px;
@@ -60,17 +48,17 @@ body {
   max-width: 42em;
 
   padding-top: 4.5em;
-  padding-left: 1.2em;
-  padding-right: 1.2em;
+  padding-left: 1em;
+  padding-right: 1em;
 
   @media (min-width: 400px) {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: 1.4em;
+    padding-right: 1.4em;
   }
 
   @media (min-width: 560px) {
-    padding-left: 2.7em;
-    padding-right: 2.7em;
+    padding-left: 2.2em;
+    padding-right: 2.2em;
   }
 
   @media (min-width: 700px) {
