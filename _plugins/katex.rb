@@ -51,14 +51,26 @@ module Katex
       JS_CTX.call('render', text, { macros: macros, displayMode: true })
     end
 
+    # The page's macros plus the site-wide ones that the text (or a page macro)
+    # uses, so KaTeX does not get the others. Also returns the names of the latter.
+    def macros_for(text, page_macros, site_macros)
+      haystack = text + page_macros.values.join
+      used = site_macros.select { |name, _| haystack.match?(/#{Regexp.escape(name)}(?![a-zA-Z])/) }
+      [used.merge(page_macros), used.keys]
+    end
   end
 end
 
 pre_render_task = lambda { |doc, _|
-  if doc.data['katex'] && doc.data['katex']['enabled']
-    content = Equations.process(doc.content, doc.relative_path)
-    doc.content = Katex.process(content, doc.data['katex']['macros'] || {})
-  end
+  katex = doc.data['katex']
+  next unless katex && katex['enabled']
+
+  content = Equations.process(doc.content, doc.relative_path)
+  site_macros = doc.site.config.dig('katex', 'macros') || {}
+  macros, used = Katex.macros_for(content, katex['macros'] || {}, site_macros)
+  # Lets the layout link the stylesheets of used site-wide macros, e.g. \explain.
+  doc.data['katex_site_macros'] = used
+  doc.content = Katex.process(content, macros)
 }
 
 Jekyll::Hooks.register(:blog, :pre_render, &pre_render_task)

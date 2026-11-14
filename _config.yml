@@ -71,3 +71,12 @@ exclude:
 # https://minimalbb.github.io/cheat%20sheet/kramdown-markdown-guide-with-jekyll
 kramdown:
   syntax_highlighter: nil
+
+# Site-wide KaTeX macros, see _plugins/katex.rb. A page only gets those it uses, and
+# can add its own under `katex: macros:` in its front matter.
+katex:
+  macros:
+    # In an aligned environment: an arrow below the "=" of the rows around it, with an
+    # explanation next to it. Use \\ for line breaks, the arrow grows along. The arrow
+    # is drawn by CSS (_sass/_explain.scss), which _layouts/page.html links if used.
+    \explain: '\mathrel{\hphantom{=}}\textcolor{88593a}{\htmlClass{explain}{\vphantom{\Big|}\small\begin{gathered}#1\end{gathered}}}'

@@ -8,36 +8,6 @@
   text-decoration: none;
 }
 
-// Arrow of the \explain macro: \mathrel{\hphantom{=}} followed by the explanation
-// in \htmlClass{explain}{...}. The arrow is drawn over the phantom "=", so it is
-// centered below the "=" of the rows around it, and grows with the explanation.
-// As a pseudo-element, it cannot be dragged or selected like an image.
-.katex .explain {
-  position: relative;
-  display: inline-block;
-
-  // Lines of the explanation are in {gathered} (display style, gaps between
-  // lines), but left-aligned instead of centered. Needs one class more than
-  // KaTeX's rule, its stylesheet comes later.
-  .mtable .col-align-c > .vlist-t {
-    text-align: left;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    // a bit longer than the explanation, 1.8em (like \Big) for a single line
-    top: -0.3em;
-    bottom: -0.3em;
-    // phantom "=" (0.778em wide) plus the thick space after a relation (0.278em)
-    left: -1.056em;
-    width: 0.778em;
-
-    background-color: currentColor;
-    mask: url("/assets/images/explain-arrow.svg") center / 100% 100% no-repeat;
-  }
-}
-
 // Preview of the referenced equation on hover or tap, see equation-preview.ts
 .eq-preview {
   position: absolute;

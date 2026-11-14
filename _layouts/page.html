@@ -21,6 +21,12 @@
   {% if page.katex.enabled %}
   <link href="{{ '/assets/katex/katex.min.css' | relative_url }}" rel="stylesheet">
   {% vite_typescript_tag equation-preview %}
+
+  {% comment %} set by _plugins/katex.rb {% endcomment %}
+  {% if page.katex_site_macros contains '\explain' %}
+  <link href="{{ '/assets/css/explain.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+  {% endif %}
+
   {% endif %}
 
   {% if page.code %}
