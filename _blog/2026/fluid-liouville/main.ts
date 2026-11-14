@@ -9,9 +9,11 @@
 import { mountBalance } from "./scenes/balance";
 import { mountDerivatives } from "./scenes/derivatives";
 import { mountIncompressible } from "./scenes/incompressible";
+import { mountPathline } from "./scenes/pathline";
 import { mountTwoViews } from "./scenes/two-views";
 
 const SCENES: Record<string, (root: HTMLElement) => void> = {
+  "pathline": mountPathline,
   "two-views": mountTwoViews,
   "balance": mountBalance,
   "incompressible": mountIncompressible,

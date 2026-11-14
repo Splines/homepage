@@ -77,6 +77,16 @@ export class Clock {
     this.redraw();
   }
 
+  /**
+   * Jumps to time `time`, e.g. when the reader drags a time slider. Only suited for
+   * animations whose state depends on t alone, since `update` gets no intermediate steps.
+   */
+  seek(time: number): void {
+    this.time = Math.min(Math.max(time, 0), this.animation.period);
+    this.animation.update(this.time, 0);
+    this.redraw();
+  }
+
   /** Schedules a single redraw, e.g. after an interaction while paused. */
   redraw(): void {
     if (this.redrawQueued) return;

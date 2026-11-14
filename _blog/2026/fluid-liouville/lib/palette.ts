@@ -21,6 +21,8 @@ export interface Palette {
   inflow: string;
   /** Particles leaving a fixed region. */
   outflow: string;
+  /** Plain text on the canvas, like a title in a corner. */
+  text: string;
 }
 
 /**
@@ -40,6 +42,7 @@ export function readPalette(element: Element): Palette {
     density: hexToRgb(color("density")),
     inflow: color("inflow"),
     outflow: color("outflow"),
+    text: color("text"),
   };
 }
 

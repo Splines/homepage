@@ -101,6 +101,83 @@ export function drawLabel(
   ctx.fillText(text, view.screenX(x) + dx, view.screenY(y) + dy);
 }
 
+/** KaTeX font styles for formulas set from several runs, e.g. bold vectors and upright digits. */
+const FORMULA_FONTS = {
+  upright: (size: number) => `${size}px KaTeX_Main, "Vermiglione", serif`,
+  italic: (size: number) => `italic ${size}px KaTeX_Math, "Vermiglione", serif`,
+  boldItalic: (size: number) => `italic bold ${size}px KaTeX_Math, "Vermiglione", serif`,
+};
+
+/** A piece of a formula and the style it is set in. */
+export type MathRun = [text: string, style: keyof typeof FORMULA_FONTS];
+
+export interface FormulaOptions {
+  color: string;
+  /** Drawn wider underneath the text, which keeps it readable on top of other marks. */
+  halo: string;
+  /** Shift in CSS pixels from the anchor point. */
+  dx?: number;
+  dy?: number;
+  /** Whether the anchor is the center or the left end of the formula. */
+  align?: "center" | "left";
+  /** Font size in CSS pixels. */
+  size?: number;
+  /**
+   * Draws only the halo or only the text, so that other marks can go in between:
+   * they are not hidden by the halo but do not cover the text either.
+   */
+  layer?: "halo" | "text" | "both";
+}
+
+/**
+ * Draws a formula made of runs in different fonts at a world point, kept inside the canvas.
+ */
+export function drawFormula(
+  view: View,
+  runs: MathRun[],
+  x: number,
+  y: number,
+  options: FormulaOptions,
+): void {
+  const { color, halo, dx = 0, dy = 0, align = "center", size = 16, layer = "both" } = options;
+  const { ctx } = view;
+  const fonts = runs.map(([, style]) => FORMULA_FONTS[style](size));
+  const widths = runs.map(([text], i) => {
+    ctx.font = fonts[i];
+    return ctx.measureText(text).width;
+  });
+  const total = widths.reduce((sum, width) => sum + width, 0);
+  const margin = 6;
+  let left = view.screenX(x) + dx - (align === "center" ? total / 2 : 0);
+  left = Math.max(margin, Math.min(view.width - margin - total, left));
+  const baseline = view.screenY(y) + dy;
+  const starts = widths.map((width) => {
+    const start = left;
+    left += width;
+    return start;
+  });
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  // All halos first, so that no halo covers a neighboring run.
+  if (layer !== "text") {
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = halo;
+    runs.forEach(([text], i) => {
+      ctx.font = fonts[i];
+      ctx.strokeText(text, starts[i], baseline);
+    });
+  }
+  if (layer !== "halo") {
+    ctx.fillStyle = color;
+    runs.forEach(([text], i) => {
+      ctx.font = fonts[i];
+      ctx.fillText(text, starts[i], baseline);
+    });
+  }
+}
+
 /** Draws thin axes through the origin, labeled at their positive ends. */
 export function drawAxes(view: View, color: string, labels: [string, string]): void {
   const { ctx, width, height } = view;

@@ -27,6 +27,17 @@ $$
 \phi(\bm X, 0) = \bm X, \qquad \bm x = \phi(\bm X, t)
 $$
 
+<figure class="fl-figure fl-wide" data-scene="pathline">
+  <canvas class="fl-canvas fl-canvas-strip" aria-label="Animation of five fluid particles drifting to the right. One particle is highlighted with a circle for its initial position X = phi(X, 0). A line traces its path so far, and its current position is labeled x = phi(X, t)." role="img"></canvas>
+  <div class="fl-controls">
+    <button class="fl-button fl-play" aria-label="Play animation" type="button">
+      <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
+      <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
+    </button>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
+  </div>
+</figure>
+
 In this material view, quantities like the temperature are attached to a particle $\bm X$:
 
 $$
