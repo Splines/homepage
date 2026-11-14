@@ -129,6 +129,20 @@ export interface FormulaOptions {
   layer?: "halo" | "text" | "both";
 }
 
+/** Font size of formulas next to marks: a bit smaller on narrow canvases. */
+export function formulaSize(view: View): number {
+  return view.width < 560 ? 16 : 19;
+}
+
+/** Width in CSS pixels of a formula set at the given font size. */
+export function measureFormula(view: View, runs: MathRun[], size = 16): number {
+  const { ctx } = view;
+  return runs.reduce((sum, [text, style]) => {
+    ctx.font = FORMULA_FONTS[style](size);
+    return sum + ctx.measureText(text).width;
+  }, 0);
+}
+
 /**
  * Draws a formula made of runs in different fonts at a world point, kept inside the canvas.
  */
@@ -150,7 +164,8 @@ export function drawFormula(
   const margin = 6;
   let left = view.screenX(x) + dx - (align === "center" ? total / 2 : 0);
   left = Math.max(margin, Math.min(view.width - margin - total, left));
-  const baseline = view.screenY(y) + dy;
+  const halfHeight = margin + size / 2;
+  const baseline = Math.max(halfHeight, Math.min(view.height - halfHeight, view.screenY(y) + dy));
   const starts = widths.map((width) => {
     const start = left;
     left += width;

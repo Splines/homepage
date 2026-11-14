@@ -1,5 +1,4 @@
-import type { Clock } from "./clock";
-import type { Point, View } from "./view";
+import { Clock, type Animation } from "./clock";
 
 /** Keeps a play/pause button's icon (via `data-playing`) and label in sync with a clock. */
 export function bindPlayButton(button: HTMLButtonElement, clock: Clock): void {
@@ -34,62 +33,44 @@ export function bindChoice(
   }
 }
 
-/** Arrow keys and the direction they move a draggable point in (world units, y up). */
-const ARROW_DIRECTIONS: Partial<Record<string, Point>> = {
-  ArrowLeft: [-1, 0],
-  ArrowRight: [1, 0],
-  ArrowUp: [0, 1],
-  ArrowDown: [0, -1],
-};
-
-/**
- * Lets the reader move a world point by dragging `handle` over the canvas of `view`,
- * or with the arrow keys while the handle has focus (Shift for larger steps).
- * `move` receives the requested position and is responsible for clamping it.
- */
-export function bindDraggable(
-  handle: HTMLElement,
-  view: View,
-  position: () => Point,
-  move: (target: Point) => void,
-  keyStep = 0.05,
-): void {
-  let grab: Point | null = null;
-
-  const pointerToWorld = (event: PointerEvent): Point => {
-    const rect = view.canvas.getBoundingClientRect();
-    return [view.worldX(event.clientX - rect.left), view.worldY(event.clientY - rect.top)];
-  };
-
-  handle.addEventListener("pointerdown", (event) => {
-    const [x, y] = pointerToWorld(event);
-    const [px, py] = position();
-    grab = [x - px, y - py];
-    handle.setPointerCapture(event.pointerId);
-    event.preventDefault();
-  });
-  handle.addEventListener("pointermove", (event) => {
-    if (!grab) return;
-    const [x, y] = pointerToWorld(event);
-    move([x - grab[0], y - grab[1]]);
-  });
-  const release = () => {
-    grab = null;
-  };
-  handle.addEventListener("pointerup", release);
-  handle.addEventListener("pointercancel", release);
-
-  handle.addEventListener("keydown", (event) => {
-    const direction = ARROW_DIRECTIONS[event.key];
-    if (!direction) return;
-    const step = event.shiftKey ? 4 * keyStep : keyStep;
-    const [x, y] = position();
-    move([x + direction[0] * step, y + direction[1] * step]);
-    event.preventDefault();
-  });
-}
-
 /** Writes `value` into an `<output>` (or any element), touching the DOM only on change. */
 export function setText(element: Element, value: string): void {
   if (element.textContent !== value) element.textContent = value;
+}
+
+/**
+ * Plays a drawing of 0 ≤ t ≤ 1 in a loop of `seconds` real seconds, controlled by the
+ * play button and the time slider in `root`. Dragging the slider holds the animation
+ * and lets it continue afterwards.
+ */
+export function playTimeline(root: HTMLElement, draw: (t: number) => void, seconds = 8): void {
+  const slider = root.querySelector<HTMLInputElement>("input[type='range']")!;
+  const animation: Animation = {
+    period: 1,
+    speed: 1 / seconds,
+    reset() {},
+    update() {},
+    draw(t) {
+      slider.value = String(t);
+      draw(t);
+    },
+  };
+
+  const clock = new Clock(animation, root);
+  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
+
+  let resumeAfterDrag = false;
+  slider.addEventListener("pointerdown", () => {
+    resumeAfterDrag = clock.playing;
+    if (resumeAfterDrag) clock.toggle();
+  });
+  const release = () => {
+    if (resumeAfterDrag && !clock.playing) clock.toggle();
+    resumeAfterDrag = false;
+  };
+  slider.addEventListener("pointerup", release);
+  slider.addEventListener("pointercancel", release);
+  slider.addEventListener("input", () => {
+    clock.seek(slider.valueAsNumber);
+  });
 }

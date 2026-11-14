@@ -93,31 +93,15 @@ Before moving on, let us also introduce the _material volume_ $V(t)$: we take a 
 
 Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behaved" in the sense that $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with[^well-behaved]. You can see this in the following animation.
 
-<figure class="fl-figure fl-wide" data-scene="two-views">
-  <div class="fl-stage">
-    <canvas class="fl-canvas" aria-label="Animation of a vortex. Fluid particles circle around the center, inner ones faster than outer ones. A brown material volume is stretched into a long spiral filament but always contains the same particles. A blue square window stays fixed in space while particles stream through it." role="img"></canvas>
-    <button class="fl-handle" aria-label="Fixed window: drag it, or use the arrow keys to move it" type="button"></button>
-  </div>
+<figure class="fl-figure fl-wide" data-scene="material-volume">
+  <canvas class="fl-canvas" aria-label="Animation of a vortex. Fluid particles circle around the center, inner ones faster than outer ones. A brown material volume V(t) starts as a disk, the initial region V-hat, whose dashed outline stays in place. V(t) is wound up into a long spiral filament but always contains the same particles and is never torn apart." role="img"></canvas>
   <div class="fl-controls">
     <button class="fl-button fl-play" aria-label="Play animation" type="button">
       <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
       <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
     </button>
-    <div class="fl-choice" aria-label="Camera" role="group">
-      <button class="fl-button" aria-pressed="true" data-camera="still" type="button">Stand still</button>
-      <button class="fl-button" aria-pressed="false" data-camera="ride" type="button">Ride along</button>
-    </div>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
   </div>
-  <div class="fl-readouts">
-    <span>Particles in $V(t)$: <output aria-live="off" data-output="material">0</output></span>
-    <span>Of these, inside the fixed window: <output aria-live="off" data-output="window">0</output></span>
-  </div>
-  <figcaption>
-    <span class="fl-swatch fl-swatch-accent"></span>Material volume $V(t)$ and its particles &middot;
-    <span class="fl-swatch fl-swatch-fixed"></span>Window fixed in space &middot;
-    <span class="fl-swatch fl-swatch-ink"></span>Particle we ride along with.
-    In a vortex, the inner layers turn faster than the outer ones, so $V(t)$ is wound up into a long filament, but it never loses or gains a particle. The fixed window (drag it around) sees particles of $V(t)$ come and go. Switch the camera to ride along with the black particle in the middle of $V(t)$: now $V(t)$ stays around you (it only deforms), while the fixed window drifts by instead.
-  </figcaption>
 </figure>
 
 

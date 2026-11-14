@@ -1,4 +1,5 @@
-import { drawFormula, drawRing, type FormulaOptions, type MathRun } from "../lib/draw";
+import { playTimeline } from "../lib/controls";
+import { drawFormula, formulaSize, drawRing, type FormulaOptions, type MathRun } from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { View, type Point } from "../lib/view";
 import {
@@ -9,8 +10,6 @@ import {
   drawDots,
   drawTrajectory,
   flow,
-  formulaSize,
-  playTimeline,
 } from "./drift";
 
 /** Initial positions X of the particles. The first one is highlighted. */

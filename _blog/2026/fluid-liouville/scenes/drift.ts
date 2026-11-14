@@ -1,10 +1,7 @@
 /**
- * The flow shared by the Lagrangian and the Eulerian scene, plus what both draw and
- * how both are controlled: a play button and a slider for 0 ≤ t ≤ 1.
+ * The flow shared by the Lagrangian and the Eulerian scene, plus what both draw.
  */
 
-import { Clock, type Animation } from "../lib/clock";
-import { bindPlayButton } from "../lib/controls";
 import { createCloud, tracePolyline } from "../lib/draw";
 import type { Palette } from "../lib/palette";
 import type { Bounds, Point, View } from "../lib/view";
@@ -49,11 +46,6 @@ export function inverseFlow([x, y]: Point, t: number): Point {
   return [X, Y];
 }
 
-/** Font size of the formulas next to the marks. */
-export function formulaSize(view: View): number {
-  return view.width < 560 ? 16 : 19;
-}
-
 /** Fills a dot of the given radius in CSS pixels at each point. */
 export function drawDots(view: View, points: Point[], radius: number, color: string): void {
   const { ctx } = view;
@@ -91,40 +83,4 @@ export function drawCornerTitle(view: View, title: string, palette: Palette): vo
   ctx.textAlign = "right";
   ctx.textBaseline = "alphabetic";
   ctx.fillText(title, view.width - 16, view.height - 14);
-}
-
-/**
- * Plays a drawing of 0 ≤ t ≤ 1 in a loop, controlled by the play button and the time
- * slider in `root`. Dragging the slider holds the animation and lets it continue afterwards.
- */
-export function playTimeline(root: HTMLElement, draw: (t: number) => void): void {
-  const slider = root.querySelector<HTMLInputElement>("input[type='range']")!;
-  const animation: Animation = {
-    period: 1,
-    speed: 1 / 8,
-    reset() {},
-    update() {},
-    draw(t) {
-      slider.value = String(t);
-      draw(t);
-    },
-  };
-
-  const clock = new Clock(animation, root);
-  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
-
-  let resumeAfterDrag = false;
-  slider.addEventListener("pointerdown", () => {
-    resumeAfterDrag = clock.playing;
-    if (resumeAfterDrag) clock.toggle();
-  });
-  const release = () => {
-    if (resumeAfterDrag && !clock.playing) clock.toggle();
-    resumeAfterDrag = false;
-  };
-  slider.addEventListener("pointerup", release);
-  slider.addEventListener("pointercancel", release);
-  slider.addEventListener("input", () => {
-    clock.seek(slider.valueAsNumber);
-  });
 }

@@ -11,12 +11,12 @@ import { mountDerivatives } from "./scenes/derivatives";
 import { mountEulerian } from "./scenes/eulerian";
 import { mountIncompressible } from "./scenes/incompressible";
 import { mountLagrangian } from "./scenes/lagrangian";
-import { mountTwoViews } from "./scenes/two-views";
+import { mountMaterialVolume } from "./scenes/material-volume";
 
 const SCENES: Record<string, (root: HTMLElement) => void> = {
   "lagrangian": mountLagrangian,
   "eulerian": mountEulerian,
-  "two-views": mountTwoViews,
+  "material-volume": mountMaterialVolume,
   "balance": mountBalance,
   "incompressible": mountIncompressible,
   "derivatives": mountDerivatives,
