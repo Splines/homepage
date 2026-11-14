@@ -51,6 +51,7 @@ exclude:
   - config/
   - tmp/
   - assets/vite/ # Vite source dir; the compiled bundle is emitted to /vite
+  - _blog/**/*.ts # post-scoped Vite sources, bundled by Vite (see SPECS.md)
   - vite.config.mts
   - Rakefile
   - spec/

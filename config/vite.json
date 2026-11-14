@@ -1,7 +1,11 @@
 {
   "all": {
     "sourceCodeDir": "assets/vite",
-    "watchAdditionalPaths": ["_layouts/**/*"]
+    "watchAdditionalPaths": ["_layouts/**/*", "_blog/**/*.ts"],
+    "additionalEntrypoints": [
+      "~/{assets,fonts,icons,images}/**/*",
+      "_blog/**/main.ts"
+    ]
   },
   "development": {
     "autoBuild": true,

@@ -30,6 +30,12 @@
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
   {% vite_typescript_tag comments %}
 
+  {% if page.vite_entrypoint %}
+  {% assign post_dir_length = page.relative_path.size | minus: page.name.size %}
+  {% assign post_entrypoint = page.relative_path | slice: 0, post_dir_length | append: page.vite_entrypoint | prepend: '/' %}
+  {% vite_typescript_tag {{ post_entrypoint }} %}
+  {% endif %}
+
 </head>
 
 <body>

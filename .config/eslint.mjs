@@ -55,6 +55,18 @@ export default defineConfig([
     },
   },
   {
+    // The core rule does not understand TypeScript: it flags the parameter names
+    // of function types like `(x: number) => void` as unused variables.
+    files: ["**/*.ts"],
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    },
+  },
+  {
     // Disable type-checked linting for plain JS config files.
     // https://typescript-eslint.io/troubleshooting/typed-linting/#how-do-i-disable-type-checked-linting-for-a-file
     files: ["**/*.js", "**/*.mjs", "**/*.mts"],
