@@ -2,9 +2,9 @@
   "devDependencies": {
     "@eslint/css": "^2.0.0",
     "@eslint/js": "^10.0.1",
-    "@html-eslint/eslint-plugin": "^0.67.0",
-    "@html-eslint/parser": "^0.67.0",
-    "@stylistic/eslint-plugin": "^5.10.0",
+    "@html-eslint/eslint-plugin": "^0.68.0",
+    "@html-eslint/parser": "^0.68.0",
+    "@stylistic/eslint-plugin": "^6.0.0",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
     "typescript": "~6.0.3",
