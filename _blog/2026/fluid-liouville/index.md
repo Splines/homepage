@@ -17,7 +17,7 @@ excerpt: >
 Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's Theorem and start with mass conservation, then use Reynold's Transport Theorem and finally Hamilton's equations.
 
 
-## Lagrangian & Eularian
+## Lagrangian & Eulerian
 
 There are two different views to describe the motion of a fluid:
 
@@ -27,7 +27,7 @@ $$
 \phi(\bm X, 0) = \bm X, \qquad \bm x = \phi(\bm X, t)
 $$
 
-<figure class="fl-figure fl-wide" data-scene="pathline">
+<figure class="fl-figure fl-wide" data-scene="lagrangian">
   <canvas class="fl-canvas fl-canvas-strip" aria-label="Animation of five fluid particles drifting to the right. One particle is highlighted with a circle for its initial position X = phi(X, 0). A line traces its path so far, and its current position is labeled x = phi(X, t)." role="img"></canvas>
   <div class="fl-controls">
     <button class="fl-button fl-play" aria-label="Play animation" type="button">
@@ -38,19 +38,7 @@ $$
   </div>
 </figure>
 
-In this material view, quantities like the temperature are attached to a particle $\bm X$:
-
-$$
-\hat T(\bm X, t)
-$$
-
-But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eularian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that point, no matter which particles came and went through that point:
-
-$$
-T(\bm x, t)
-$$
-
-Both views describe the same physics, it's just another perspective.
+In this material view, quantities like the temperature are attached to a particle $\bm X$ and we denote with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that point, no matter which particles came and went through that point: $T(\bm x, t)$. Both views describe the same physics, it's just another perspective.
 
 $$
 T \bigl((\phi(\bm X, t), t)\bigr)
@@ -58,6 +46,17 @@ T \bigl((\phi(\bm X, t), t)\bigr)
 = \hat T(\bm X, t)
 = \hat T \bigl((\phi^{-1}(\bm x, t), t)\bigr)
 $$
+
+<figure class="fl-figure fl-wide" data-scene="eulerian">
+  <canvas class="fl-canvas fl-canvas-strip" aria-label="A flow watched at a point x fixed in space, marked with a blue target. Particles drift past it, and every now and then one passes right through it." role="img"></canvas>
+  <div class="fl-controls">
+    <button class="fl-button fl-play" aria-label="Play animation" type="button">
+      <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
+      <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
+    </button>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
+  </div>
+</figure>
 
 But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, i.e. what a thermometer nailed in place would measure. A thermometer drifting with the fluid instead measures the _material time derivative_, which we get from the chain rule with the velocity $\bm v = \partial \phi / \partial t$:
 

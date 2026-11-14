@@ -8,12 +8,14 @@
 
 import { mountBalance } from "./scenes/balance";
 import { mountDerivatives } from "./scenes/derivatives";
+import { mountEulerian } from "./scenes/eulerian";
 import { mountIncompressible } from "./scenes/incompressible";
-import { mountPathline } from "./scenes/pathline";
+import { mountLagrangian } from "./scenes/lagrangian";
 import { mountTwoViews } from "./scenes/two-views";
 
 const SCENES: Record<string, (root: HTMLElement) => void> = {
-  "pathline": mountPathline,
+  "lagrangian": mountLagrangian,
+  "eulerian": mountEulerian,
   "two-views": mountTwoViews,
   "balance": mountBalance,
   "incompressible": mountIncompressible,
