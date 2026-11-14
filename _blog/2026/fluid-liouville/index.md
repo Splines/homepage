@@ -1,7 +1,7 @@
 ---
 layout: page
 date: 2026-11-14
-title: "Liouville's theorem, the fluid way"
+title: "A Fluid Dynamic's view on Liouville's Theorem"
 katex:
   enabled: true
   macros:
@@ -11,29 +11,44 @@ katex:
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 excerpt: >
-  Liouville's theorem says that copies of a system flow through phase space like an incompressible fluid. So why not derive it with the tools of fluid dynamics? With material volumes, the Reynolds transport theorem and a few animations of observers who either stand still or ride along.
+  TODO
 ---
 
-This semester, I'm taking a course on statistical physics, and one of the first big results there is Liouville's theorem. In the lecture script, its derivation starts with a balance equation that is not really motivated. Last semester, I followed a course on fluid dynamics (can highly recommend!), and from this perspective, it makes a lot more sense. After a nice discussion in our tutorial, I sat down again to better understand the steps in the derivation and which assumptions enter where. I also wanted to point out the parallels to fluid dynamics, which I think make the derivation more intuitive (and are quite fun).
-
-So here's the plan: we take a short detour into fluid dynamics, derive the continuity and the balance equation from the conservation of mass, and then move over to phase space to arrive at Liouville's theorem and Liouville's equation. Along the way, there are a few animations to play with.
+Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's Theorem and start with mass conservation, then use Reynold's Transport Theorem and finally Hamilton's equations.
 
 
-## Two ways to watch a fluid
+## Lagrangian & Eularian
 
-In fluid dynamics, we describe a fluid as a continuum: density, velocity, temperature etc. are smooth fields over space and time. There are two different ways to look at these fields.
+There are two different views to describe the motion of a fluid:
 
-The first one is to _follow the fluid_. We label every fluid particle by its position $\bm X$ at the initial time $t = 0$ and describe its motion by a map $\phi$ that tells us where this particle is at time $t$:
+In the **Lagrangian** (material) description, we follow each fluid particle individually. A particle is labeled by its position $\bm X$ at the initial time $t = 0$. Its motion is described by a map[^phi] $\phi$that tells us where this particle is at time $t$:
 
 $$
-\bm x = \phi(\bm X, t), \qquad \phi(\bm X, 0) = \bm X
+\phi(\bm X, 0) = \bm X, \qquad \bm x = \phi(\bm X, t)
 $$
 
-A quantity like the temperature is then attached to a particle, $\hat T(\bm X, t)$. This is called the material or _Lagrangian_ description: you sit on a fluid particle and ride along with it.
+In this material view, quantities like the temperature are attached to a particle $\bm X$:
 
-The second one is to _stand still_. We fix a position $\bm x$ in space and watch whichever particle happens to pass by, $T(\bm x, t)$. This is called the spatial or _Eulerian_ description. In practice, fluid dynamicists almost always work with this one, since tracking every single particle would be quite cumbersome.
+$$
+\hat T(\bm X, t)
+$$
 
-Both describe the same physics, $T(\phi(\bm X, t), t) = \hat T(\bm X, t)$, but their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, i.e. what a thermometer nailed in place would measure. A thermometer drifting with the fluid instead measures the _material time derivative_, which we get from the chain rule with the velocity $\bm v = \partial \phi / \partial t$:
+But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eularian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that point, no matter which particles came and went through that point:
+
+$$
+T(\bm x, t)
+$$
+
+Both views describe the same physics, it's just another perspective.
+
+$$
+T \bigl((\phi(\bm X, t), t)\bigr)
+= T(\bm x, t)
+= \hat T(\bm X, t)
+= \hat T \bigl((\phi^{-1}(\bm x, t), t)\bigr)
+$$
+
+But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, i.e. what a thermometer nailed in place would measure. A thermometer drifting with the fluid instead measures the _material time derivative_, which we get from the chain rule with the velocity $\bm v = \partial \phi / \partial t$:
 
 $$
 \dv{}{t} T(\phi(\bm X, t), t) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
@@ -364,6 +379,6 @@ It also matters for numerics: integrators that respect the structure of Hamilton
 
 As for the fun part: I just love it when two lectures suddenly turn out to talk about the same thing. The continuity equation, the Reynolds transport theorem and the material derivative are the bread and butter of fluid dynamics, and they directly carry over to a probability fluid in phase space. Thinking of Liouville's theorem as "the phase space fluid is incompressible", and of $\partial \rho / \partial t$ and $\mathrm{d}\rho / \mathrm{d}t$ as standing still and riding along, gives me pictures I can actually reason with, instead of just another formula to remember.
 
-If you find any mistakes, please let me know in the comments.
+[^phi]: Note that we have certain assumptions on this map $\phi$. First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
 [^sign]: Many textbooks use the opposite sign for the Poisson bracket, so there Liouville's equation reads $\partial \rho / \partial t = \{\Ham, \rho\}$ (without the minus).
