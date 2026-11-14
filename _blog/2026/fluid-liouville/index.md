@@ -16,6 +16,9 @@ excerpt: >
 
 Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's Theorem and start with mass conservation, then use Reynold's Transport Theorem and finally Hamilton's equations.
 
+<small>
+_Tip: Hover over footnote and equation references to get a preview without scrolling._
+</small>
 
 ## Lagrangian & Eulerian
 
@@ -84,9 +87,11 @@ $$
 
 Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor-expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
 
+### Material volume
+
 Before moving on, let us also introduce the _material volume_ $V(t)$: we take a region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
 
-Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is somewhat "well-behaved". Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it. So $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with.
+Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behaved" in the sense that $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with[^well-behaved]. You can see this in the following animation.
 
 <figure class="fl-figure fl-wide" data-scene="two-views">
   <div class="fl-stage">
@@ -409,6 +414,8 @@ It also matters for numerics: integrators that respect the structure of Hamilton
 
 As for the fun part: I just love it when two lectures suddenly turn out to talk about the same thing. The continuity equation, the Reynolds transport theorem and the material derivative are the bread and butter of fluid dynamics, and they directly carry over to a probability fluid in phase space. Thinking of Liouville's theorem as "the phase space fluid is incompressible", and of $\partial \rho / \partial t$ and $\mathrm{d}\rho / \mathrm{d}t$ as standing still and riding along, gives me pictures I can actually reason with, instead of just another formula to remember.
 
-[^phi]: Note that we have certain assumptions on this map $\phi$. First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
+[^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
+
+[^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it.
 
 [^sign]: Many textbooks use the opposite sign for the Poisson bracket, so there Liouville's equation reads $\partial \rho / \partial t = \{\Ham, \rho\}$ (without the minus).
