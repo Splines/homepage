@@ -1,28 +1,33 @@
-import { Clock, type Animation } from "../lib/clock";
-import { bindPlayButton, setText } from "../lib/controls";
-import { createCloud, drawDots, drawLabel, tracePolyline } from "../lib/draw";
+import { playTimeline } from "../lib/controls";
+import { createCloud, drawDots, drawLabel, MATH_FONT } from "../lib/draw";
 import { readPalette } from "../lib/palette";
-import { createRandom, normal, onCircle, type Random } from "../lib/random";
+import { createRandom, normal, type Random } from "../lib/random";
 import { View, type Bounds, type Point } from "../lib/view";
 
-const FRAME: Bounds = { xMin: -1.6, xMax: 1.6, yMin: -1, yMax: 1 };
-/** The channel walls sit at y = ±1. */
-const WALL = 1;
+/** The channel on top, the plot of the mass m(t) below it. */
+const FRAME: Bounds = { xMin: -2, xMax: 2, yMin: -1.32, yMax: 0.68 };
+/** The fluid fills the channel |y| < WALL. */
+const WALL = 0.65;
 const CENTER_SPEED = 0.42;
 /** Flow speed at the walls relative to the center of the channel. */
 const WALL_SPEED_RATIO = 0.35;
 
-const PERIOD = 9;
-/** Time at which the material volume V(t) coincides with the fixed region V. */
-const COINCIDE_AT = 4.5;
-const REGION_CENTER: Point = [0.3, 0];
-const REGION_RADIUS = 0.45;
+const PERIOD = 10;
+const REGION_CENTER: Point = [0, 0];
+const REGION_RADIUS = 0.4;
 
 const BACKGROUND_DENSITY = 120;
 const PUFF_COUNT = 800;
-const PUFF_SPREAD = 0.3;
+const PUFF_SPREAD = 0.25;
 /** How long (in simulated time) a particle stays highlighted after crossing ∂V. */
 const FLASH_DURATION = 0.5;
+
+/** Where the plot of m(t) goes, in world coordinates. */
+const PLOT = { left: -1.8, right: 1.8, bottom: -1.25, top: -0.86 };
+/** How far the axis arrows reach beyond the plot, in world units. */
+const AXIS_OVERHANG = 0.06;
+const ARROW_SIZE = 7;
+const PLOT_SAMPLES = 400;
 
 /** Velocity profile of the channel: fastest in the middle, slower near the walls. */
 function speedAt(y: number): number {
@@ -30,174 +35,176 @@ function speedAt(y: number): number {
 }
 
 /**
- * Start positions: a uniform background plus a dense puff that reaches the fixed
- * region around the middle of the loop. The background starts far enough upstream
+ * Start positions: a uniform background plus a dense puff whose center passes the
+ * fixed region halfway through the loop. The background starts far enough upstream
  * that the channel stays filled for the whole loop.
  */
 function sampleFluid(random: Random): Point[] {
   const upstream = FRAME.xMin - CENTER_SPEED * PERIOD;
   const area = (FRAME.xMax - upstream) * 2 * WALL;
-  const points: Point[] = Array.from({ length: Math.round(BACKGROUND_DENSITY * area) }, () => [
+  const backgroundCount = Math.round(BACKGROUND_DENSITY * area);
+  const points: Point[] = Array.from({ length: backgroundCount }, () => [
     upstream + random() * (FRAME.xMax - upstream),
     (2 * random() - 1) * WALL * 0.98,
   ]);
-  const puffX = REGION_CENTER[0] - CENTER_SPEED * (COINCIDE_AT - 0.3);
-  while (points.length < Math.round(BACKGROUND_DENSITY * area) + PUFF_COUNT) {
+  const puffX = REGION_CENTER[0] - CENTER_SPEED * (PERIOD / 2);
+  while (points.length < backgroundCount + PUFF_COUNT) {
     const y = PUFF_SPREAD * normal(random);
     if (Math.abs(y) < WALL * 0.98) points.push([puffX + PUFF_SPREAD * normal(random), y]);
   }
   return points;
 }
 
+/** Draws a line from (x0, y0) to (x1, y1) in screen coordinates with an arrowhead at its end. */
+function drawArrow(
+  ctx: CanvasRenderingContext2D,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+): void {
+  const angle = Math.atan2(y1 - y0, x1 - x0);
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x1, y1);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x1 - ARROW_SIZE * Math.cos(angle - 0.4), y1 - ARROW_SIZE * Math.sin(angle - 0.4));
+  ctx.lineTo(x1 - ARROW_SIZE * Math.cos(angle + 0.4), y1 - ARROW_SIZE * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+}
+
 /**
  * A channel flow carrying a puff of particles through a fixed region V. Particles
- * crossing ∂V are counted as inflow and outflow, which illustrates the balance
- * equation. A material volume V(t) is drawn alongside; it coincides with V at one
- * instant and always contains the same particles.
+ * crossing ∂V light up as inflow or outflow, and a plot below the channel traces
+ * the mass inside V, which illustrates the balance equation. Every particle moves on
+ * a straight line at constant speed, so the times at which it enters and leaves V
+ * are known exactly and the whole scene is a function of t, which the slider sets.
  */
 export function mountBalance(root: HTMLElement): void {
   const view = new View(root.querySelector<HTMLCanvasElement>("canvas")!, FRAME);
-  const outputs = {
-    now: root.querySelector<HTMLOutputElement>("[data-output='now']")!,
-    start: root.querySelector<HTMLOutputElement>("[data-output='start']")!,
-    inflow: root.querySelector<HTMLOutputElement>("[data-output='inflow']")!,
-    outflow: root.querySelector<HTMLOutputElement>("[data-output='outflow']")!,
-    material: root.querySelector<HTMLOutputElement>("[data-output='material']")!,
-  };
   const palette = readPalette(root);
 
   const start = sampleFluid(createRandom(11));
   const count = start.length;
-  const speed = Float64Array.from(start, ([, y]) => speedAt(y));
   const positions = createCloud(count);
-  const moveTo = (t: number) => {
-    for (let i = 0; i < count; i++) {
-      positions.x[i] = start[i][0] + speed[i] * t;
-      positions.y[i] = start[i][1];
+  // A particle at height y is inside V while its x lies in [cx - h, cx + h] with
+  // h = √(R² - y²). Particles that never get close enough enter and leave at +∞.
+  const entersAt = new Float64Array(count).fill(Infinity);
+  const leavesAt = new Float64Array(count).fill(Infinity);
+  start.forEach(([x, y], i) => {
+    const dy = y - REGION_CENTER[1];
+    if (Math.abs(dy) >= REGION_RADIUS) return;
+    const halfChord = Math.sqrt(REGION_RADIUS ** 2 - dy ** 2);
+    const speed = speedAt(y);
+    entersAt[i] = (REGION_CENTER[0] - halfChord - x) / speed;
+    leavesAt[i] = (REGION_CENTER[0] + halfChord - x) / speed;
+  });
+  const isInside = (i: number, t: number) => entersAt[i] <= t && t < leavesAt[i];
+  const massAt = (t: number) => {
+    let total = 0;
+    for (let i = 0; i < count; i++) total += isInside(i, t) ? 1 : 0;
+    return total;
+  };
+
+  const massCurve = Float64Array.from(
+    { length: PLOT_SAMPLES + 1 },
+    (_, k) => massAt((k / PLOT_SAMPLES) * PERIOD),
+  );
+  const massMax = 1.1 * Math.max(...massCurve);
+  const plotX = (t: number) => PLOT.left + (t / PERIOD) * (PLOT.right - PLOT.left);
+  const plotY = (mass: number) => PLOT.bottom + (mass / massMax) * (PLOT.top - PLOT.bottom);
+
+  const traceCurve = (until: number) => {
+    const { ctx } = view;
+    const last = Math.min(PLOT_SAMPLES, Math.floor((until / PERIOD) * PLOT_SAMPLES));
+    ctx.beginPath();
+    for (let k = 0; k <= last; k++) {
+      const t = (k / PLOT_SAMPLES) * PERIOD;
+      ctx.lineTo(view.screenX(plotX(t)), view.screenY(plotY(massCurve[k])));
     }
   };
-  const inRegion = (i: number) => {
-    const dx = positions.x[i] - REGION_CENTER[0];
-    const dy = positions.y[i] - REGION_CENTER[1];
-    return Math.hypot(dx, dy) < REGION_RADIUS;
+
+  /** Rings around particles that crossed ∂V recently, fading out. Ignores crossings at t < 0. */
+  const drawFlashes = (time: number, crossedAt: Float64Array, color: string) => {
+    const { ctx } = view;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.2;
+    for (let i = 0; i < count; i++) {
+      const age = time - crossedAt[i];
+      if (crossedAt[i] <= 0 || age < 0 || age > FLASH_DURATION) continue;
+      ctx.globalAlpha = 0.8 * (1 - age / FLASH_DURATION);
+      ctx.beginPath();
+      ctx.arc(view.screenX(positions.x[i]), view.screenY(positions.y[i]), 3.2, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
   };
 
-  // The material volume consists of the particles that are inside V at COINCIDE_AT.
-  moveTo(COINCIDE_AT);
-  const isMaterial = Array.from({ length: count }, (_, i) => inRegion(i));
-  setText(outputs.material, String(isMaterial.filter(Boolean).length));
-  const outlineAtCoincidence = onCircle(REGION_CENTER, REGION_RADIUS, 400);
-  const outline = createCloud(outlineAtCoincidence.length);
+  playTimeline(root, (progress) => {
+    if (!view.begin()) return;
+    const { ctx } = view;
+    const time = progress * PERIOD;
+    start.forEach(([x, y], i) => {
+      positions.x[i] = x + speedAt(y) * time;
+      positions.y[i] = y;
+    });
 
-  const inside = new Uint8Array(count);
-  const crossedAt = new Float64Array(count);
-  const crossedInward = new Uint8Array(count);
-  let startCount = 0;
-  let current = 0;
-  let inflow = 0;
-  let outflow = 0;
-  let time = 0;
+    // Fixed region V.
+    ctx.beginPath();
+    const [centerX, centerY] = [view.screenX(REGION_CENTER[0]), view.screenY(REGION_CENTER[1])];
+    ctx.arc(centerX, centerY, REGION_RADIUS * view.scale, 0, 2 * Math.PI);
+    ctx.globalAlpha = 0.07;
+    ctx.fillStyle = palette.fixed;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = palette.fixed;
+    ctx.lineWidth = 1.75;
+    ctx.stroke();
 
-  const animation: Animation = {
-    period: PERIOD,
-    speed: 1,
-    reset() {
-      moveTo(0);
-      startCount = 0;
-      for (let i = 0; i < count; i++) {
-        inside[i] = inRegion(i) ? 1 : 0;
-        startCount += inside[i];
-        crossedAt[i] = -Infinity;
-      }
-      current = startCount;
-      inflow = outflow = 0;
-    },
-    update(t) {
-      time = t;
-      moveTo(t);
-      for (let i = 0; i < count; i++) {
-        const now = inRegion(i) ? 1 : 0;
-        if (now === inside[i]) continue;
-        if (now) inflow++;
-        else outflow++;
-        current += now ? 1 : -1;
-        inside[i] = now;
-        crossedAt[i] = t;
-        crossedInward[i] = now;
-      }
-      outlineAtCoincidence.forEach(([x, y], k) => {
-        outline.x[k] = x + speedAt(y) * (t - COINCIDE_AT);
-        outline.y[k] = y;
-      });
-    },
-    draw() {
-      if (!view.begin()) return;
-      const { ctx } = view;
+    drawDots(view, positions, 1.3, palette.muted, i => !isInside(i, time));
+    drawDots(view, positions, 1.6, palette.fixed, i => isInside(i, time));
+    drawFlashes(time, entersAt, palette.inflow);
+    drawFlashes(time, leavesAt, palette.outflow);
 
-      // Channel walls.
-      ctx.strokeStyle = palette.muted;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (const y of [WALL, -WALL]) {
-        ctx.moveTo(0, view.screenY(y));
-        ctx.lineTo(view.width, view.screenY(y));
-      }
-      ctx.stroke();
+    drawLabel(view, "V", REGION_CENTER[0], REGION_CENTER[1], palette.fixed, 0, -REGION_RADIUS * view.scale - 12);
 
-      // Fixed region V.
-      ctx.beginPath();
-      const [centerX, centerY] = [view.screenX(REGION_CENTER[0]), view.screenY(REGION_CENTER[1])];
-      ctx.arc(centerX, centerY, REGION_RADIUS * view.scale, 0, 2 * Math.PI);
-      ctx.globalAlpha = 0.07;
-      ctx.fillStyle = palette.fixed;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = palette.fixed;
-      ctx.lineWidth = 1.75;
-      ctx.stroke();
+    // Plot of the mass m(t) inside V: axes, the whole loop faintly, the past solid.
+    const originX = view.screenX(PLOT.left);
+    const originY = view.screenY(PLOT.bottom);
+    const axisTop = view.screenY(PLOT.top + AXIS_OVERHANG);
+    const axisRight = view.screenX(PLOT.right + AXIS_OVERHANG);
+    ctx.strokeStyle = palette.muted;
+    ctx.fillStyle = palette.muted;
+    ctx.lineWidth = 1;
+    drawArrow(ctx, originX, originY, originX, axisTop);
+    drawArrow(ctx, originX, originY, axisRight, originY);
+    ctx.lineJoin = "round";
+    traceCurve(PERIOD);
+    ctx.strokeStyle = palette.faint;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    traceCurve(time);
+    ctx.strokeStyle = palette.fixed;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(view.screenX(plotX(time)), view.screenY(plotY(massAt(time))), 3.5, 0, 2 * Math.PI);
+    ctx.fillStyle = palette.fixed;
+    ctx.fill();
 
-      // Material volume V(t).
-      tracePolyline(view, outline, true);
-      ctx.globalAlpha = 0.1;
-      ctx.fillStyle = palette.accent;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.setLineDash([5, 4]);
-      ctx.strokeStyle = palette.accent;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      drawDots(view, positions, 1.3, palette.muted, i => !isMaterial[i]);
-      drawDots(view, positions, 1.6, palette.accent, i => isMaterial[i]);
-
-      // Recent crossings of ∂V fade out.
-      for (let i = 0; i < count; i++) {
-        const age = time - crossedAt[i];
-        if (age > FLASH_DURATION) continue;
-        ctx.globalAlpha = 0.8 * (1 - age / FLASH_DURATION);
-        ctx.strokeStyle = crossedInward[i] ? palette.inflow : palette.outflow;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.arc(view.screenX(positions.x[i]), view.screenY(positions.y[i]), 3.2, 0, 2 * Math.PI);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1;
-
-      const labelOffset = -REGION_RADIUS * view.scale - 12;
-      drawLabel(view, "V", REGION_CENTER[0], REGION_CENTER[1], palette.fixed, 0, labelOffset);
-      const outlineCenter = REGION_CENTER[0] + CENTER_SPEED * (time - COINCIDE_AT);
-      if (Math.abs(time - COINCIDE_AT) > 0.8) {
-        drawLabel(view, "V(t)", outlineCenter, REGION_CENTER[1], palette.accent, 0, -labelOffset);
-      }
-
-      setText(outputs.now, String(current));
-      setText(outputs.start, String(startCount));
-      setText(outputs.inflow, String(inflow));
-      setText(outputs.outflow, String(outflow));
-    },
-  };
-
-  const clock = new Clock(animation, root);
-  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
+    // Axis labels: "Mass in V" next to the tip of the vertical axis, t after the horizontal one.
+    ctx.fillStyle = palette.text;
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "left";
+    ctx.font = "14px Rethink, sans-serif";
+    const prefix = "Mass in ";
+    ctx.fillText(prefix, originX + 10, axisTop);
+    const prefixWidth = ctx.measureText(prefix).width;
+    ctx.font = MATH_FONT;
+    ctx.fillText("V", originX + 10 + prefixWidth, axisTop);
+    ctx.fillText("t", axisRight + 8, originY);
+  }, PERIOD);
 }

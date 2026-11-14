@@ -112,8 +112,11 @@
   box-shadow: 0 0.1em 0.2em #00000010;
 }
 
-.fl-canvas-channel {
-  aspect-ratio: 16 / 10;
+/* Flatter than the default on wide screens, where a 3:2 canvas gets very tall. */
+.fl-canvas-wide {
+  @media (min-width: 560px) {
+    aspect-ratio: 2 / 1;
+  }
 }
 
 .fl-canvas-pendulum {

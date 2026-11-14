@@ -94,7 +94,7 @@ Before moving on, let us also introduce the _material volume_ $V(t)$: we take a 
 Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behaved" in the sense that $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with[^well-behaved]. You can see this in the following animation.
 
 <figure class="fl-figure fl-wide" data-scene="material-volume">
-  <canvas class="fl-canvas" aria-label="Animation of a vortex. Fluid particles circle around the center, inner ones faster than outer ones. A brown material volume V(t) starts as a disk, the initial region V-hat, whose dashed outline stays in place. V(t) is wound up into a long spiral filament but always contains the same particles and is never torn apart." role="img"></canvas>
+  <canvas class="fl-canvas fl-canvas-wide" aria-label="Animation of a vortex. Fluid particles circle around the center, inner ones faster than outer ones. A brown material volume V(t) starts as a disk, the initial region V-hat, whose dashed outline stays in place. V(t) is wound up into a long spiral filament but always contains the same particles and is never torn apart." role="img"></canvas>
   <div class="fl-controls">
     <button class="fl-button fl-play" aria-label="Play animation" type="button">
       <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
@@ -107,13 +107,13 @@ Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behav
 
 ## Balance equation
 
-In the lecture script, the derivation starts with a balance equation for a _fixed_ region. Let's instead start where fluid dynamics starts: with a material volume $V(t)$. It always contains the same fluid particles, so its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
+Since over time, the material volume always contains the same fluid particles, its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
 
 $$
 \dv{m}{t} = \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x \overset{!}{=} 0
 $$ <eq:mass-conservation>
 
-Next, we can turn this into the continuity equation from the script by using:
+Next, we use Reynolds transport theorem (without proof):
 
 <div class="fl-panel" markdown="1">
 <p class="fl-key-title">Reynolds transport theorem</p>
@@ -140,7 +140,7 @@ $$
 $$ <eq:continuity>
 </div>
 
-If you're wondering how the derivation of the script relates to this: it's basically the same. To see this, let's apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term turns into a surface integral:
+One can also turn this into a balance equation for a _fixed_ region $V$ in space. Simply apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term turns into a surface integral:
 
 $$
 0 \overset{@eq:mass-conservation}{=} \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x
@@ -148,38 +148,40 @@ $$
 \int_{V(t)} \pdv{\rho}{t} \,\mathrm{d}\bm x + \int_{\partial V(t)} \mathrm{d}\bm A \cdot \rho \bm v
 $$
 
-Now let's define the current $\bm j := \rho \bm v$ and freeze time at some instant $t$. There, $V(t)$ coincides with a _fixed_ region $V$, and for a fixed region, we can pull the partial time derivative out of the integral. This gives exactly the balance equation from the script:
+Now let's define the current $\bm j := \rho \bm v$ and freeze time at some instant $t$ such that $V(t)$ is a _fixed_ region $V$. This allows us to pull the partial time derivative out of the integral, and we get the balance equation:
 
 $$
-\int_{\partial V} \mathrm{d}\bm A \cdot \bm j = - \pdv{}{t} \int_V \rho \,\mathrm{d}\bm x
+-\int_{\partial V} \mathrm{d}\bm A \cdot \bm j
+= \pdv{}{t} \int_V \rho \,\mathrm{d}\bm x
+= \pdv{m}{t}
 $$ <eq:balance>
 
-It tells us: the mass inside a _fixed_ region $V$ can only change by what flows through its boundary $\partial V$. I just find it a lot more intuitive to start with the conservation of mass in a material volume @eq:mass-conservation to arrive at this result.
+It tells us: the mass inside a _fixed_ region $V$ can only change by what flows through its boundary $\partial V$. And the minus sign shows that if more mass flows out than in, the mass inside $V$ decreases. See the following animation, where a dense cluster of particles flows through a fixed volume $V$, increasing the mass inside $V$ while it flows in, then decreasing the mass again while the particles flow out.
 
 <figure class="fl-figure fl-wide" data-scene="balance">
   <div class="fl-stage">
-    <canvas class="fl-canvas fl-canvas-channel" aria-label="Animation of a channel flow that is fastest in the middle. A dense puff of particles drifts through a fixed circular region V. Particles crossing the boundary of V light up. A material volume V(t) approaches, coincides with V for an instant, and moves on, deforming but keeping its particles." role="img"></canvas>
+    <canvas class="fl-canvas fl-canvas-wide" aria-label="Animation of a channel flow that is fastest in the middle. A dense puff of particles drifts through a fixed volume V. Particles entering V light up blue, particles leaving it red. A plot traces the mass inside V over time, which rises while the puff flows in and falls again while it flows out." role="img"></canvas>
   </div>
   <div class="fl-controls">
     <button class="fl-button fl-play" aria-label="Play animation" type="button">
       <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
       <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
     </button>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
   </div>
-  <div class="fl-readouts">
-    <span>Particles in the fixed $V$: <output aria-live="off" data-output="now">0</output> = <output aria-live="off" data-output="start">0</output> at the start + <output aria-live="off" data-output="inflow">0</output> in &minus; <output aria-live="off" data-output="outflow">0</output> out</span>
-    <span>Particles in $V(t)$: <output aria-live="off" data-output="material">0</output>, always the same</span>
-  </div>
-  <figcaption>
-    <span class="fl-swatch fl-swatch-fixed"></span>Fixed region $V$ &middot;
-    <span class="fl-swatch fl-swatch-accent"></span>Material volume $V(t)$ and its particles &middot;
-    <span class="fl-swatch fl-swatch-inflow"></span>Entering $V$ &middot;
-    <span class="fl-swatch fl-swatch-outflow"></span>Leaving $V$.
-    The number of particles in the fixed region only changes by what crosses its boundary: that's the balance equation @eq:balance. Halfway through, the material volume $V(t)$ coincides with $V$, which is the moment where we &ldquo;froze time&rdquo; above.
-  </figcaption>
 </figure>
 
-Last but not least, let's translate back to our setting. Instead of fluid particles, we consider copies of our system with different initial conditions in our phase space. These abstract particles basically move like a fluid through phase space. As the script puts it: "the system evolves like a hydrodynamic system, with a probability fluid streaming through state space". The mass density $\rho$ becomes the probability density, and the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity.
+
+## Connection to phase space
+
+In phase space, each point represents a possible state of our system. So the axes of this multidimensional space represent the degrees of freedom of our system. For our purposes, we consider $N$ particles in three dimensions, so we have $3N$ position coordinates $\bm q = (\bm q_1, \dots, \bm q_N)$ and $3N$ momentum coordinates $\bm p = (\bm p_1, \dots, \bm p_N)$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
+
+The funny thing is that this abstract point in phase space can be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
+
+Let's see this with the famous harmonic oscillator.
+TODO: describe a bit more and add animation.
+
+<!-- Last but not least, let's translate back to our setting. Instead of fluid particles, we consider copies of our system with different initial conditions in our phase space. These abstract particles basically move like a fluid through phase space. As the script puts it: "the system evolves like a hydrodynamic system, with a probability fluid streaming through state space". The mass density $\rho$ becomes the probability density, and the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. -->
 
 
 ## Liouville's theorem

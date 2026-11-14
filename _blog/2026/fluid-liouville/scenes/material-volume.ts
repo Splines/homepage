@@ -21,10 +21,12 @@ const CORE_RATE = 1.25;
 /** Simulated time of one loop, played in as many real seconds. */
 const DURATION = 10;
 
+/** The frame spans -1 ≤ y ≤ 1 and is widened to the shape of the canvas, at most 2:1. */
 const FRAME: Bounds = { xMin: -1.5, xMax: 1.5, yMin: -1, yMax: 1 };
-/** Fluid particles fill a disk that covers the frame. */
-const FLUID_RADIUS = 1.85;
-const PARTICLE_COUNT = 2600;
+const MAX_ASPECT = 2;
+/** Fluid particles fill a disk that covers the widest frame. */
+const FLUID_RADIUS = 2.3;
+const PARTICLE_COUNT = 4000;
 
 const MATERIAL_CENTER: Point = [0.55, 0];
 const MATERIAL_RADIUS = 0.24;
@@ -112,6 +114,10 @@ export function mountMaterialVolume(root: HTMLElement): void {
   });
 
   playTimeline(root, (t) => {
+    const { clientWidth, clientHeight } = view.canvas;
+    const aspect = clientHeight > 0 ? clientWidth / clientHeight : FRAME.xMax;
+    const halfWidth = Math.min(MAX_ASPECT, aspect);
+    view.bounds = { ...FRAME, xMin: -halfWidth, xMax: halfWidth };
     if (!view.begin()) return;
     const { ctx } = view;
     const time = DURATION * t;
