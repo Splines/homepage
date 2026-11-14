@@ -38,14 +38,7 @@ $$
   </div>
 </figure>
 
-In this material view, quantities like the temperature are attached to a particle $\bm X$ and we denote with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that point, no matter which particles came and went through that point: $T(\bm x, t)$. Both views describe the same physics, it's just another perspective.
-
-$$
-T \bigl((\phi(\bm X, t), t)\bigr)
-= T(\bm x, t)
-= \hat T(\bm X, t)
-= \hat T \bigl((\phi^{-1}(\bm x, t), t)\bigr)
-$$
+In this material view, quantities like the temperature are attached to a particle $\bm X$ and we denote it with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
 
 <figure class="fl-figure fl-wide" data-scene="eulerian">
   <canvas class="fl-canvas fl-canvas-strip" aria-label="A flow watched at a point x fixed in space, marked with a blue target. Particles drift past it, and every now and then one passes right through it." role="img"></canvas>
@@ -58,15 +51,42 @@ $$
   </div>
 </figure>
 
-But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, i.e. what a thermometer nailed in place would measure. A thermometer drifting with the fluid instead measures the _material time derivative_, which we get from the chain rule with the velocity $\bm v = \partial \phi / \partial t$:
+Both views describe the same physics, it's just another perspective:
 
 $$
-\dv{}{t} T(\phi(\bm X, t), t) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
+T \bigl(\phi(\bm X, t), t\bigr)
+= T(\bm x, t)
+= \hat T(\bm X, t)
+= \hat T \bigl(\phi^{-1}(\bm x, t), t\bigr)
 $$
 
-The convective part is the change the drifting thermometer sees just because it is carried to places with a different temperature, even if the temperature field itself is frozen in time.
+But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, e.g. what a thermometer fixed in some place would measure. But what about a thermometer that moves along, say with velocity $\bm u$? At time $t$, it is at $\bm x$, a short moment $\delta t$ later at $\bm x + \bm u \, \delta t$. Taylor-expanding $T$ in both arguments to first order gives:
 
-The last ingredient is the _material volume_ $V(t)$: we take a region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. It can deform as much as it likes, but it always contains the same fluid particles. Nothing ever enters or leaves through its boundary.
+$$
+T(\bm x + \bm u \, \delta t, \, t + \delta t)
+= T(\bm x, t) + \pdv{T}{t} \, \delta t + \bm u \cdot \nabla T \, \delta t + \mathcal{O}(\delta t^2)
+$$
+
+So the rate of change the moving thermometer measures is
+
+$$
+\lim_{\delta t \to 0} \frac{T(\bm x + \bm u \, \delta t, \, t + \delta t) - T(\bm x, t)}{\delta t}
+= \pdv{T}{t} + \bm u \cdot \nabla T
+$$
+
+The temperature field itself may change in time, which is the $\partial T / \partial t$ term. But even if the field is frozen in time, the thermometer may still measure a change, simply because it moves on its own to places with a different temperature. This is what the convective term $\bm u \cdot \nabla T$ captures.
+
+Next, let's attach this thermometer to a fluid particle $\bm X$ and let it move with it through the fluid (Lagrangian view). The particle is at position $\bm x = \phi(\bm X, t)$ at time $t$, and its velocity is $\bm v(\bm x, t) = \partial \phi / \partial t$. The temperature the thermometer measures is then called the _material time derivative_:
+
+$$
+\dv{}{t} T \bigl(\phi(\bm X, t), t\bigr) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
+$$
+
+Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor-expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
+
+Before moving on, let us also introduce the _material volume_ $V(t)$: we take a region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
+
+Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is somewhat "well-behaved". Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it. So $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with.
 
 <figure class="fl-figure fl-wide" data-scene="two-views">
   <div class="fl-stage">
