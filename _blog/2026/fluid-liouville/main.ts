@@ -19,17 +19,6 @@ const SCENES: Record<string, (root: HTMLElement) => void> = {
 };
 
 for (const root of document.querySelectorAll<HTMLElement>("[data-scene]")) {
-  const mount = SCENES[root.dataset.scene ?? ""];
-  if (!mount) {
-    console.warn(`Unknown scene "${root.dataset.scene}"`);
-    continue;
-  }
-  try {
-    mount(root);
-    root.classList.add("fl-ready");
-  }
-  catch (error) {
-    // One broken scene should not take down the others.
-    console.error(`Could not start scene "${root.dataset.scene}"`, error);
-  }
+  SCENES[root.dataset.scene!](root);
+  root.classList.add("fl-ready");
 }

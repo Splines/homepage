@@ -46,7 +46,7 @@ export function readPalette(element: Element): Palette {
 /** Parses `#rgb` or `#rrggbb`. */
 export function hexToRgb(hex: string): RGB {
   let digits = hex.replace("#", "");
-  if (digits.length === 3) digits = [...digits].map(d => d + d).join("");
+  if (digits.length === 3) digits = digits.replace(/./g, "$&$&");
   const value = parseInt(digits, 16);
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }

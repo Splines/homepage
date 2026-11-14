@@ -36,8 +36,11 @@ function gaussian(center: Point, spread: Point) {
   const peak = 1 / (TAU * spread[0] * spread[1]);
   return {
     peak,
-    density: (q: number, p: number) =>
-      peak * Math.exp(-0.5 * (((q - center[0]) / spread[0]) ** 2 + ((p - center[1]) / spread[1]) ** 2)),
+    density: (q: number, p: number) => {
+      const u = (q - center[0]) / spread[0];
+      const v = (p - center[1]) / spread[1];
+      return peak * Math.exp(-0.5 * (u * u + v * v));
+    },
     sample: (random: Random): Point => [
       center[0] + spread[0] * normal(random),
       center[1] + spread[1] * normal(random),
@@ -112,7 +115,11 @@ function damped(): PhaseExample {
     const c = Math.cos(omega * t);
     const s = Math.sin(omega * t);
     cachedTime = t;
-    cachedMatrix = [e * (c + (a / omega) * s), (e * s) / omega, (-e * s) / omega, e * (c - (a / omega) * s)];
+    const m11 = e * (c + (a / omega) * s);
+    const m12 = (e * s) / omega;
+    const m21 = (-e * s) / omega;
+    const m22 = e * (c - (a / omega) * s);
+    cachedMatrix = [m11, m12, m21, m22];
     return cachedMatrix;
   };
   const initial = gaussian([2, 0], [0.3, 0.3]);
@@ -150,10 +157,13 @@ function traffic(): PhaseExample {
 
   // Travel time τ(q) from −π to q, tabulated so it can be inverted.
   const samples = 4096;
-  const angles = Float64Array.from({ length: samples + 1 }, (_, i) => -Math.PI + (TAU * i) / samples);
+  const angleStep = TAU / samples;
+  const angles = Float64Array.from({ length: samples + 1 }, (_, i) => -Math.PI + i * angleStep);
   const travelTime = new Float64Array(samples + 1);
   for (let i = 1; i <= samples; i++) {
-    travelTime[i] = travelTime[i - 1] + (0.5 * (1 / speedAt(angles[i - 1]) + 1 / speedAt(angles[i])) * TAU) / samples;
+    // Trapezoidal rule for the integral of dq / q̇.
+    const slowness = 0.5 * (1 / speedAt(angles[i - 1]) + 1 / speedAt(angles[i]));
+    travelTime[i] = travelTime[i - 1] + slowness * angleStep;
   }
   const lap = travelTime[samples];
   const wrap = (q: number) => ((((q + Math.PI) % TAU) + TAU) % TAU) - Math.PI;

@@ -23,9 +23,7 @@ export class View {
   offset: Point = [0, 0];
 
   constructor(readonly canvas: HTMLCanvasElement, public bounds: Bounds) {
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas 2D context is not available.");
-    this.ctx = ctx;
+    this.ctx = canvas.getContext("2d")!;
   }
 
   /**

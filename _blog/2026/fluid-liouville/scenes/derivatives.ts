@@ -1,5 +1,5 @@
 import { Clock, type Animation } from "../lib/clock";
-import { bindChoice, bindPlayButton, requireElement, setText } from "../lib/controls";
+import { bindChoice, bindPlayButton, setText } from "../lib/controls";
 import { MATH_FONT, createCloud, drawAxes, drawDensity, drawDots, drawRing, type PointCloud } from "../lib/draw";
 import { readPalette, type Palette } from "../lib/palette";
 import { createRandom } from "../lib/random";
@@ -26,7 +26,7 @@ interface LoadedExample {
 }
 
 function loadExample(id: string): LoadedExample {
-  const example = (EXAMPLES[id] ?? EXAMPLES.blob)();
+  const example = EXAMPLES[id]();
   const random = createRandom(23);
   const starts = Array.from({ length: COPY_COUNT }, () => example.sample(random));
   const highlighted = Uint8Array.from(starts, ([q, p]) => {
@@ -68,11 +68,16 @@ function forEachImage(view: View, example: PhaseExample, draw: () => void): void
 }
 
 /** Plots both measured densities over one loop, highlighting the part up to time t. */
-function drawSeries(canvas: HTMLCanvasElement, loaded: LoadedExample, t: number, palette: Palette): void {
+function drawSeries(
+  canvas: HTMLCanvasElement,
+  loaded: LoadedExample,
+  t: number,
+  palette: Palette,
+): void {
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
-  const ctx = canvas.getContext("2d");
-  if (!ctx || width === 0 || height === 0) return;
+  if (width === 0 || height === 0) return;
+  const ctx = canvas.getContext("2d")!;
   const ratio = window.devicePixelRatio || 1;
   if (canvas.width !== Math.round(width * ratio)) canvas.width = Math.round(width * ratio);
   if (canvas.height !== Math.round(height * ratio)) canvas.height = Math.round(height * ratio);
@@ -101,12 +106,18 @@ function drawSeries(canvas: HTMLCanvasElement, loaded: LoadedExample, t: number,
   ctx.textBaseline = "top";
   ctx.fillText("t", margin.left + plotWidth + 6, margin.top + plotHeight + 5);
 
-  const current = Math.min(SERIES_SAMPLES, Math.round((t / loaded.example.period) * SERIES_SAMPLES));
-  const curves: [Float64Array, string][] = [[loaded.fixedSeries, palette.fixed], [loaded.riderSeries, palette.accent]];
+  const progress = t / loaded.example.period;
+  const current = Math.min(SERIES_SAMPLES, Math.round(progress * SERIES_SAMPLES));
+  const curves: [Float64Array, string][] = [
+    [loaded.fixedSeries, palette.fixed],
+    [loaded.riderSeries, palette.accent],
+  ];
+  // Whole loop faintly, the part up to time t on top.
+  const passes = [[0, SERIES_SAMPLES, 0.22, 1.5], [0, current, 1, 2.25]];
   for (const [series, color] of curves) {
     ctx.strokeStyle = color;
     ctx.lineJoin = "round";
-    for (const [from, to, alpha, lineWidth] of [[0, SERIES_SAMPLES, 0.22, 1.5], [0, current, 1, 2.25]]) {
+    for (const [from, to, alpha, lineWidth] of passes) {
       ctx.globalAlpha = alpha;
       ctx.lineWidth = lineWidth;
       ctx.beginPath();
@@ -128,15 +139,16 @@ function drawSeries(canvas: HTMLCanvasElement, loaded: LoadedExample, t: number,
  * camera can stand still or ride along, and a plot shows what both observers measure.
  */
 export function mountDerivatives(root: HTMLElement): void {
-  const phaseCanvas = requireElement<HTMLCanvasElement>(root, "[data-canvas='phase']");
-  const seriesCanvas = requireElement<HTMLCanvasElement>(root, "[data-canvas='series']");
-  const fixedOutput = requireElement<HTMLOutputElement>(root, "[data-output='fixed']");
-  const riderOutput = requireElement<HTMLOutputElement>(root, "[data-output='rider']");
+  const phaseCanvas = root.querySelector<HTMLCanvasElement>("[data-canvas='phase']")!;
+  const seriesCanvas = root.querySelector<HTMLCanvasElement>("[data-canvas='series']")!;
+  const fixedOutput = root.querySelector<HTMLOutputElement>("[data-output='fixed']")!;
+  const riderOutput = root.querySelector<HTMLOutputElement>("[data-output='rider']")!;
   const explanations = [...root.querySelectorAll<HTMLElement>("[data-explains]")];
   const palette = readPalette(root);
 
   const exampleButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-example]")];
-  const initialId = exampleButtons.find(b => b.getAttribute("aria-pressed") === "true")?.dataset.example ?? "blob";
+  const initialId = root.querySelector<HTMLElement>("[data-example][aria-pressed='true']")!
+    .dataset.example!;
   let loaded = loadExample(initialId);
   const view = new View(phaseCanvas, loaded.example.bounds);
   const copies: PointCloud = createCloud(COPY_COUNT);
@@ -162,7 +174,8 @@ export function mountDerivatives(root: HTMLElement): void {
     draw(t) {
       const { example, highlighted } = loaded;
       const { xMin, xMax, yMin, yMax } = example.bounds;
-      view.offset = ridingAlong ? [rider[0] - (xMin + xMax) / 2, rider[1] - (yMin + yMax) / 2] : [0, 0];
+      const frameCenter: Point = [(xMin + xMax) / 2, (yMin + yMax) / 2];
+      view.offset = ridingAlong ? [rider[0] - frameCenter[0], rider[1] - frameCenter[1]] : [0, 0];
       if (!view.begin()) return;
 
       drawDensity(view, (q, p) => example.density(q, p, t), example.densityScale, palette.density);
@@ -187,15 +200,15 @@ export function mountDerivatives(root: HTMLElement): void {
   };
 
   const clock = new Clock(animation, root);
-  bindPlayButton(requireElement(root, ".fl-play"), clock);
+  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
   bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-camera]")], "camera", (camera) => {
     ridingAlong = camera === "ride";
     clock.redraw();
   });
   const phaseLabel = phaseCanvas.getAttribute("aria-label") ?? "";
   bindChoice(exampleButtons, "example", (id) => {
-    const button = exampleButtons.find(b => b.dataset.example === id);
-    phaseCanvas.setAttribute("aria-label", `${phaseLabel} Example: ${button?.getAttribute("aria-label") ?? id}.`);
+    const button = exampleButtons.find(b => b.dataset.example === id)!;
+    phaseCanvas.setAttribute("aria-label", `${phaseLabel} Example: ${button.getAttribute("aria-label")!}.`);
     loaded = loadExample(id);
     view.bounds = loaded.example.bounds;
     explanations.forEach(element => (element.hidden = element.dataset.explains !== id));

@@ -1,5 +1,5 @@
 import { Clock, type Animation } from "../lib/clock";
-import { bindChoice, bindDraggable, bindPlayButton, requireElement, setText } from "../lib/controls";
+import { bindChoice, bindDraggable, bindPlayButton, setText } from "../lib/controls";
 import { createCloud, drawDots, drawLabel, tracePolyline, type PointCloud } from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { createRandom, inDisk, onCircle } from "../lib/random";
@@ -71,15 +71,17 @@ class VortexParticles {
  * particle at the center of V(t).
  */
 export function mountTwoViews(root: HTMLElement): void {
-  const view = new View(requireElement<HTMLCanvasElement>(root, "canvas"), FRAME);
-  const handle = requireElement<HTMLElement>(root, ".fl-handle");
-  const windowOutput = requireElement<HTMLOutputElement>(root, "[data-output='window']");
-  const materialOutput = requireElement<HTMLOutputElement>(root, "[data-output='material']");
+  const view = new View(root.querySelector<HTMLCanvasElement>("canvas")!, FRAME);
+  const handle = root.querySelector<HTMLElement>(".fl-handle")!;
+  const windowOutput = root.querySelector<HTMLOutputElement>("[data-output='window']")!;
+  const materialOutput = root.querySelector<HTMLOutputElement>("[data-output='material']")!;
   const palette = readPalette(root);
 
   const random = createRandom(7);
   const start = Array.from({ length: PARTICLE_COUNT }, () => inDisk(random, [0, 0], FLUID_RADIUS));
-  const isMaterial = start.map(([x, y]) => Math.hypot(x - MATERIAL_CENTER[0], y - MATERIAL_CENTER[1]) < MATERIAL_RADIUS);
+  const isMaterial = start.map(
+    ([x, y]) => Math.hypot(x - MATERIAL_CENTER[0], y - MATERIAL_CENTER[1]) < MATERIAL_RADIUS,
+  );
   const fluid = new VortexParticles(start);
   const boundary = new VortexParticles(onCircle(MATERIAL_CENTER, MATERIAL_RADIUS, BOUNDARY_POINTS));
   const tracked = new VortexParticles([MATERIAL_CENTER]);
@@ -90,7 +92,8 @@ export function mountTwoViews(root: HTMLElement): void {
   setText(materialOutput, String(isMaterial.filter(Boolean).length));
 
   const insideWindow = (x: number, y: number) =>
-    Math.abs(x - fixedWindow[0]) < WINDOW_HALF_SIZE && Math.abs(y - fixedWindow[1]) < WINDOW_HALF_SIZE;
+    Math.abs(x - fixedWindow[0]) < WINDOW_HALF_SIZE
+    && Math.abs(y - fixedWindow[1]) < WINDOW_HALF_SIZE;
 
   const animation: Animation = {
     period: 10,
@@ -144,7 +147,8 @@ export function mountTwoViews(root: HTMLElement): void {
       // Trail and marker of the tracked particle.
       const from = Math.max(0, t - TRAIL_DURATION);
       for (let k = 0; k < trail.x.length; k++) {
-        [trail.x[k], trail.y[k]] = tracked.positionAt(0, from + ((t - from) * k) / (trail.x.length - 1));
+        const time = from + ((t - from) * k) / (trail.x.length - 1);
+        [trail.x[k], trail.y[k]] = tracked.positionAt(0, time);
       }
       tracePolyline(view, trail, false);
       ctx.strokeStyle = palette.ink;
@@ -175,7 +179,7 @@ export function mountTwoViews(root: HTMLElement): void {
   };
 
   const clock = new Clock(animation, root);
-  bindPlayButton(requireElement(root, ".fl-play"), clock);
+  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
   bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-camera]")], "camera", (camera) => {
     ridingAlong = camera === "ride";
     clock.redraw();

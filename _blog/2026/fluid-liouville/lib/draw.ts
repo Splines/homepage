@@ -42,7 +42,12 @@ export function drawDots(
 }
 
 /** Makes the polyline through the first `count` points the current path. */
-export function tracePolyline(view: View, cloud: PointCloud, closed: boolean, count = cloud.x.length): void {
+export function tracePolyline(
+  view: View,
+  cloud: PointCloud,
+  closed: boolean,
+  count = cloud.x.length,
+): void {
   const { ctx } = view;
   ctx.beginPath();
   for (let i = 0; i < count; i++) {
@@ -120,7 +125,7 @@ export function drawAxes(view: View, color: string, labels: [string, string]): v
 }
 
 const densityCanvas = document.createElement("canvas");
-const densityContext = densityCanvas.getContext("2d");
+const densityContext = densityCanvas.getContext("2d")!;
 let densityImage: ImageData | null = null;
 
 /**
@@ -138,7 +143,6 @@ export function drawDensity(
   const columns = Math.max(1, Math.round(view.width / pixelsPerSample));
   const rows = Math.max(1, Math.round(view.height / pixelsPerSample));
   const ctx = densityContext;
-  if (!ctx) return;
   if (!densityImage || densityImage.width !== columns || densityImage.height !== rows) {
     densityCanvas.width = columns;
     densityCanvas.height = rows;

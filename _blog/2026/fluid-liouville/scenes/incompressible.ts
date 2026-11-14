@@ -1,5 +1,5 @@
 import { Clock, type Animation } from "../lib/clock";
-import { bindChoice, bindPlayButton, requireElement, setText } from "../lib/controls";
+import { bindChoice, bindPlayButton, setText } from "../lib/controls";
 import { createCloud, drawAxes, drawDots, tracePolyline, type PointCloud } from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { createRandom, inDisk } from "../lib/random";
@@ -39,7 +39,7 @@ function step(state: PointCloud, index: number, gamma: number): void {
   state.y[index] = p * damping;
 }
 
-/** Signed area enclosed by the closed polygon through the first `count` points (shoelace formula). */
+/** Area enclosed by the closed polygon through the first `count` points (shoelace formula). */
 function polygonArea(cloud: PointCloud, count: number): number {
   let twiceArea = 0;
   for (let i = 0, j = count - 1; i < count; j = i++) {
@@ -76,7 +76,8 @@ class FlowingBoundary {
     let insertions = 0;
     for (let i = 0; i < this.count && this.count < MAX_BOUNDARY_POINTS; i++) {
       const next = (i + 1) % this.count;
-      const length = Math.hypot(this.points.x[next] - this.points.x[i], this.points.y[next] - this.points.y[i]);
+      const { x, y } = this.points;
+      const length = Math.hypot(x[next] - x[i], y[next] - y[i]);
       if (length < MAX_SEGMENT_LENGTH) continue;
       if (++insertions > MAX_INSERTIONS_PER_FRAME) return;
 
@@ -113,7 +114,8 @@ class FlowingBoundary {
 function drawEnergyGuides(view: View, color: string): void {
   const { ctx } = view;
   const samples = 200;
-  const momentum = (energy: number, q: number) => Math.sqrt(Math.max(0, 2 * (energy + Math.cos(q))));
+  const momentum = (energy: number, q: number) =>
+    Math.sqrt(Math.max(0, 2 * (energy + Math.cos(q))));
   ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   for (const energy of GUIDE_ENERGIES) {
@@ -126,12 +128,11 @@ function drawEnergyGuides(view: View, color: string): void {
         const p = Math.sign(Math.sin(angle)) * momentum(energy, q);
         ctx.lineTo(view.screenX(q), view.screenY(p));
       }
-    }
-    else {
+    } else {
       for (const sign of [1, -1]) {
         for (let k = 0; k <= samples; k++) {
           const q = FRAME.xMin + ((FRAME.xMax - FRAME.xMin) * k) / samples;
-          const point: [number, number] = [view.screenX(q), view.screenY(sign * momentum(energy, q))];
+          const point: Point = [view.screenX(q), view.screenY(sign * momentum(energy, q))];
           if (k === 0) ctx.moveTo(...point);
           else ctx.lineTo(...point);
         }
@@ -147,13 +148,16 @@ function drawEnergyGuides(view: View, color: string): void {
  * friction, the area shrinks like exp(−γt) and the density of copies grows.
  */
 export function mountIncompressible(root: HTMLElement): void {
-  const view = new View(requireElement<HTMLCanvasElement>(root, "canvas"), FRAME);
-  const areaOutput = requireElement<HTMLOutputElement>(root, "[data-output='area']");
-  const densityOutput = requireElement<HTMLOutputElement>(root, "[data-output='density']");
+  const view = new View(root.querySelector<HTMLCanvasElement>("canvas")!, FRAME);
+  const areaOutput = root.querySelector<HTMLOutputElement>("[data-output='area']")!;
+  const densityOutput = root.querySelector<HTMLOutputElement>("[data-output='density']")!;
   const palette = readPalette(root);
 
   const random = createRandom(5);
-  const copiesStart = Array.from({ length: COPY_COUNT }, () => inDisk(random, REGION_CENTER, REGION_RADIUS));
+  const copiesStart = Array.from(
+    { length: COPY_COUNT },
+    () => inDisk(random, REGION_CENTER, REGION_RADIUS),
+  );
   const copies = createCloud(COPY_COUNT);
   const boundary = new FlowingBoundary();
   let gamma = 0;
@@ -207,7 +211,7 @@ export function mountIncompressible(root: HTMLElement): void {
   };
 
   const clock = new Clock(animation, root);
-  bindPlayButton(requireElement(root, ".fl-play"), clock);
+  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
   bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-friction]")], "friction", (value) => {
     gamma = value === "on" ? FRICTION : 0;
     clock.restart();

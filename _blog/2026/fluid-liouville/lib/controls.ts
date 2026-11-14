@@ -1,20 +1,15 @@
 import type { Clock } from "./clock";
 import type { Point, View } from "./view";
 
-/** Finds a required element inside `root`, failing loudly if the markup is incomplete. */
-export function requireElement<T extends Element>(root: ParentNode, selector: string): T {
-  const element = root.querySelector<T>(selector);
-  if (!element) throw new Error(`Missing element: ${selector}`);
-  return element;
-}
-
 /** Keeps a play/pause button's icon (via `data-playing`) and label in sync with a clock. */
 export function bindPlayButton(button: HTMLButtonElement, clock: Clock): void {
   const sync = () => {
     button.dataset.playing = String(clock.playing);
     button.setAttribute("aria-label", clock.playing ? "Pause animation" : "Play animation");
   };
-  button.addEventListener("click", () => clock.toggle());
+  button.addEventListener("click", () => {
+    clock.toggle();
+  });
   clock.onToggle(sync);
   sync();
 }
@@ -23,18 +18,24 @@ export function bindPlayButton(button: HTMLButtonElement, clock: Clock): void {
  * Makes `buttons` a single-choice group: a click marks that button as pressed,
  * unmarks the others and reports its `data-<key>` value.
  */
-export function bindChoice(buttons: HTMLButtonElement[], key: string, onChange: (value: string) => void): void {
+export function bindChoice(
+  buttons: HTMLButtonElement[],
+  key: string,
+  onChange: (value: string) => void,
+): void {
   for (const button of buttons) {
     button.addEventListener("click", () => {
       if (button.getAttribute("aria-pressed") === "true") return;
-      buttons.forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+      buttons.forEach((other) => {
+        other.setAttribute("aria-pressed", String(other === button));
+      });
       onChange(button.dataset[key] ?? "");
     });
   }
 }
 
 /** Arrow keys and the direction they move a draggable point in (world units, y up). */
-const ARROW_DIRECTIONS: Record<string, Point> = {
+const ARROW_DIRECTIONS: Partial<Record<string, Point>> = {
   ArrowLeft: [-1, 0],
   ArrowRight: [1, 0],
   ArrowUp: [0, 1],

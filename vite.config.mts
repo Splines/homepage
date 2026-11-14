@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import RubyPlugin from 'vite-plugin-ruby'
+import { defineConfig } from "vite";
+import RubyPlugin from "vite-plugin-ruby";
 
 export default defineConfig({
   plugins: [
@@ -12,8 +12,8 @@ export default defineConfig({
     // from `location`, which picks up Jekyll's port here since Jekyll and
     // Vite run as separate, unproxied servers.
     hmr: {
-      host: 'localhost',
+      host: "localhost",
       clientPort: 3036,
     },
   },
-})
+});

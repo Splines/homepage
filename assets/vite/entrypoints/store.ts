@@ -10,7 +10,7 @@
 const YOUTUBE_EMBED_BASE = "https://www.youtube-nocookie.com/embed/";
 
 /** How far Left/Right move along the documentation tabs, wrapping at the ends. */
-const ARROW_STEPS: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1 };
+const ARROW_STEPS: Partial<Record<string, number>> = { ArrowLeft: -1, ArrowRight: 1 };
 
 document.addEventListener("DOMContentLoaded", () => {
   setupDocTabs();
@@ -72,7 +72,11 @@ function setupDocTabs(): void {
     // The panel may have just lost its `hidden` attribute, so a heading inside it
     // has no box yet in this tick; wait a frame for layout before scrolling.
     const scrollTo = named ? tabList : heading;
-    if (scrollTo) requestAnimationFrame(() => scrollTo.scrollIntoView());
+    if (scrollTo) {
+      requestAnimationFrame(() => {
+        scrollTo.scrollIntoView();
+      });
+    }
   };
 
   for (const tab of tabs) {

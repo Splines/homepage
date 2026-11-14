@@ -1,5 +1,5 @@
 import { Clock, type Animation } from "../lib/clock";
-import { bindPlayButton, requireElement, setText } from "../lib/controls";
+import { bindPlayButton, setText } from "../lib/controls";
 import { createCloud, drawDots, drawLabel, tracePolyline } from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { createRandom, normal, onCircle, type Random } from "../lib/random";
@@ -56,13 +56,13 @@ function sampleFluid(random: Random): Point[] {
  * instant and always contains the same particles.
  */
 export function mountBalance(root: HTMLElement): void {
-  const view = new View(requireElement<HTMLCanvasElement>(root, "canvas"), FRAME);
+  const view = new View(root.querySelector<HTMLCanvasElement>("canvas")!, FRAME);
   const outputs = {
-    now: requireElement<HTMLOutputElement>(root, "[data-output='now']"),
-    start: requireElement<HTMLOutputElement>(root, "[data-output='start']"),
-    inflow: requireElement<HTMLOutputElement>(root, "[data-output='inflow']"),
-    outflow: requireElement<HTMLOutputElement>(root, "[data-output='outflow']"),
-    material: requireElement<HTMLOutputElement>(root, "[data-output='material']"),
+    now: root.querySelector<HTMLOutputElement>("[data-output='now']")!,
+    start: root.querySelector<HTMLOutputElement>("[data-output='start']")!,
+    inflow: root.querySelector<HTMLOutputElement>("[data-output='inflow']")!,
+    outflow: root.querySelector<HTMLOutputElement>("[data-output='outflow']")!,
+    material: root.querySelector<HTMLOutputElement>("[data-output='material']")!,
   };
   const palette = readPalette(root);
 
@@ -76,8 +76,11 @@ export function mountBalance(root: HTMLElement): void {
       positions.y[i] = start[i][1];
     }
   };
-  const inRegion = (i: number) =>
-    Math.hypot(positions.x[i] - REGION_CENTER[0], positions.y[i] - REGION_CENTER[1]) < REGION_RADIUS;
+  const inRegion = (i: number) => {
+    const dx = positions.x[i] - REGION_CENTER[0];
+    const dy = positions.y[i] - REGION_CENTER[1];
+    return Math.hypot(dx, dy) < REGION_RADIUS;
+  };
 
   // The material volume consists of the particles that are inside V at COINCIDE_AT.
   moveTo(COINCIDE_AT);
@@ -143,7 +146,8 @@ export function mountBalance(root: HTMLElement): void {
 
       // Fixed region V.
       ctx.beginPath();
-      ctx.arc(view.screenX(REGION_CENTER[0]), view.screenY(REGION_CENTER[1]), REGION_RADIUS * view.scale, 0, 2 * Math.PI);
+      const [centerX, centerY] = [view.screenX(REGION_CENTER[0]), view.screenY(REGION_CENTER[1])];
+      ctx.arc(centerX, centerY, REGION_RADIUS * view.scale, 0, 2 * Math.PI);
       ctx.globalAlpha = 0.07;
       ctx.fillStyle = palette.fixed;
       ctx.fill();
@@ -195,5 +199,5 @@ export function mountBalance(root: HTMLElement): void {
   };
 
   const clock = new Clock(animation, root);
-  bindPlayButton(requireElement(root, ".fl-play"), clock);
+  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
 }

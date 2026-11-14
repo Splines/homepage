@@ -40,12 +40,16 @@ export class Clock {
       this.onScreen = entries.some(entry => entry.isIntersecting);
       this.sync();
     }).observe(root);
-    new ResizeObserver(() => this.redraw()).observe(root);
+    new ResizeObserver(() => {
+      this.redraw();
+    }).observe(root);
     reducedMotion.addEventListener("change", () => {
       if (reducedMotion.matches && this.wantsToPlay) this.toggle();
     });
     // Canvas text falls back to another font until the web fonts are ready.
-    void document.fonts.ready.then(() => this.redraw());
+    void document.fonts.ready.then(() => {
+      this.redraw();
+    });
   }
 
   get playing(): boolean {
@@ -55,7 +59,9 @@ export class Clock {
   toggle(): void {
     this.wantsToPlay = !this.wantsToPlay;
     this.sync();
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => {
+      listener();
+    });
   }
 
   /** Calls `listener` whenever playback is started or paused. */
@@ -87,8 +93,7 @@ export class Clock {
     if (shouldRun && !this.frame) {
       this.lastTimestamp = performance.now();
       this.frame = requestAnimationFrame(this.tick);
-    }
-    else if (!shouldRun && this.frame) {
+    } else if (!shouldRun && this.frame) {
       cancelAnimationFrame(this.frame);
       this.frame = 0;
     }
