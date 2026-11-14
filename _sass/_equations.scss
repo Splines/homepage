@@ -1,7 +1,6 @@
 // Equation references from _plugins/equations.rb, in prose and in math.
 .eq-ref,
 .eq-ref-missing,
-.eq-preview-jump,
 .katex a[href^="#eq-"] {
   // avoid ligatures that would turn "(1)" into a circled digit
   font-variant-ligatures: no-common-ligatures;
@@ -72,67 +71,5 @@ $selection-inactive: #e6e4e2; // when the window is not focused
       height: calc(var(--katex-selection-height, 0px) + 0.2em);
       background: var(--selection);
     }
-  }
-}
-
-// Preview of the referenced equation on hover or tap, see equation-preview.ts
-.eq-preview {
-  position: absolute;
-  z-index: 10;
-  box-sizing: border-box;
-  // 100% is the viewport without its scrollbar (100vw would include it)
-  max-width: min(46rem, calc(100% - 16px));
-
-  background: #fffcf8;
-  border: 1px solid #88593a40;
-  border-radius: 8px;
-  box-shadow: 0 0.4em 1.2em #563c2926;
-
-  animation: eq-preview-in 120ms ease-out;
-
-  .eq-preview-equation {
-    // wide equations scroll here, the jump link below stays in place
-    overflow-x: auto;
-    padding: 0.1em 1em;
-
-    // on phones, rather fit the equation than show a scrollbar for padding
-    @media (max-width: 36rem) {
-      padding-inline: 0.5em;
-    }
-  }
-
-  // only on touch devices
-  .eq-preview-jump {
-    display: block;
-    padding: 0.7em 1em;
-    border-top: 1px solid #88593a26;
-    font-size: 0.9rem;
-    text-align: right;
-  }
-
-  .katex-display {
-    margin: 0.6em 0;
-    // Posts may make display math scrollable on its own. Here, only
-    // .eq-preview-equation scrolls: KaTeX's aligned environment sticks out
-    // by 2px (a negative margin), which its padding absorbs.
-    overflow: visible;
-  }
-
-  .katex-display > .katex > .katex-html > .tag {
-    // no need to show the number again in the preview itself
-    display: none;
-  }
-}
-
-@keyframes eq-preview-in {
-  from {
-    opacity: 0;
-    transform: translateY(-0.2em);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .eq-preview {
-    animation: none;
   }
 }

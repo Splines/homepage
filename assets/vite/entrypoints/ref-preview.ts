@@ -1,9 +1,11 @@
 /**
- * Previews for equation references from `_plugins/equations.rb`, in prose and inside math.
+ * Previews for references within a page: equation references from `_plugins/equations.rb`
+ * (in prose and inside math) and kramdown's footnote references.
  *
- * - Mouse: hovering a reference shows a copy of the referenced display equation right next
- *   to it. The preview stays open while the pointer moves over to it, so wide equations
- *   can be scrolled. Clicking the reference jumps to the equation as usual.
+ * - Mouse: hovering a reference shows a copy of the referenced equation or footnote right
+ *   next to it. The preview stays open while the pointer moves over to it, so wide
+ *   equations can be scrolled and links in footnotes clicked. Clicking the reference
+ *   jumps to its target as usual.
  * - Touch: the first tap opens the preview instead of jumping, with a "Jump to" link at
  *   the bottom. Tapping the same reference again jumps, too. Tapping elsewhere or
  *   scrolling the page closes it.
@@ -15,7 +17,20 @@
 
 type Mode = "hover" | "tap";
 
-const REF_SELECTOR = 'a.eq-ref, .katex a[href^="#eq-"]';
+interface Target {
+  /** Content of the preview, already detached from the page. */
+  content: HTMLElement;
+  /** Element the jump link scrolls to. */
+  anchor: HTMLElement;
+  /** Text of the jump link, followed by an arrow. */
+  jumpLabel: string;
+  /** Called once the preview is visible and has its final width. */
+  fit?: () => void;
+}
+
+const EQUATION_SELECTOR = 'a.eq-ref, .katex a[href^="#eq-"]';
+const FOOTNOTE_SELECTOR = 'a.footnote[href^="#fn:"]';
+const REF_SELECTOR = `${EQUATION_SELECTOR}, ${FOOTNOTE_SELECTOR}`;
 const SHOW_DELAY_MS = 120;
 const HIDE_DELAY_MS = 150;
 /** Distance between the reference and the preview, and minimum distance to the viewport edges. */
@@ -29,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!document.querySelector(REF_SELECTOR)) return;
 
   const preview = document.createElement("div");
-  preview.className = "eq-preview";
+  preview.className = "ref-preview";
   preview.hidden = true;
   document.body.append(preview);
 
@@ -95,8 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (target && preview.contains(target)) {
-      // The jump link navigates by itself, the preview can go.
-      if (target.closest(".eq-preview-jump")) hide();
+      // Links (the jump link, links in footnotes) navigate by themselves, the preview can go.
+      if (target.closest("a[href]")) hide();
       return;
     }
 
@@ -122,40 +137,40 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Fills the preview with a copy of the equation the link points to (plus a jump link if
+ * Fills the preview with a copy of what the link points to (plus a jump link if
  * requested) and places it below the link, or above if there is not enough space below.
- * Returns false if the link does not point to a display equation.
+ * Returns false if the link target cannot be previewed.
  */
 function showPreview(preview: HTMLElement, link: HTMLAnchorElement, withJump: boolean): boolean {
   const id = decodeURIComponent(link.getAttribute("href")?.slice(1) ?? "");
-  const anchor = document.getElementById(id);
-  const equation = anchor?.closest(".katex-display");
-  if (!anchor || !equation) return false;
+  const target = link.matches(FOOTNOTE_SELECTOR) ? footnoteTarget(id, link) : equationTarget(id);
+  if (!target) return false;
 
-  const copy = equation.cloneNode(true) as HTMLElement;
-  // The anchor id must stay unique on the page.
-  for (const element of copy.querySelectorAll("[id]")) element.removeAttribute("id");
-  // The equation may be selected right now, see math-selection.ts.
-  for (const element of copy.querySelectorAll(".katex-selected")) element.classList.remove("katex-selected");
-  const content = document.createElement("div");
-  content.className = "eq-preview-equation";
-  content.append(copy);
+  const { content } = target;
+  // Ids must stay unique on the page.
+  for (const element of content.querySelectorAll("[id]")) element.removeAttribute("id");
+  // Math may be selected right now, see math-selection.ts.
+  for (const element of content.querySelectorAll(".katex-selected")) element.classList.remove("katex-selected");
   preview.replaceChildren(content);
 
   if (withJump) {
     const jump = document.createElement("a");
-    jump.className = "eq-preview-jump";
+    jump.className = "ref-preview-jump";
     jump.href = `#${id}`;
-    const below = anchor.getBoundingClientRect().top > link.getBoundingClientRect().top;
-    jump.textContent = `Jump to (${anchor.textContent}) ${below ? "↓" : "↑"}`;
+    const below = target.anchor.getBoundingClientRect().top > link.getBoundingClientRect().top;
+    jump.textContent = `${target.jumpLabel} ${below ? "↓" : "↑"}`;
     preview.append(jump);
   }
 
   // On hover, the preview is only a visual aid: the reference itself is a link.
   if (withJump) preview.removeAttribute("aria-hidden");
   else preview.setAttribute("aria-hidden", "true");
+  // The width of wrapping content (footnotes) depends on the space right of the preview,
+  // so measure it at the left edge, not wherever the previous preview was.
+  preview.style.left = "0";
+  preview.style.top = "0";
   preview.hidden = false;
-  fitEquation(content, copy);
+  target.fit?.();
 
   const ref = link.getBoundingClientRect();
   const { offsetWidth: width, offsetHeight: height } = preview;
@@ -170,6 +185,44 @@ function showPreview(preview: HTMLElement, link: HTMLAnchorElement, withJump: bo
   preview.style.left = `${left + window.scrollX}px`;
   preview.style.top = `${top + window.scrollY}px`;
   return true;
+}
+
+/** The display equation containing the element with the given id. */
+function equationTarget(id: string): Target | null {
+  const anchor = document.getElementById(id);
+  const equation = anchor?.closest(".katex-display");
+  if (!anchor || !equation) return null;
+
+  const copy = equation.cloneNode(true) as HTMLElement;
+  const content = document.createElement("div");
+  content.className = "ref-preview-equation";
+  content.append(copy);
+  return {
+    content,
+    anchor,
+    jumpLabel: `Jump to (${anchor.textContent})`,
+    fit: () => {
+      fitEquation(content, copy);
+    },
+  };
+}
+
+/** The footnote with the given id, e.g. `fn:1`, without its back links. */
+function footnoteTarget(id: string, link: HTMLAnchorElement): Target | null {
+  const footnote = document.getElementById(id);
+  if (!footnote) return null;
+
+  const content = document.createElement("div");
+  content.className = "ref-preview-footnote";
+  for (const child of footnote.childNodes) content.append(child.cloneNode(true));
+  for (const backlink of content.querySelectorAll(".reversefootnote")) backlink.remove();
+
+  return {
+    content,
+    anchor: footnote,
+    // the reference shows the footnote's number, the id has the label from Markdown
+    jumpLabel: `Jump to footnote ${link.textContent}`,
+  };
 }
 
 /**

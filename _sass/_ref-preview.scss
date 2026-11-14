@@ -1,0 +1,86 @@
+// Preview of a referenced equation or footnote on hover or tap, see ref-preview.ts
+.ref-preview {
+  position: absolute;
+  z-index: 10;
+  box-sizing: border-box;
+  // 100% is the viewport without its scrollbar (100vw would include it)
+  max-width: min(46rem, calc(100% - 16px));
+
+  background: #fffcf8;
+  border: 1px solid #88593a40;
+  border-radius: 8px;
+  box-shadow: 0 0.4em 1.2em #563c2926;
+
+  animation: ref-preview-in 120ms ease-out;
+
+  // only on touch devices
+  .ref-preview-jump {
+    display: block;
+    padding: 0.7em 1em;
+    border-top: 1px solid #88593a26;
+    font-size: 0.9rem;
+    font-variant-ligatures: no-common-ligatures;
+    text-align: right;
+    text-decoration: none;
+  }
+}
+
+.ref-preview-equation {
+  // wide equations scroll here, the jump link below stays in place
+  overflow-x: auto;
+  padding: 0.1em 1em;
+
+  // on phones, rather fit the equation than show a scrollbar for padding
+  @media (max-width: 36rem) {
+    padding-inline: 0.5em;
+  }
+
+  .katex-display {
+    margin: 0.6em 0;
+    // Posts may make display math scrollable on its own. Here, only
+    // .ref-preview-equation scrolls: KaTeX's aligned environment sticks out
+    // by 2px (a negative margin), which its padding absorbs.
+    overflow: visible;
+  }
+
+  .katex-display > .katex > .katex-html > .tag {
+    // no need to show the number again in the preview itself
+    display: none;
+  }
+}
+
+// Footnotes are prose, wrap them at a comfortable line length.
+.ref-preview-footnote {
+  max-width: 28rem;
+  padding: 0.6em 1em;
+  font-size: 0.9rem;
+  line-height: 1.4;
+
+  p {
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+
+    + p {
+      margin-top: 0.5em;
+    }
+  }
+
+  // wide display math in a footnote
+  .katex-display {
+    overflow-x: auto;
+  }
+}
+
+@keyframes ref-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.2em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ref-preview {
+    animation: none;
+  }
+}

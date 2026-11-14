@@ -20,7 +20,6 @@
 
   {% if page.katex.enabled %}
   <link href="{{ '/assets/katex/katex.min.css' | relative_url }}" rel="stylesheet">
-  {% vite_typescript_tag equation-preview %}
   {% vite_typescript_tag math-selection %}
 
   {% comment %} set by _plugins/katex.rb {% endcomment %}
@@ -36,6 +35,7 @@
   {% endif %}
 
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
+  {% vite_typescript_tag ref-preview %}
   {% vite_typescript_tag comments %}
 
   {% if page.vite_entrypoint %}
