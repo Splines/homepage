@@ -8,7 +8,9 @@ katex:
     \dv: '\frac{\mathrm{d}#1}{\mathrm{d}#2}'
     \pdv: '\frac{\partial #1}{\partial #2}'
     \Ham: '\mathcal{H}'
-    \explain: '\textcolor{88593a}{\Big\downarrow\;\;\small #1}'
+    # Arrow (drawn by CSS, see _equations.scss) below the "=" of the rows around it,
+    # with an explanation next to it. Use \\ for line breaks, the arrow grows along.
+    \explain: '\mathrel{\hphantom{=}}\textcolor{88593a}{\htmlClass{explain}{\vphantom{\Big|}\small\begin{gathered}#1\end{gathered}}}'
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 excerpt: >

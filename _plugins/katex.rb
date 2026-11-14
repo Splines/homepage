@@ -10,10 +10,12 @@ module Katex
   JS_FILENAME = 'vendor/katex.min.js'
   JS_CTX = MiniRacer::Context.new
   JS_CTX.eval(File.read(JS_FILENAME))
-  # Trust only what equations.rb emits: anchors and same-page links.
+  # Trust only what equations.rb emits (anchors and same-page links) and CSS
+  # classes (e.g. for the \explain arrow).
   JS_CTX.eval(<<~'JS')
     function render(tex, options) {
-      options.trust = (c) => c.command === '\\htmlId' || (c.command === '\\href' && c.url.startsWith('#'));
+      options.trust = (c) => c.command === '\\htmlId' || c.command === '\\htmlClass'
+        || (c.command === '\\href' && c.url.startsWith('#'));
       return katex.renderToString(tex, options);
     }
   JS
