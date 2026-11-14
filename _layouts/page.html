@@ -20,6 +20,7 @@
 
   {% if page.katex.enabled %}
   <link href="{{ '/assets/katex/katex.min.css' | relative_url }}" rel="stylesheet">
+  {% vite_typescript_tag equation-preview %}
   {% endif %}
 
   {% if page.code %}

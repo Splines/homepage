@@ -1,0 +1,47 @@
+// Equation references from _plugins/equations.rb, in prose and in math.
+.eq-ref,
+.eq-ref-missing,
+.katex a[href^="#eq-"] {
+  // avoid ligatures that would turn "(1)" into a circled digit
+  font-variant-ligatures: no-common-ligatures;
+  text-decoration: none;
+}
+
+// Hover preview of the referenced equation, see equation-preview.ts
+.eq-preview {
+  position: absolute;
+  z-index: 10;
+  box-sizing: border-box;
+  max-width: min(46rem, calc(100vw - 16px));
+  overflow-x: auto;
+  padding: 0.1em 1em;
+
+  background: #fffcf8;
+  border: 1px solid #88593a40;
+  border-radius: 8px;
+  box-shadow: 0 0.4em 1.2em #563c2926;
+
+  animation: eq-preview-in 120ms ease-out;
+
+  .katex-display {
+    margin: 0.6em 0;
+  }
+
+  .katex-display > .katex > .katex-html > .tag {
+    // no need to show the number again in the preview itself
+    display: none;
+  }
+}
+
+@keyframes eq-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.2em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-preview {
+    animation: none;
+  }
+}

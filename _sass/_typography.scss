@@ -122,12 +122,3 @@ a {
 .katex {
   font-size: 1.13em !important;
 }
-
-// Equation references from _plugins/equations.rb, in prose and in math.
-// Rethink's "liga" feature would turn "(1)" into a circled digit.
-.eq-ref,
-.eq-ref-missing,
-.katex a[href^="#eq-"] {
-  font-variant-ligatures: no-common-ligatures;
-  text-decoration: none;
-}
