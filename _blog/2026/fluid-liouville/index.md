@@ -78,8 +78,7 @@ In the lecture script, the derivation starts with a balance equation for a _fixe
 
 $$
 \dv{m}{t} = \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x \overset{!}{=} 0
-\tag{1}
-$$
+$$ <eq:mass-conservation>
 
 Next, we can turn this into the continuity equation from the script by using:
 
@@ -90,8 +89,7 @@ Let $V(t)$ be a material volume moving with the velocity field $\bm v$, and let 
 
 $$
 \dv{}{t} \int_{V(t)} f \,\mathrm{d}\bm x = \int_{V(t)} \left( \pdv{f}{t} + \nabla \cdot (f \bm v) \right) \mathrm{d}\bm x
-\tag{2}
-$$
+$$ <eq:reynolds>
 </div>
 
 As you might have guessed, we now set $f := \rho$ to turn the conservation of mass into
@@ -106,15 +104,14 @@ This holds for arbitrary material volumes $V(t)$, so the integrand has to vanish
 <p class="fl-key-title">Continuity equation</p>
 $$
 \pdv{\rho}{t} + \nabla \cdot (\rho \bm v) = 0
-\tag{3}
-$$
+$$ <eq:continuity>
 </div>
 
-If you're wondering how the derivation of the script relates to this: it's basically the same. To see this, let's apply Gauß' theorem to the second term of $(2)$ with $f = \rho$. The divergence term turns into a surface integral:
+If you're wondering how the derivation of the script relates to this: it's basically the same. To see this, let's apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term turns into a surface integral:
 
 $$
-0 \overset{(1)}{=} \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x
-\overset{\text{Gauß on (2)}}{=}
+0 \overset{@eq:mass-conservation}{=} \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x
+\overset{\text{Gauß on } @eq:reynolds}{=}
 \int_{V(t)} \pdv{\rho}{t} \,\mathrm{d}\bm x + \int_{\partial V(t)} \mathrm{d}\bm A \cdot \rho \bm v
 $$
 
@@ -122,10 +119,9 @@ Now let's define the current $\bm j := \rho \bm v$ and freeze time at some insta
 
 $$
 \int_{\partial V} \mathrm{d}\bm A \cdot \bm j = - \pdv{}{t} \int_V \rho \,\mathrm{d}\bm x
-\tag{4}
-$$
+$$ <eq:balance>
 
-It tells us: the mass inside a _fixed_ region $V$ can only change by what flows through its boundary $\partial V$. I just find it a lot more intuitive to start with the conservation of mass in a material volume $(1)$ to arrive at this result.
+It tells us: the mass inside a _fixed_ region $V$ can only change by what flows through its boundary $\partial V$. I just find it a lot more intuitive to start with the conservation of mass in a material volume @eq:mass-conservation to arrive at this result.
 
 <figure class="fl-figure fl-wide" data-scene="balance">
   <div class="fl-stage">
@@ -146,16 +142,16 @@ It tells us: the mass inside a _fixed_ region $V$ can only change by what flows 
     <span class="fl-swatch fl-swatch-accent"></span>Material volume $V(t)$ and its particles &middot;
     <span class="fl-swatch fl-swatch-inflow"></span>Entering $V$ &middot;
     <span class="fl-swatch fl-swatch-outflow"></span>Leaving $V$.
-    The number of particles in the fixed region only changes by what crosses its boundary: that's the balance equation $(4)$. Halfway through, the material volume $V(t)$ coincides with $V$, which is the moment where we &ldquo;froze time&rdquo; above.
+    The number of particles in the fixed region only changes by what crosses its boundary: that's the balance equation @eq:balance. Halfway through, the material volume $V(t)$ coincides with $V$, which is the moment where we &ldquo;froze time&rdquo; above.
   </figcaption>
 </figure>
 
-Last but not least, let's translate back to our setting. Instead of fluid particles, we consider copies of our system with different initial conditions in our phase space. These abstract particles basically move like a fluid through phase space. As the script puts it: "the system evolves like a hydrodynamic system, with a probability fluid streaming through state space". The mass density $\rho$ becomes the probability density, and the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely $(3)$.
+Last but not least, let's translate back to our setting. Instead of fluid particles, we consider copies of our system with different initial conditions in our phase space. These abstract particles basically move like a fluid through phase space. As the script puts it: "the system evolves like a hydrodynamic system, with a probability fluid streaming through state space". The mass density $\rho$ becomes the probability density, and the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity.
 
 
 ## Liouville's theorem
 
-We are now in phase space with the coordinates $(\bm q, \bm p) := (\bm q_1, \dots, \bm q_N, \bm p_1, \dots, \bm p_N)$, where we write $q_i, p_i$ ($i = 1, \dots, 3N$) for the individual components. The velocity is now the phase space velocity $\bm v := (\dot{\bm q}, \dot{\bm p})$. Accordingly, our nabla operator is defined as $\nabla := (\partial / \partial \bm q, \partial / \partial \bm p)$. With this, we start from the continuity equation $(3)$ and expand its divergence term:
+We are now in phase space with the coordinates $(\bm q, \bm p) := (\bm q_1, \dots, \bm q_N, \bm p_1, \dots, \bm p_N)$, where we write $q_i, p_i$ ($i = 1, \dots, 3N$) for the individual components. The velocity is now the phase space velocity $\bm v := (\dot{\bm q}, \dot{\bm p})$. Accordingly, our nabla operator is defined as $\nabla := (\partial / \partial \bm q, \partial / \partial \bm p)$. With this, we start from the continuity equation @eq:continuity and expand its divergence term:
 
 $$
 \begin{aligned}
@@ -163,8 +159,7 @@ $$
   &\explain{\text{product rule: } \nabla \cdot (\rho \bm v) = \bm v \cdot \nabla \rho + \rho \, (\nabla \cdot \bm v)} \\
   &= \pdv{\rho}{t} + \bm v \cdot \nabla \rho + \rho \, (\nabla \cdot \bm v)
 \end{aligned}
-\tag{5}
-$$
+$$ <eq:continuity-expanded>
 
 Let's tackle the term $\nabla \cdot \bm v$ first:
 
@@ -178,7 +173,7 @@ $$
 \end{aligned}
 $$
 
-This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can deform, but never shrink or grow. To see this, we can use the Reynolds transport theorem $(2)$ once more, this time with $f := 1$. Then the integral is simply the volume of a material volume $V(t)$ in phase space, and
+This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can deform, but never shrink or grow. To see this, we can use the Reynolds transport theorem @eq:reynolds once more, this time with $f := 1$. Then the integral is simply the volume of a material volume $V(t)$ in phase space, and
 
 $$
 \dv{}{t} \int_{V(t)} \mathrm{d}\bm x = \int_{V(t)} \nabla \cdot \bm v \,\mathrm{d}\bm x = 0
@@ -209,12 +204,11 @@ $$
 
 We have used Hamilton's equations to arrive here. A general flow, e.g. with friction, would still obey the continuity equation, but not $\nabla \cdot \bm v = 0$.
 
-With this, the expanded continuity equation $(5)$ simplifies to
+With this, the expanded continuity equation @eq:continuity-expanded simplifies to
 
 $$
 \pdv{\rho}{t} + \underbrace{\bm v \cdot \nabla \rho}_{\text{convective part}} = 0
-\tag{6}
-$$
+$$ <eq:liouville-partial>
 
 We can write the left-hand side as a total derivative along the trajectory of a copy of the system in phase space. To see this, we follow a single copy along its trajectory $(\bm q(t), \bm p(t))$ and look at the density it sees, i.e. $\rho(\bm q(t), \bm p(t), t)$. The chain rule gives:
 
@@ -224,7 +218,7 @@ $$
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
 $$
 
-which is exactly the left-hand side of $(6)$, and nothing else than the material time derivative from fluid dynamics. Finally, this results in:
+which is exactly the left-hand side of @eq:liouville-partial, and nothing else than the material time derivative from fluid dynamics. Finally, this results in:
 
 <div class="fl-key" markdown="1">
 <p class="fl-key-title">Liouville's theorem</p>
@@ -233,8 +227,7 @@ Consider an ensemble of copies of a system that evolve according to Hamilton's e
 
 $$
 \dv{\rho}{t} = 0
-\tag{7}
-$$
+$$ <eq:liouville>
 
 In other words: the probability fluid in phase space is incompressible. A region of phase space that moves with the flow may change its shape, but never its volume.
 </div>
@@ -243,12 +236,11 @@ Or equivalently, the density only depends on the initial conditions of the copy,
 
 $$
 \rho(\bm q(t), \bm p(t), t) = \rho(\bm q(0), \bm p(0), 0)
-\tag{8}
-$$
+$$ <eq:liouville-integrated>
 
 It's worth pausing for a moment to see where exactly each assumption entered:
 
-- _Conservation of probability_ gave us the continuity equation $(3)$. Copies of the system don't just pop into existence or vanish.
+- _Conservation of probability_ gave us the continuity equation @eq:continuity. Copies of the system don't just pop into existence or vanish.
 - _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$. With friction, the continuity equation still holds, but Liouville's theorem does not, see the pendulum above.
 - _Smoothness_: we need $\Ham$ to be twice continuously differentiable to swap the partial derivatives (Schwarz), and $\rho$ to be differentiable to write down the continuity equation in the first place.
 
@@ -259,7 +251,7 @@ Note also the difference between the two time derivatives: $\partial \rho / \par
 
 ## Liouville's equation
 
-Liouville's theorem tells us what happens along a trajectory in phase space. But often, we're interested in the opposite perspective: how does $\rho$ change at a _fixed_ point in phase space? As discussed, this is just the term $\partial \rho / \partial t$, so let's solve $(6)$ for it and use Hamilton's equations once again to arrive at:
+Liouville's theorem tells us what happens along a trajectory in phase space. But often, we're interested in the opposite perspective: how does $\rho$ change at a _fixed_ point in phase space? As discussed, this is just the term $\partial \rho / \partial t$, so let's solve @eq:liouville-partial for it and use Hamilton's equations once again to arrive at:
 
 $$
 \begin{aligned}
@@ -282,25 +274,23 @@ With this, we get:
 <p class="fl-key-title">Liouville's equation</p>
 $$
 \pdv{\rho}{t} = -\{\Ham, \rho\}
-\tag{9}
-$$
+$$ <eq:liouville-equation>
 </div>
 
 So the change of $\rho$ at a fixed point is completely determined by $\rho$ and the Hamiltonian $\Ham$.
 
-Note how $(9)$ gives us a condition for when $\rho$ is stationary in phase space, i.e. when the statistics of our ensemble don't change at any point anymore. This is what we call (statistical) equilibrium:
+Note how @eq:liouville-equation gives us a condition for when $\rho$ is stationary in phase space, i.e. when the statistics of our ensemble don't change at any point anymore. This is what we call (statistical) equilibrium:
 
 $$
 \pdv{\rho}{t} = 0 \quad \Longleftrightarrow \quad \{\Ham, \rho\} = 0
-\tag{10}
-$$
+$$ <eq:stationary>
 
 
 ## Standing still or riding along
 
 We now have two time derivatives of the same density $\rho(\bm q, \bm p, t)$, and I think it's worth getting a feeling for them. Imagine two observers in phase space: one of them stands still at a fixed point and measures $\partial \rho / \partial t$. The other one sits on a copy of the system, rides along with it and measures $\mathrm{d}\rho / \mathrm{d}t$.
 
-Before we used Hamilton's equations, the expanded continuity equation $(5)$ told us
+Before we used Hamilton's equations, the expanded continuity equation @eq:continuity-expanded told us
 
 $$
 \dv{\rho}{t} = \pdv{\rho}{t} + \bm v \cdot \nabla \rho = -\rho \, (\nabla \cdot \bm v)
@@ -353,7 +343,7 @@ All four combinations can happen. Pick one in the matrix to load it into the ani
       <p><strong>Blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> For the harmonic oscillator $\Ham = (q^2 + p^2)/2$, Hamilton's equations give $\bm v = (p, -q)$: phase space turns clockwise like a rigid body, and the blob is carried around without changing its shape. The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period. Here, $\partial \rho / \partial t = -\bm v \cdot \nabla \rho \neq 0$ since the contours of the blob are not circles around the origin, so the flow carries density across them.</p>
     </div>
     <div data-explains="ring" hidden>
-      <p><strong>Ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same oscillator, but now the density only depends on the energy, $\rho = \Phi(\Ham)$, here a Gaussian ring around $\Ham = 1.8$. Then $\bm v \cdot \nabla \rho = \Phi'(\Ham) \, \bm v \cdot \nabla \Ham = 0$ since the velocity runs along the energy contours, so $\partial \rho / \partial t = 0$, too. The copies are colored in alternating sectors of their initial angle: they clearly still move, but every copy leaving the fixed point is replaced by one with the same energy, and the density does not change at all. This is the equilibrium from $(10)$. That it works for any $\Phi(\Ham)$ is the content of Jeans' theorem, but that's a story for another time.</p>
+      <p><strong>Ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same oscillator, but now the density only depends on the energy, $\rho = \Phi(\Ham)$, here a Gaussian ring around $\Ham = 1.8$. Then $\bm v \cdot \nabla \rho = \Phi'(\Ham) \, \bm v \cdot \nabla \Ham = 0$ since the velocity runs along the energy contours, so $\partial \rho / \partial t = 0$, too. The copies are colored in alternating sectors of their initial angle: they clearly still move, but every copy leaving the fixed point is replaced by one with the same energy, and the density does not change at all. This is the equilibrium from @eq:stationary. That it works for any $\Phi(\Ham)$ is the content of Jeans' theorem, but that's a story for another time.</p>
     </div>
     <div data-explains="damped" hidden>
       <p><strong>Damped oscillator: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> With friction, $\dot q = p$ and $\dot p = -q - \gamma p$ (here $\gamma = 0.3$). This flow is not Hamiltonian: $\nabla \cdot \bm v = -\gamma$, so $\mathrm{d}\rho / \mathrm{d}t = \gamma \rho$. Every patch of copies shrinks in area like $e^{-\gamma t}$ while keeping its probability, so the density around the rider grows exponentially. The observer standing still sees the blob pass by once, and then nothing, since all copies spiral into the origin.</p>
@@ -367,7 +357,7 @@ All four combinations can happen. Pick one in the matrix to load it into the ani
 
 ## Why bother?
 
-Liouville's equation is the starting point for describing equilibrium in statistical physics: an ensemble in equilibrium is stationary, so by $(10)$, its density has to satisfy $\{\Ham, \rho\} = 0$. As the ring example suggests, any density that only depends on the energy does the job, and the microcanonical and canonical ensembles are exactly of this form. Making this precise leads to Jeans' theorem, which I'll leave for another time.
+Liouville's equation is the starting point for describing equilibrium in statistical physics: an ensemble in equilibrium is stationary, so by @eq:stationary, its density has to satisfy $\{\Ham, \rho\} = 0$. As the ring example suggests, any density that only depends on the energy does the job, and the microcanonical and canonical ensembles are exactly of this form. Making this precise leads to Jeans' theorem, which I'll leave for another time.
 
 The conservation of phase space volume also has a striking consequence for the long-term behavior: a Hamiltonian system can never settle down. The damped oscillator squeezes all of its copies into a single point, the origin. For a Hamiltonian system, this is impossible, since a region of phase space can never shrink. Taken further, this leads to Poincaré's recurrence theorem: a Hamiltonian system that is confined to a region of phase space with finite volume returns arbitrarily close to almost any initial state, again and again (though you may have to wait for longer than the age of the universe).
 

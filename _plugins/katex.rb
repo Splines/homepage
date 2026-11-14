@@ -4,20 +4,28 @@
 # runtime spawns a fresh `node` per call, and this hook makes one call per math
 # expression, so a math-heavy post cost seconds of process-spawn overhead.
 require 'mini_racer'
+require_relative 'equations'
 
 module Katex
+  JS_FILENAME = 'vendor/katex.min.js'
+  JS_CTX = MiniRacer::Context.new
+  JS_CTX.eval(File.read(JS_FILENAME))
+  # Trust only what equations.rb emits: anchors and same-page links.
+  JS_CTX.eval(<<~'JS')
+    function render(tex, options) {
+      options.trust = (c) => c.command === '\\htmlId' || (c.command === '\\href' && c.url.startsWith('#'));
+      return katex.renderToString(tex, options);
+    }
+  JS
+
+  # Tried in order at each position (\x60 is a backtick):
+  #   code:    `...`, ``...`` or ```...``` fences, left untouched
+  #   escaped: \$ or \\$, becomes a literal dollar sign
+  #   display: $$...$$
+  #   inline:  $...$
+  TOKEN_REGEX = /(?<code>(?<ticks>\x60+).*?\k<ticks>)|(?<escaped>\\{1,2}\$)|\$\$(?<display>.*?)\$\$|\$(?<inline>.*?)\$/m.freeze
+
   class << self
-    JS_FILENAME = 'vendor/katex.min.js'
-    JS_CTX = MiniRacer::Context.new
-    JS_CTX.eval(File.read(JS_FILENAME))
-
-    # Tried in order at each position (\x60 is a backtick):
-    #   code:    `...`, ``...`` or ```...``` fences, left untouched
-    #   escaped: \$ or \\$, becomes a literal dollar sign
-    #   display: $$...$$
-    #   inline:  $...$
-    TOKEN_REGEX = /(?<code>(?<ticks>\x60+).*?\k<ticks>)|(?<escaped>\\{1,2}\$)|\$\$(?<display>.*?)\$\$|\$(?<inline>.*?)\$/m.freeze
-
     def process(text, macros)
       text.gsub(TOKEN_REGEX) do
         m = Regexp.last_match
@@ -34,11 +42,11 @@ module Katex
     end
 
     def render_inline(text, macros)
-      JS_CTX.call('katex.renderToString', text, { macros: macros })
+      JS_CTX.call('render', text, { macros: macros })
     end
 
     def render_display(text, macros)
-      JS_CTX.call('katex.renderToString', text, { macros: macros, displayMode: true })
+      JS_CTX.call('render', text, { macros: macros, displayMode: true })
     end
 
   end
@@ -46,7 +54,8 @@ end
 
 pre_render_task = lambda { |doc, _|
   if doc.data['katex'] && doc.data['katex']['enabled']
-    doc.content = Katex.process(doc.content, doc.data['katex']['macros'] || {})
+    content = Equations.process(doc.content, doc.relative_path)
+    doc.content = Katex.process(content, doc.data['katex']['macros'] || {})
   end
 }
 
