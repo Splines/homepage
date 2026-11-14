@@ -3,8 +3,10 @@
 # Uses mini_racer (in-process V8) directly rather than ExecJS: ExecJS's Node
 # runtime spawns a fresh `node` per call, and this hook makes one call per math
 # expression, so a math-heavy post cost seconds of process-spawn overhead.
+require 'cgi'
 require 'mini_racer'
 require_relative 'equations'
+require_relative 'tex_source'
 
 module Katex
   JS_FILENAME = 'vendor/katex.min.js'
@@ -44,11 +46,18 @@ module Katex
     end
 
     def render_inline(text, macros)
-      JS_CTX.call('render', text, { macros: macros })
+      with_source(JS_CTX.call('render', text, { macros: macros }), text, macros)
     end
 
     def render_display(text, macros)
-      JS_CTX.call('render', text, { macros: macros, displayMode: true })
+      with_source(JS_CTX.call('render', text, { macros: macros, displayMode: true }), text, macros)
+    end
+
+    # The TeX for copying (see tex_source.rb) on the outermost element. Newlines as
+    # entities, so that the HTML stays on one line for Markdown.
+    def with_source(html, text, macros)
+      source = CGI.escapeHTML(TexSource.for_copy(text, macros)).gsub("\n", '&#10;')
+      html.sub(/\A<span class="katex(?:-display)?"/) { |tag| %(#{tag} data-tex="#{source}") }
     end
 
     # The page's macros plus the site-wide ones that the text (or a page macro)

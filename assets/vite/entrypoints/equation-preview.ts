@@ -135,6 +135,8 @@ function showPreview(preview: HTMLElement, link: HTMLAnchorElement, withJump: bo
   const copy = equation.cloneNode(true) as HTMLElement;
   // The anchor id must stay unique on the page.
   for (const element of copy.querySelectorAll("[id]")) element.removeAttribute("id");
+  // The equation may be selected right now, see math-selection.ts.
+  for (const element of copy.querySelectorAll(".katex-selected")) element.classList.remove("katex-selected");
   const content = document.createElement("div");
   content.className = "eq-preview-equation";
   content.append(copy);
