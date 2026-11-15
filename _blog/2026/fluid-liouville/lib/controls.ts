@@ -41,9 +41,9 @@ export function setText(element: Element, value: string): void {
 /**
  * Plays a drawing of 0 ≤ t ≤ 1 in a loop of `seconds` real seconds, controlled by the
  * play button and the time slider in `root`. Dragging the slider holds the animation
- * and lets it continue afterwards.
+ * and lets it continue afterwards. Returns the clock, e.g. to redraw after an interaction.
  */
-export function playTimeline(root: HTMLElement, draw: (t: number) => void, seconds = 8): void {
+export function playTimeline(root: HTMLElement, draw: (t: number) => void, seconds = 8): Clock {
   const slider = root.querySelector<HTMLInputElement>("input[type='range']")!;
   const animation: Animation = {
     period: 1,
@@ -73,4 +73,5 @@ export function playTimeline(root: HTMLElement, draw: (t: number) => void, secon
   slider.addEventListener("input", () => {
     clock.seek(slider.valueAsNumber);
   });
+  return clock;
 }

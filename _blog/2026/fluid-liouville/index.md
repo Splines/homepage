@@ -8,6 +8,7 @@ katex:
     \dv: '\frac{\mathrm{d}#1}{\mathrm{d}#2}'
     \pdv: '\frac{\partial #1}{\partial #2}'
     \Ham: '\mathcal{H}'
+    \RR: '\mathbb{R}'
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 excerpt: >
@@ -174,19 +175,59 @@ It tells us: the mass inside a _fixed_ region $V$ can only change by what flows 
 
 ## Connection to phase space
 
-In phase space, each point represents a possible state of our system. So the axes of this multidimensional space represent the degrees of freedom of our system. For our purposes, we consider $N$ particles in three dimensions, so we have $3N$ position coordinates $\bm q = (\bm q_1, \dots, \bm q_N)$ and $3N$ momentum coordinates $\bm p = (\bm p_1, \dots, \bm p_N)$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
+In phase space, each point represents a possible state of our system. The axes of this multidimensional space are the degrees of freedom of the system. For our purposes, we consider $N$ particles in three dimensions, so we have $3N$ position coordinates $\bm q = (\bm q_1, \dots, \bm q_N)$ and $3N$ momentum coordinates $\bm p = (\bm p_1, \dots, \bm p_N)$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
 
-The funny thing is that this abstract point in phase space can be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
+The funny thing is that this abstract point in phase space, representing a state of a particle system, can itself be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
 
-Let's see this with the famous harmonic oscillator.
-TODO: describe a bit more and add animation.
+Let's see this with the famous harmonic oscillator: a mass $m$ on a spring with stiffness $k$ that moves back and forth on a line. We just consider $N=1$ particle in one dimension, so the state of the system is described by the position $q$ and momentum $p$ alone. The phase space is then 2-dimensional. The Hamiltonian is the total energy:
 
-<!-- Last but not least, let's translate back to our setting. Instead of fluid particles, we consider copies of our system with different initial conditions in our phase space. These abstract particles basically move like a fluid through phase space. As the script puts it: "the system evolves like a hydrodynamic system, with a probability fluid streaming through state space". The mass density $\rho$ becomes the probability density, and the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. -->
+$$
+\Ham(q, p) = \frac{p^2}{2m} + \frac{k}{2} q^2
+$$
+
+With Hamilton's equations, we find:
+
+$$
+\dot q = \pdv{\Ham}{p} = \frac{p}{m}, \qquad \dot p = -\pdv{\Ham}{q} = -k q
+$$
+
+To keep things simple, we choose units such that $m = k = 1$. Starting from $(q_0, p_0)$, the solution to this ordinary differential equation is
+
+$$
+q(t) = q_0 \cos t + p_0 \sin t, \qquad p(t) = p_0 \cos t - q_0 \sin t
+$$
+
+So every state moves clockwise on a circle around the origin. The radius of one trajectory stays constant, $r^2 = q^2 + p^2 = q_0^2 + p_0^2$, since the energy $\Ham = (q^2 + p^2)/2$ is conserved.
+
+<figure class="fl-figure fl-wide" data-scene="oscillator">
+  <div class="fl-lab">
+    <canvas class="fl-canvas fl-canvas-springs" aria-label="Four masses on springs attached to a wall, each in its own color, swinging back and forth with different amplitudes. An arrow above every mass shows its momentum." data-canvas="springs" role="img"></canvas>
+    <canvas class="fl-canvas fl-canvas-square" aria-label="Phase space of the harmonic oscillator, position q horizontally and momentum p vertically. Each of the four copies is a dot in its color that circles the origin clockwise, all with the same period. Optionally, many more copies fill a disk that turns like a rigid body." data-canvas="phase" role="img"></canvas>
+  </div>
+  <div class="fl-controls">
+    <button class="fl-button fl-play" aria-label="Play animation" type="button">
+      <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
+      <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
+    </button>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
+    <div class="fl-choice" aria-label="Copies in phase space" role="group">
+      <button class="fl-button" aria-pressed="true" data-copies="few" type="button">Four copies</button>
+      <button class="fl-button" aria-pressed="false" data-copies="many" type="button">Many copies</button>
+    </div>
+  </div>
+  <figcaption>
+    Copies of the harmonic oscillator in real space and phase space. The arrows above the masses show their momentum $p$.
+  </figcaption>
+</figure>
+
+You can click on "Many copies" to fill the phase space with many copies of the system, all with different initial conditions. The whole cloud then "streams" through phase space with the velocity field $\bm v(q, p) = (\dot q, \dot p) = (p, -q)$. In this sense, the ensemble of copies really is a fluid in phase space.
+
+Let's recap our setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
 
 
 ## Liouville's theorem
 
-We are now in phase space with the coordinates $(\bm q, \bm p) := (\bm q_1, \dots, \bm q_N, \bm p_1, \dots, \bm p_N)$, where we write $q_i, p_i$ ($i = 1, \dots, 3N$) for the individual components. The velocity is now the phase space velocity $\bm v := (\dot{\bm q}, \dot{\bm p})$. Accordingly, our nabla operator is defined as $\nabla := (\partial / \partial \bm q, \partial / \partial \bm p)$. With this, we start from the continuity equation @eq:continuity and expand its divergence term:
+So let's do this! Note that instead of the mass density $\rho$ of fluids, we consider the probability density $\rho$ in phase space. And the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. We start from exactly this equation and expand its divergence term:
 
 $$
 \begin{aligned}

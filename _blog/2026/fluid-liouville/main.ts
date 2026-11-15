@@ -12,12 +12,14 @@ import { mountEulerian } from "./scenes/eulerian";
 import { mountIncompressible } from "./scenes/incompressible";
 import { mountLagrangian } from "./scenes/lagrangian";
 import { mountMaterialVolume } from "./scenes/material-volume";
+import { mountOscillator } from "./scenes/oscillator";
 
 const SCENES: Record<string, (root: HTMLElement) => void> = {
   "lagrangian": mountLagrangian,
   "eulerian": mountEulerian,
   "material-volume": mountMaterialVolume,
   "balance": mountBalance,
+  "oscillator": mountOscillator,
   "incompressible": mountIncompressible,
   "derivatives": mountDerivatives,
 };

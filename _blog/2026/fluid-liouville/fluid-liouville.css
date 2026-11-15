@@ -127,6 +127,13 @@
   aspect-ratio: 1;
 }
 
+/* Copies of a mass on a spring next to their phase space: square beside it, flatter above it. */
+.fl-canvas-springs {
+  @media (min-width: 760px) {
+    aspect-ratio: 1;
+  }
+}
+
 /* Low strip for motion that is mostly horizontal. */
 .fl-canvas-strip {
   aspect-ratio: 5 / 2;
