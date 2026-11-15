@@ -8,6 +8,7 @@ import {
   drawDensity,
   drawDots,
   drawRing,
+  drawTarget,
   type PointCloud,
 } from "../lib/draw";
 import { readPalette, type Palette } from "../lib/palette";
@@ -19,7 +20,8 @@ const COPY_COUNT = 900;
 const SERIES_SAMPLES = 400;
 /** The ring example colors its copies in this many alternating sectors of start angle. */
 const SECTORS = 8;
-const OBSERVER_RADIUS = 9;
+/** Radius of the ring around the copy that the observer rides along with. */
+const RIDER_RADIUS = 9;
 
 /** An example with everything that only depends on the example, computed once on selection. */
 interface LoadedExample {
@@ -198,8 +200,8 @@ export function mountDerivatives(root: HTMLElement): void {
       drawDots(view, copies, 1.3, palette.ink, i => !highlighted[i]);
       view.ctx.globalAlpha = 1;
       drawDots(view, copies, 1.6, palette.paper, i => highlighted[i] === 1);
-      drawRing(view, ...example.fixedPoint, OBSERVER_RADIUS, palette.fixed, 2.25, palette.paper);
-      drawRing(view, ...rider, OBSERVER_RADIUS, palette.accent, 2.25, palette.paper);
+      drawTarget(view, ...example.fixedPoint, palette.fixed, 2.25, palette.paper);
+      drawRing(view, ...rider, RIDER_RADIUS, palette.accent, 2.25, palette.paper);
       view.ctx.fillStyle = palette.ink;
       view.ctx.beginPath();
       view.ctx.arc(view.screenX(rider[0]), view.screenY(rider[1]), 2.5, 0, 2 * Math.PI);

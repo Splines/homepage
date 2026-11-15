@@ -82,6 +82,43 @@ export function drawRing(
   ctx.stroke();
 }
 
+/** Radius of the target that marks a point fixed in space, in CSS pixels. */
+export const TARGET_RADIUS = 11;
+/** Length of the ticks that point at the target's ring from outside, in CSS pixels. */
+export const TARGET_TICK = 5;
+
+/**
+ * Marks a point fixed in space (the Eulerian observer): a ring with short ticks pointing
+ * at it from all four sides. A `halo` color is drawn wider underneath, as for `drawRing`.
+ */
+export function drawTarget(
+  view: View,
+  x: number,
+  y: number,
+  color: string,
+  lineWidth = 2,
+  halo?: string,
+): void {
+  const { ctx } = view;
+  const cx = view.screenX(x);
+  const cy = view.screenY(y);
+  ctx.beginPath();
+  ctx.moveTo(cx + TARGET_RADIUS, cy);
+  ctx.arc(cx, cy, TARGET_RADIUS, 0, 2 * Math.PI);
+  for (const [ux, uy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+    ctx.moveTo(cx + ux * TARGET_RADIUS, cy + uy * TARGET_RADIUS);
+    ctx.lineTo(cx + ux * (TARGET_RADIUS + TARGET_TICK), cy + uy * (TARGET_RADIUS + TARGET_TICK));
+  }
+  if (halo) {
+    ctx.strokeStyle = halo;
+    ctx.lineWidth = lineWidth + 3;
+    ctx.stroke();
+  }
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.stroke();
+}
+
 /** Draws `text` in the math font, anchored at a world point and shifted by (dx, dy) pixels. */
 export function drawLabel(
   view: View,

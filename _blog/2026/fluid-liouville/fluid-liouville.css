@@ -395,11 +395,9 @@
   align-self: stretch;
 }
 
-.fl-explanation {
-  margin-top: 1em;
-  font-family: "Rethink", sans-serif;
-
-  p {
-    margin: 0.4em 0;
-  }
+/* Captions that change with the selected example: only one paragraph is shown at a time. */
+.fl-explanation p {
+  margin: 0;
+  font: inherit;
+  color: inherit;
 }

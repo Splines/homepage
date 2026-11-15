@@ -375,17 +375,17 @@ To see this, let's discuss what the physical system determines and what is up to
 
 Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. The rows are decided by physics: is the flow Hamiltonian or not? The columns are decided by our choice of the initial density for that flow. In the top row, both examples use the very same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row shows two flows that are not Hamiltonian. Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown as an orange wash, the individual copies as dots.
 
-<div class="fl-figure fl-wide" data-scene="derivatives">
+<figure class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
     <span class="fl-matrix-corner"><span>Choice of $\rho_0$ &rarr;</span><span>Physics &darr;</span></span>
     <span class="fl-matrix-head">$\partial \rho / \partial t = 0$<small>stationary ensemble</small></span>
     <span class="fl-matrix-head">$\partial \rho / \partial t \neq 0$<small>changes at fixed points</small></span>
     <span class="fl-matrix-head fl-matrix-row">$\mathrm{d}\rho / \mathrm{d}t = 0$<small>Hamiltonian flow</small></span>
-    <button class="fl-cell" aria-label="Ring: total and partial derivative are both zero" aria-pressed="false" data-example="ring" type="button"><strong>Harmonic Oscillator: Ring</strong><small>Initial density only depends on the energy</small></button>
-    <button class="fl-cell" aria-label="Blob: total derivative zero, partial derivative not zero" aria-pressed="true" data-example="blob" type="button"><strong>Harmonic Oscillator: Blob</strong><small>Initial density concentrated in one region</small></button>
+    <button class="fl-cell" aria-label="Harmonic oscillator with a ring density: total and partial derivative are both zero" aria-pressed="false" data-example="ring" type="button"><strong>Harmonic oscillator</strong><small>Ring: density only depends on the energy</small></button>
+    <button class="fl-cell" aria-label="Harmonic oscillator with a blob density: total derivative zero, partial derivative not zero" aria-pressed="true" data-example="blob" type="button"><strong>Harmonic oscillator</strong><small>Blob: density concentrated in one spot</small></button>
     <span class="fl-matrix-head fl-matrix-row">$\mathrm{d}\rho / \mathrm{d}t \neq 0$<small>not Hamiltonian</small></span>
-    <button class="fl-cell" aria-label="Traffic jam: total derivative not zero, partial derivative zero" aria-pressed="false" data-example="traffic" type="button"><strong>Traffic jam</strong><small>Speed depends on the position</small></button>
-    <button class="fl-cell" aria-label="Damped oscillator: total and partial derivative are both not zero" aria-pressed="false" data-example="damped" type="button"><strong>Damped oscillator</strong><small>Friction squeezes the ensemble</small></button>
+    <button class="fl-cell" aria-label="Traffic flow with a jam: total derivative not zero, partial derivative zero" aria-pressed="false" data-example="traffic" type="button"><strong>Traffic flow</strong><small>Jam: density piles up where copies are slow</small></button>
+    <button class="fl-cell" aria-label="Damped oscillator with a blob density: total and partial derivative are both not zero" aria-pressed="false" data-example="damped" type="button"><strong>Damped oscillator</strong><small>Blob: density concentrated in one spot</small></button>
   </div>
   <div class="fl-lab">
     <div class="fl-stage">
@@ -402,21 +402,22 @@ Before we can answer the question about equilibrium, let's look at the following
       </div>
     </div>
   </div>
-  <div class="fl-explanation" aria-live="polite">
+  <figcaption class="fl-explanation" aria-live="polite">
     <div data-explains="blob">
-      <p><strong>Blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> Same physics as the ring, just a different initial density. The harmonic oscillator turns phase space clockwise like a rigid body (the blob doesn't change its shape). The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period.</p>
+      <p><strong>Harmonic oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> Phase space turns clockwise and keeps its shape. The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period.</p>
     </div>
     <div data-explains="ring" hidden>
-      <p><strong>Ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Harmonic oscillator, but now the density only depends on the energy, $\rho = \Phi(\Ham)$, here a Gaussian ring around some fixed $\Ham$. Then $\bm v \cdot \nabla \rho = \Phi'(\Ham) \, \bm v \cdot \nabla \Ham = 0$ since the velocity runs along the energy contours, so $\partial \rho / \partial t = 0$. This is no coincidence, as we'll see below with Jeans' theorem.</p>
+      <p><strong>Harmonic oscillator with a ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same flow as for the blob, but now the density only depends on the energy, $\rho = \Phi(\Ham)$. The copies still circle the origin, but each copy that leaves a point is replaced by one with the same density. This will lead us to Jeans' theorem below.</p>
     </div>
     <div data-explains="damped" hidden>
-      <p><strong>Damped oscillator: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> With friction, $\dot q = p$ and $\dot p = -q - \gamma p$ (here $\gamma = 0.3$). This flow is not Hamiltonian: $\nabla \cdot \bm v = -\gamma$, so $\mathrm{d}\rho / \mathrm{d}t = \gamma \rho$. Every patch of copies shrinks in area like $e^{-\gamma t}$ while keeping its probability, so the density around the rider grows exponentially. The observer standing still sees the blob pass by once, and then nothing, since all copies spiral into the origin.</p>
+      <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing, since all copies spiral into the origin.</p>
     </div>
     <div data-explains="traffic" hidden>
-      <p><strong>Traffic jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A made-up, non-Hamiltonian flow on a ring $q \in [-\pi, \pi)$: $\dot q = 1 + a \sin q$ and $\dot p = 0$ (here $a = 0.7$), so $p$ is just a label. Copies are slowest at $q = -\pi/2$ and spend more time there. The density $\rho = g(p) / \bigl(Z \, (1 + a \sin q)\bigr)$, for any profile $g(p)$ and normalization $Z$, is stationary: $\partial \rho / \partial t = -\partial_q (\rho \, \dot q) = -\partial_q \bigl(g(p)/Z\bigr) = 0$. But the flow is compressible, $\nabla \cdot \bm v = a \cos q$, so $\mathrm{d}\rho / \mathrm{d}t = -a \cos q \, \rho \neq 0$. The rider gets squeezed together with its neighbors when entering the slow zone and spread apart again when leaving it. Just like cars at a construction site: the traffic jam stays where it is, but every car passes through it. For a Hamiltonian system, this combination is impossible.</p>
+      
+      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A flow that is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. Yet, stand still as observer at any point and you see a constant density there.</p>
     </div>
-  </div>
-</div>
+  </figcaption>
+</figure>
 
 Liouville's theorem holds for the top row since $\nabla \cdot \bm v = 0$. Yet, the blob is not in equilibrium, while the ring is. The difference is that the density of the ring only depends on the energy, while the blob has a more complicated dependence on $(\bm q, \bm p)$. This is essentially the content of Jeans' theorem. Let's analyze the situation now.
 
