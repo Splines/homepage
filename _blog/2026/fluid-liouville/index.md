@@ -227,7 +227,7 @@ Let's recap our setting in statistical physics: we consider a real system of $N$
 
 ## Liouville's theorem
 
-So let's do this! Note that instead of the mass density $\rho$ of fluids, we consider the probability density $\rho$ in phase space. And the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. We start from exactly this equation and expand its divergence term:
+So let's do this! Note that instead of the mass density $\rho$ of fluids, we consider the probability density $\rho$ in phase space. And the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. Let's expand its divergence term:
 
 $$
 \begin{aligned}
@@ -237,7 +237,7 @@ $$
 \end{aligned}
 $$ <eq:continuity-expanded>
 
-Let's tackle the term $\nabla \cdot \bm v$ first:
+We focus on the term $\nabla \cdot \bm v$ now. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$:
 
 $$
 \begin{aligned}
@@ -249,21 +249,25 @@ $$
 \end{aligned}
 $$
 
-This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can deform, but never shrink or grow. To see this, we can use the Reynolds transport theorem @eq:reynolds once more, this time with $f := 1$. Then the integral is simply the volume of a material volume $V(t)$ in phase space, and
+This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can deform, but never shrink or grow! To see this, we can use the Reynolds transport theorem @eq:reynolds once more, this time with $f := 1$. Then the left-hand side is simply the change of the volume of the material region $V(t)$.
 
 $$
 \dv{}{t} \int_{V(t)} \mathrm{d}\bm x = \int_{V(t)} \nabla \cdot \bm v \,\mathrm{d}\bm x = 0
 $$
 
+We have used Hamilton's equations to arrive here. A general flow, e.g. with friction, would still obey the continuity equation, but not $\nabla \cdot \bm v = 0$.
+
 <figure class="fl-figure fl-wide" data-scene="incompressible">
-  <div class="fl-stage">
-    <canvas class="fl-canvas fl-canvas-pendulum" aria-label="Animation of a pendulum in phase space, angle q horizontally and momentum p vertically. A disk of copies is wound up into a spiral because swings with larger amplitude take longer. Without friction, its area stays the same. With friction, the region spirals inwards and its area shrinks." role="img"></canvas>
+  <div class="fl-lab">
+    <canvas class="fl-canvas fl-canvas-pendulum" aria-label="Three pendulums in blue, red and orange hanging from a common pivot. They start at rest at increasing angles; the ones released higher swing wider and take longer, so they drift out of step. With friction, their swings die down." data-canvas="real" role="img"></canvas>
+    <canvas class="fl-canvas fl-canvas-pendulum" aria-label="Phase space of the pendulum, angle q horizontally and momentum p vertically. A disk of copies is wound up into a spiral because swings with larger amplitude take longer. The three pendulums are marked as blue, red and orange dots within it. Without friction, the area of the region stays the same. With friction, the region spirals inwards and its area shrinks." data-canvas="phase" role="img"></canvas>
   </div>
   <div class="fl-controls">
     <button class="fl-button fl-play" aria-label="Play animation" type="button">
       <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
       <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
     </button>
+    <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
     <div class="fl-choice" aria-label="Friction" role="group">
       <button class="fl-button" aria-pressed="true" data-friction="off" type="button">Without friction</button>
       <button class="fl-button" aria-pressed="false" data-friction="on" type="button">With friction</button>
@@ -274,11 +278,9 @@ $$
     <span>Density of copies: <output aria-live="off" data-output="density">&times; 1.00</output></span>
   </div>
   <figcaption>
-    Copies of a pendulum, $\Ham = p^2/2 - \cos q$, starting in a disk. Swings with a larger amplitude take longer, so the disk gets wound up into a thin spiral, but its area stays exactly the same. With friction, $\dot p = -\sin q - \gamma p$, the flow is no longer Hamiltonian: we have $\nabla \cdot \bm v = -\gamma$, the area shrinks like $e^{-\gamma t}$ and the copies get crowded.
+    Copies of a pendulum, $\Ham = p^2/2 - \cos q$, starting in a disk. Three of them, released from rest at different angles, are also shown in real space. Swings with a larger amplitude take longer, so the pendulums drift out of step and the disk gets wound up into a thin spiral, but its area stays exactly the same. With friction, $\dot p = -\sin q - \gamma p$, the flow is no longer Hamiltonian: we have $\nabla \cdot \bm v = -\gamma$, the area shrinks like $e^{-\gamma t}$ and the copies get crowded.
   </figcaption>
 </figure>
-
-We have used Hamilton's equations to arrive here. A general flow, e.g. with friction, would still obey the continuity equation, but not $\nabla \cdot \bm v = 0$.
 
 With this, the expanded continuity equation @eq:continuity-expanded simplifies to
 

@@ -78,8 +78,9 @@ export class Clock {
   }
 
   /**
-   * Jumps to time `time`, e.g. when the reader drags a time slider. Only suited for
-   * animations whose state depends on t alone, since `update` gets no intermediate steps.
+   * Jumps to time `time`, e.g. when the reader drags a time slider. `update` gets no
+   * intermediate steps (dt = 0), so an animation that integrates its state has to handle
+   * the jump itself, e.g. by integrating from t = 0 again when seeking backwards.
    */
   seek(time: number): void {
     this.time = Math.min(Math.max(time, 0), this.animation.period);

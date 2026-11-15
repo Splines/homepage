@@ -58,7 +58,16 @@ export function playTimeline(root: HTMLElement, draw: (t: number) => void, secon
 
   const clock = new Clock(animation, root);
   bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
+  bindTimeSlider(slider, clock, 1);
+  return clock;
+}
 
+/**
+ * Lets a slider from 0 to 1 seek `clock` within a loop of the given simulated `period`.
+ * Dragging holds the animation and lets it continue afterwards. Keeping the slider in
+ * sync with the clock is up to the animation's `draw`.
+ */
+export function bindTimeSlider(slider: HTMLInputElement, clock: Clock, period: number): void {
   let resumeAfterDrag = false;
   slider.addEventListener("pointerdown", () => {
     resumeAfterDrag = clock.playing;
@@ -71,7 +80,6 @@ export function playTimeline(root: HTMLElement, draw: (t: number) => void, secon
   slider.addEventListener("pointerup", release);
   slider.addEventListener("pointercancel", release);
   slider.addEventListener("input", () => {
-    clock.seek(slider.valueAsNumber);
+    clock.seek(slider.valueAsNumber * period);
   });
-  return clock;
 }
