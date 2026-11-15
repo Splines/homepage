@@ -98,6 +98,17 @@
   margin-inline: calc((100% - var(--fl-width)) / 2);
 }
 
+/* Keep the table of contents clear of the wide figures, so only show it on big screens. */
+.toc-rail {
+  --toc-gap: calc((54rem - 100%) / 2 + 2.6rem);
+}
+
+@media (max-width: 1659px) {
+  .toc-rail {
+    display: none;
+  }
+}
+
 .fl-stage {
   position: relative;
 }

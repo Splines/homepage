@@ -38,6 +38,10 @@
   {% vite_typescript_tag ref-preview %}
   {% vite_typescript_tag comments %}
 
+  {% if page.table_of_contents %}
+  {% vite_typescript_tag toc %}
+  {% endif %}
+
   {% if page.vite_entrypoint %}
   {% assign post_dir_length = page.relative_path.size | minus: page.name.size %}
   {% assign post_entrypoint = page.relative_path | slice: 0, post_dir_length | append: page.vite_entrypoint | prepend: '/' %}
@@ -63,7 +67,10 @@
 
     <hr class="header-content-separator">
 
-    <div>
+    <div class="post-content">
+      {% if page.table_of_contents %}
+      <aside class="toc-rail">{{ content | table_of_contents }}</aside>
+      {% endif %}
       {{ content }}
     </div>
 

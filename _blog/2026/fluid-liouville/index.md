@@ -11,6 +11,7 @@ katex:
     \RR: '\mathbb{R}'
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
+table_of_contents: true
 excerpt: >
   It it surprising how many ideas and formulas from fluid dynamics appear in statistical physics. In this post, we derive Liouville's theorem from mass conservation, Reynold's transport theorem and Hamilton's equations. We then use it to see which ensembles are in equilibrium with Jeans' theorem.
 ---

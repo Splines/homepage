@@ -142,6 +142,81 @@ h2 {
   }
 }
 
+// Table of contents, opt-in via `table_of_contents: true` in the front matter.
+// The rail spans the whole post to the right of the text, so the list inside can
+// stick while scrolling. Only shown when the viewport leaves enough room for it.
+//
+// Posts with figures that break out of the text column can push the rail past them
+// by overriding `--toc-gap` (a percentage is relative to the text width) and hiding
+// the rail on viewports that are too narrow for the larger gap.
+.post-content {
+  position: relative;
+}
+
+.toc-rail {
+  --toc-gap: 2.6rem;
+
+  display: none;
+
+  // container (42em at 19px) + gap + rail width + margin to the window edge
+  @media (min-width: 1280px) {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    margin-left: var(--toc-gap);
+    width: 11.5rem;
+  }
+}
+
+.toc {
+  position: sticky;
+  top: 2.5rem;
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding-left: 0.9rem;
+    border-left: 1.5px solid #e0d3c2;
+  }
+
+  li {
+    position: relative;
+    font-size: 0.8rem;
+    line-height: 1.25;
+    margin-bottom: 0.65em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    color: #8a7a6c;
+    text-decoration: none;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+
+    // current section, set by assets/vite/entrypoints/toc.ts
+    &[aria-current] {
+      color: v.$primary;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -0.15em;
+        bottom: -0.15em;
+        left: calc(-0.9rem - 1.5px);
+        width: 1.5px;
+        background-color: #88593a;
+      }
+    }
+  }
+}
+
 .header-content-separator {
   background-color: #88593a;
   width: 100%;
