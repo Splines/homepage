@@ -388,6 +388,12 @@
 }
 
 @media (max-width: 559px) {
+  /* Let the row titles wrap, otherwise they squeeze the cells until their text sticks out. */
+  .fl-matrix {
+    /* eslint-disable-next-line css/use-baseline */
+    grid-template-columns: fit-content(30%) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
   .fl-matrix-head,
   .fl-matrix-row,
   .fl-matrix-corner {
