@@ -18,8 +18,6 @@ import { EXAMPLES, type PhaseExample } from "./examples";
 
 const COPY_COUNT = 900;
 const SERIES_SAMPLES = 400;
-/** The ring example colors its copies in this many alternating sectors of start angle. */
-const SECTORS = 8;
 /** Radius of the ring around the copy that the observer rides along with. */
 const RIDER_RADIUS = 9;
 
@@ -27,8 +25,6 @@ const RIDER_RADIUS = 9;
 interface LoadedExample {
   example: PhaseExample;
   starts: Point[];
-  /** Whether a copy is drawn light instead of dark (alternating sectors in the ring example). */
-  highlighted: Uint8Array;
   /** ρ measured by the observer standing still, sampled over one loop. */
   fixedSeries: Float64Array;
   /** ρ measured by the observer riding along, sampled over one loop. */
@@ -40,11 +36,6 @@ function loadExample(id: string): LoadedExample {
   const example = EXAMPLES[id]();
   const random = createRandom(23);
   const starts = Array.from({ length: COPY_COUNT }, () => example.sample(random));
-  const highlighted = Uint8Array.from(starts, ([q, p]) => {
-    if (!example.colorByAngle) return 0;
-    const angle = Math.atan2(p, q) + Math.PI;
-    return Math.floor((angle / (2 * Math.PI)) * SECTORS) % 2;
-  });
 
   const fixedSeries = new Float64Array(SERIES_SAMPLES + 1);
   const riderSeries = new Float64Array(SERIES_SAMPLES + 1);
@@ -54,7 +45,7 @@ function loadExample(id: string): LoadedExample {
     riderSeries[i] = example.density(...example.flow(example.riderStart, t), t);
   }
   const seriesMax = 1.1 * Math.max(...fixedSeries, ...riderSeries);
-  return { example, starts, highlighted, fixedSeries, riderSeries, seriesMax };
+  return { example, starts, fixedSeries, riderSeries, seriesMax };
 }
 
 /** Text next to the plot, e.g. its legend. */
@@ -189,7 +180,7 @@ export function mountDerivatives(root: HTMLElement): void {
       if (example.qPeriod) rider = [wrapToBounds(rider[0], example), rider[1]];
     },
     draw(t) {
-      const { example, highlighted } = loaded;
+      const { example } = loaded;
       slider.value = String(t / example.period);
       drawSeries(seriesCanvas, loaded, t, palette);
       if (!view.begin()) return;
@@ -197,9 +188,8 @@ export function mountDerivatives(root: HTMLElement): void {
       drawDensity(view, (q, p) => example.density(q, p, t), example.densityScale, palette.density);
       drawAxes(view, palette.muted, ["q", "p"]);
       view.ctx.globalAlpha = 0.6;
-      drawDots(view, copies, 1.3, palette.ink, i => !highlighted[i]);
+      drawDots(view, copies, 1.3, palette.ink);
       view.ctx.globalAlpha = 1;
-      drawDots(view, copies, 1.6, palette.paper, i => highlighted[i] === 1);
       drawTarget(view, ...example.fixedPoint, palette.fixed, 2.25, palette.paper);
       drawRing(view, ...rider, RIDER_RADIUS, palette.accent, 2.25, palette.paper);
       view.ctx.fillStyle = palette.ink;

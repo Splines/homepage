@@ -25,8 +25,6 @@ const PERIOD_SECONDS = 5.5;
 
 const ENSEMBLE_COUNT = 1500;
 const ENSEMBLE_RADIUS = 2.1;
-/** The ensemble is colored in alternating sectors of start angle, so its rotation shows. */
-const SECTORS = 8;
 const GUIDE_RADII = [0.5, 1, 1.5, 2];
 
 /** Pixels between the canvas edges and the outer springs; more at the bottom for the title. */
@@ -182,10 +180,6 @@ export function mountOscillator(root: HTMLElement): void {
     { length: ENSEMBLE_COUNT },
     () => inDisk(random, [0, 0], ENSEMBLE_RADIUS),
   );
-  const isLight = ensembleStarts.map(([q, p]) => {
-    const angle = Math.atan2(p, q) + Math.PI;
-    return Math.floor((angle / (2 * Math.PI)) * SECTORS) % 2 === 1;
-  });
   const ensemble = createCloud(ENSEMBLE_COUNT);
   let showEnsemble = false;
 
@@ -211,8 +205,7 @@ export function mountOscillator(root: HTMLElement): void {
       ensembleStarts.forEach((start, i) => {
         [ensemble.x[i], ensemble.y[i]] = evolve(start, time);
       });
-      drawDots(phase, ensemble, 1.5, palette.muted, i => isLight[i]);
-      drawDots(phase, ensemble, 1.5, palette.ink, i => !isLight[i]);
+      drawDots(phase, ensemble, 1.5, palette.ink);
     }
 
     // Orbits of the highlighted copies: circles of constant energy.

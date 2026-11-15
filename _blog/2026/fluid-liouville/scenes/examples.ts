@@ -25,8 +25,6 @@ export interface PhaseExample {
   fixedPoint: Point;
   /** If set, q is an angle with this period, and positions are wrapped into the bounds. */
   qPeriod?: number;
-  /** Color copies by the angle of their start position, to show that they move. */
-  colorByAngle?: boolean;
 }
 
 const TAU = 2 * Math.PI;
@@ -95,7 +93,6 @@ function ring(): PhaseExample {
     riderStart: [2.1, 0],
     // In the middle of the ring, where the density is highest.
     fixedPoint: [0, -Math.sqrt(2 * energy)],
-    colorByAngle: true,
   };
 }
 
