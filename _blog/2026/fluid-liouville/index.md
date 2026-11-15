@@ -476,7 +476,13 @@ $$
 \end{aligned}
 $$
 
-So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, note that every point $(\bm q, \bm p)$ in phase space is occupied at time $t$ by exactly one copy. Just trace its trajectory back to its initial condition. This is the same as the bijectivity we assumed for the map $\phi$ of a fluid[^phi], and for Hamilton's equations, it follows from the uniqueness of their solutions, provided they exist for all times (no copy escapes to infinity in finite time). So for any time $t$ and any point $(\bm q, \bm p)$, we pick the copy with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
+So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is occupied at time $t$ by exactly one copy. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
+
+- _At most one copy:_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one unique solution to Hamilton's equations that passes through this state ( forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$, i.e. they were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+
+- _At least one copy:_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
+
+Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique copy with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
 
 $$
 \rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t
@@ -515,6 +521,6 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 
 [^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it.
 
-[^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as above.
+[^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
 [^sampling]: In the above animation, you can still see the particles rotating. But only because you look at individual points sampled from the density. Imagine you sampled infinitely many points from the density: then the picture would be a uniform ring at all times.
