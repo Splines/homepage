@@ -366,7 +366,7 @@ Liouville's theorem $\mathrm{d}\rho / \mathrm{d}t = 0$ is a statement from the L
 
 $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
-$$
+$$ <eq:ensemble-average>
 
 The copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
@@ -454,7 +454,7 @@ $$
 \rho(\bm q, \bm p, 0) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr)
 $$ <eq:ansatz>
 
-for some function $\Phi$ of one variable. In general, $\rho$ is a function of all $6N$ phase space coordinates. The ansatz says that it depends on them only through the _single_ number $\Ham(\bm q, \bm p)$. In other words: two points in phase space with the same energy must have the same density. For the harmonic oscillator with $\Ham = (q^2 + p^2)/2$, the curves of constant energy are circles around the origin. So the ansatz says that $\rho$ may depend on the radius, but not on the angle. The ring fulfills this, the blob doesn't.
+for some function $\Phi$ of one variable. In general, $\rho$ is a function of all $6N$ phase space coordinates. The ansatz says that it depends on them only through the _single_ number $\Ham(\bm q, \bm p)$. In other words: two points in phase space with the same energy must have the same density. For the harmonic oscillator with $\Ham = (q^2 + p^2)/2$, the curves of constant energy are circles around the origin. So the ansatz says that $\rho$ may depend on the radius, but not on the angle. The ring above fulfills this, the blog doesn't.
 
 Now let's see what happens at later times. We follow a copy along its trajectory and use Liouville's theorem in the form @eq:liouville-integrated:
 
@@ -491,15 +491,17 @@ Let's see again where our assumptions were used:
 
 - _Liouville's theorem_ @eq:liouville-integrated: the density is constant along every trajectory. This in turn relied on the conservation of probability and on Hamilton's equations.
 - _Time-independent Hamiltonian:_ the energy of every copy is conserved @eq:energy-conservation.
-- _Ansatz_ @eq:ansatz: the initial density only depends on the energy. This is the part that is up to us.
+- _Ansatz_ @eq:ansatz: the initial density only depends on the energy. This model choice is up to us, but it is physically motivated: we expect that the equilibrium state of a system only depends on its energy, not on the details of how it got there. And with the ansatz, we showed that this is indeed the case.
 
 You may wonder how the density at a fixed point can stay the same, given that the copies keep moving and carry their values of $\rho$ with them. Couldn't these values get shuffled around? No, because a copy is only ever replaced by a copy with the _same_ density. Every copy stays on its energy surface, and by the ansatz, $\rho$ has the same value $\Phi(E)$ everywhere on that surface. So whatever copy arrives at a fixed point comes from the same energy surface as the copy that just left. In terms of the balance equation @eq:balance: as much probability flows into any fixed region as flows out of it.
 
-Go back to the ring in the matrix above to see this in action. Every copy circles the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant. In the blob, on the other hand, copies with very different densities share the same circle, so the observer standing still sees them pass by.
+The ring in the above matrix is an example of Jean's theorem. Every copy circles the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant. In the blob, on the other hand, copies with very different densities share the same circle, so the observer standing still sees them pass by.
 
-Jeans' theorem leaves the function $\Phi$ open. Physics doesn't fix it, the setting we have in mind does. For an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. For a system in contact with a heat bath at temperature $T$, we pick the canonical ensemble $\rho \propto e^{-\Ham / k_B T}$. Both only depend on the energy, so by Jeans' theorem, both describe a system in equilibrium.
+Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
-To sum up: Hamilton's equations give us the flow, and with it an incompressible probability fluid in phase space. Which fluid we pour in is up to us. Liouville's theorem tells us that the density along every trajectory stays the same, no matter what we pour in. Jeans' theorem tells us that if we pour it in such that its density only depends on the energy, the ensemble is in equilibrium and stays like this forever.
+So to summarize: Hamilton's equations give us the flow, and with it an incompressible probability fluid in phase space. Which fluid we pour in is up to us. Liouville's theorem tells us that the density along every trajectory stays the same, no matter what we pour in. Jeans' theorem tells us that if we pour it in such that its density only depends on the energy, the ensemble is in equilibrium and stays like this forever.
+
+I hope this was somewhat helpful to you. I find it fascinating that the same mathematical structure appears in fluid dynamics and in statistical physics and that we can actually use tools from fluid dynamics to better understand statistical physics.
 
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
