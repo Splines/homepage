@@ -1,0 +1,425 @@
+/* Boxes and animations for the post "Liouville's theorem, the fluid way". */
+
+/* Long equations scroll on their own instead of widening the page. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.15em;
+}
+
+/* ---------------------------------------------------------------- boxes */
+
+/* Key result: subtle frame with a small uppercase title. */
+.fl-key {
+  margin: 1.3em 0;
+  padding: 0.55em 1em;
+  background: #88593a0d;
+  border-left: 2px solid #88593a;
+  border-radius: 0 8px 8px 0;
+
+  .katex-display {
+    margin: 0.5em 0;
+  }
+
+  p {
+    margin: 0.4em 0;
+  }
+}
+
+.fl-key-title {
+  margin: 0.2em 0 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #88593a;
+}
+
+/*
+ * A short title next to a one-line equation: both share one grid cell, so the
+ * equation stays centered in the box and its tag sits at the right edge.
+ */
+@media (min-width: 560px) {
+  .fl-key-inline {
+    display: grid;
+    align-items: center;
+
+    .fl-key-title,
+    .katex-display {
+      grid-area: 1 / 1;
+    }
+
+    .fl-key-title {
+      justify-self: start;
+      margin: 0;
+    }
+
+    .katex-display {
+      margin: 0.3em 0;
+    }
+  }
+}
+
+/* Theorem from another field, set off in a calm panel. */
+.fl-panel {
+  margin: 1.3em 0;
+  padding: 0.6em 1.1em 0.4em;
+  background: #f5ece2;
+  border-radius: 8px;
+
+  p {
+    margin: 0.4em 0;
+  }
+}
+
+/* --------------------------------------------------------- animations */
+
+/* The `--fl-*` colors are read by the scripts (lib/palette.ts) to draw the canvases. */
+.fl-figure {
+  /* Background of the canvases, also halos that separate marks from what is below. */
+  --fl-paper: #fffdf9;
+  /* Fluid particles or copies of the system. */
+  --fl-ink: #2b231d;
+  /* Background particles and guides that should stay in the background. */
+  --fl-muted: #b3a493;
+  /* Very light guide lines. */
+  --fl-faint: #efe6db;
+  /* Things that move with the flow: material volumes, the observer riding along. */
+  --fl-accent: #88593a;
+  /* Things fixed in space: control volumes, the observer standing still. */
+  --fl-fixed: #3c6a87;
+  /* Color wash of a density field (hex, as it is parsed). */
+  --fl-density: #c98b4f;
+  /* Particles entering a fixed region. */
+  --fl-inflow: #3c6a87;
+  /* Particles leaving a fixed region. */
+  --fl-outflow: #c0573f;
+  /* Plain text on the canvas, like a title in a corner. */
+  --fl-text: #5a4636;
+
+  margin: 1.8em 0 2em;
+  font-family: "Rethink", sans-serif;
+}
+
+/* Breaks out of the text column on wide screens. */
+.fl-wide {
+  --fl-width: min(54rem, calc(100vw - 2rem));
+
+  width: var(--fl-width);
+  margin-inline: calc((100% - var(--fl-width)) / 2);
+}
+
+/* Keep the table of contents clear of the wide figures, so only show it on big screens. */
+.toc-rail {
+  --toc-gap: calc((54rem - 100%) / 2 + 2.6rem);
+}
+
+@media (max-width: 1659px) {
+  .toc-rail {
+    display: none;
+  }
+}
+
+.fl-stage {
+  position: relative;
+}
+
+.fl-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background: var(--fl-paper);
+  border: 1px solid #e6d9c9;
+  border-radius: 10px;
+  box-shadow: 0 0.1em 0.2em #00000010;
+}
+
+/* Flatter than the default on wide screens, where a 3:2 canvas gets very tall. */
+.fl-canvas-wide {
+  @media (min-width: 560px) {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+.fl-canvas-pendulum {
+  aspect-ratio: 10 / 7;
+}
+
+.fl-canvas-square {
+  aspect-ratio: 1;
+}
+
+/* Copies of a mass on a spring next to their phase space: square beside it, flatter above it. */
+.fl-canvas-springs {
+  @media (min-width: 760px) {
+    aspect-ratio: 1;
+  }
+}
+
+/* Low strip for motion that is mostly horizontal. */
+.fl-canvas-strip {
+  aspect-ratio: 5 / 2;
+
+  @media (min-width: 560px) {
+    aspect-ratio: 7 / 2;
+  }
+}
+
+/* Next to a square canvas, the plot fills the height its column leaves for it. */
+.fl-canvas-series {
+  aspect-ratio: 2 / 1;
+
+  @media (min-width: 760px) {
+    flex: 1 1 0;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+}
+
+/* ----------------------------------------------------------- controls */
+
+.fl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 0.6em;
+  margin-top: 0.7em;
+  font-size: 0.85rem;
+}
+
+.fl-choice {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+.fl-button {
+  min-height: 2.4rem;
+  padding: 0.3em 0.95em;
+  font: inherit;
+  color: #563c29;
+  background: transparent;
+  border: 1px solid #decebc;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 150ms ease-in-out, background-color 150ms ease-in-out;
+
+  &:hover {
+    border-color: #88593a;
+  }
+
+  &[aria-pressed="true"] {
+    color: #fffaf5;
+    background: #88593a;
+    border-color: #88593a;
+  }
+}
+
+.fl-play {
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  padding: 0;
+
+  svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    fill: currentColor;
+  }
+
+  &[data-playing="true"] .fl-icon-play,
+  &:not([data-playing="true"]) .fl-icon-pause {
+    display: none;
+  }
+}
+
+.fl-slider {
+  flex: 1;
+  min-width: 8rem;
+  height: 2.4rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+
+  &::-webkit-slider-runnable-track {
+    height: 2px;
+    background: #decebc;
+    border-radius: 1px;
+  }
+
+  &::-moz-range-track {
+    height: 2px;
+    background: #decebc;
+    border-radius: 1px;
+  }
+
+  &::-webkit-slider-thumb {
+    width: 1rem;
+    height: 1rem;
+    margin-top: calc(1px - 0.5rem);
+    background: #88593a;
+    border: none;
+    border-radius: 50%;
+    appearance: none;
+  }
+
+  &::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    background: #88593a;
+    border: none;
+    border-radius: 50%;
+  }
+}
+
+.fl-figure :focus-visible {
+  outline: 2px solid #88593a;
+  outline-offset: 2px;
+}
+
+/* Hide the controls until the script has taken over, so they never appear dead. */
+.fl-figure:not(.fl-ready) :is(.fl-controls, .fl-readouts) {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------ readouts */
+
+.fl-readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1.4em;
+  margin-top: 0.7em;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--fl-text);
+  font-variant-numeric: tabular-nums;
+
+  output {
+    font-weight: 600;
+    color: #0f1b24;
+  }
+}
+
+.fl-figure figcaption {
+  margin-top: 0.6em;
+  font-size: 0.85rem;
+  line-height: 1.35rem;
+  color: var(--fl-text);
+}
+
+/* ------------------------------------------------- derivative matrix */
+
+.fl-matrix {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.45em;
+  margin-bottom: 1.2em;
+}
+
+.fl-matrix-head {
+  align-self: end;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #88593a;
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--fl-text);
+  }
+}
+
+.fl-matrix-row {
+  align-self: center;
+  padding-right: 0.3em;
+  text-align: right;
+}
+
+/* Names the axes: what decides the column (to the right) and the row (below). */
+.fl-matrix-corner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6em;
+  padding-right: 0.3em;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: right;
+  color: var(--fl-text);
+}
+
+.fl-cell {
+  padding: 0.6em 0.8em;
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  text-align: left;
+  color: #0f1b24;
+  background: #fffaf5cc;
+  border: 1px solid #decebc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 150ms ease-in-out, box-shadow 150ms ease-in-out;
+
+  &:hover {
+    border-color: #88593a;
+  }
+
+  &[aria-pressed="true"] {
+    border-color: #88593a;
+    box-shadow: 0 0 0 1px #88593a;
+  }
+
+  strong {
+    display: block;
+    font-family: "Vermiglione", serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #563c29;
+  }
+
+  small {
+    display: block;
+    margin-top: 0.2em;
+    font-size: 0.8rem;
+    color: var(--fl-text);
+  }
+}
+
+@media (max-width: 559px) {
+  .fl-matrix-head,
+  .fl-matrix-row,
+  .fl-matrix-corner {
+    font-size: 0.75rem;
+  }
+
+  .fl-cell small {
+    display: none;
+  }
+}
+
+.fl-lab {
+  display: grid;
+  gap: 1em;
+}
+
+@media (min-width: 760px) {
+  .fl-lab {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.fl-lab-column {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+/* Captions that change with the selected example: only one paragraph is shown at a time. */
+.fl-explanation p {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}

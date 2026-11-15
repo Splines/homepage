@@ -1,64 +1,85 @@
+import { fileURLToPath } from "node:url";
+
 import css from "@eslint/css";
 import eslint from "@eslint/js";
 import html from "@html-eslint/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
 
-export default defineConfig([
+export default defineConfig(
   {
-    // Globally ignore the following paths
     ignores: [
       "node_modules/",
       "vendor/", // vendored JS (prism, katex, ...)
       "assets/katex/", // vendored KaTeX CSS + fonts
       "_site/", // Jekyll build output
       ".jekyll-cache/", // Jekyll + Vite build cache
+      "public/vite*/", // Vite build output
       "tmp/",
       "notes/",
     ],
   },
   {
-    files: ["**/*.js", "**/*.mjs", "**/*.ts"],
-    plugins: {
-      "@stylistic": stylistic,
-    },
-    extends: [
-      eslint.configs.recommended,
-      // tseslint.configs.recommendedTypeChecked,
-      // tseslint.configs.strictTypeChecked,
-    ],
+    files: ["**/*.{js,mjs,ts,mts}"],
+    extends: [eslint.configs.recommended],
+    plugins: { "@stylistic": stylistic },
     rules: {
       ...stylistic.configs.customize({
-        "indent": 2,
-        "jsx": false,
-        "quote-props": "always",
-        "semi": true,
-        "brace-style": "1tbs",
+        indent: 2,
+        quotes: "double",
+        semi: true,
+        jsx: false,
+        braceStyle: "1tbs",
       }).rules,
       "@stylistic/quotes": ["error", "double", { avoidEscape: true }],
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    },
-    languageOptions: {
-      parser: tseslint.parser,
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        ...globals.browser,
-      },
-      parserOptions: {
-        // https://typescript-eslint.io/blog/project-service
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+      "@stylistic/max-len": ["error", { code: 100, ignoreUrls: true, ignoreStrings: true }],
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
   {
-    // Disable type-checked linting for plain JS config files.
-    // https://typescript-eslint.io/troubleshooting/typed-linting/#how-do-i-disable-type-checked-linting-for-a-file
-    files: ["**/*.js", "**/*.mjs", "**/*.mts"],
-    extends: [tseslint.configs.disableTypeChecked],
+    files: ["**/*.{ts,mts}"],
+    extends: [tseslint.configs.strictTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        // https://typescript-eslint.io/blog/project-service
+        // vite.config.mts runs in Node and stays out of the browser-only tsconfig.json.
+        projectService: { allowDefaultProject: ["vite.config.mts"] },
+        tsconfigRootDir: fileURLToPath(new URL("..", import.meta.url)),
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
+      // We control the markup the scripts run against, so `querySelector(...)!` is fine;
+      // missing elements are caught while writing the page, not at runtime.
+      "@typescript-eslint/no-non-null-assertion": "off",
+    },
+  },
+  {
+    // Code that runs in the browser: Vite sources, plain scripts and post-scoped scripts.
+    files: ["assets/**/*.{js,ts}", "_blog/**/*.{js,ts}", "_store/**/*.{js,ts}"],
+    languageOptions: { globals: globals.browser },
+  },
+  {
+    files: [".config/**/*.{js,mjs,ts,mts}", "vite.config.mts"],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ["**/*.css"],
+    plugins: { css },
+    language: "css/css",
+    extends: [css.configs.recommended],
+    rules: {
+      "css/use-baseline": ["error", {
+        allowSelectors: ["nesting"],
+        // `scrollbar-width` is only "newly" baseline; hiding the scrollbar is a
+        // progressive enhancement here, so a visible one is an acceptable fallback.
+        allowProperties: ["user-select", "zoom", "resize", "scrollbar-width"],
+      }],
+      "css/no-invalid-properties": ["error", { allowUnknownVariables: true }],
+    },
   },
   {
     files: ["**/*.html"],
@@ -67,6 +88,8 @@ export default defineConfig([
       "@html-eslint": html,
       "@stylistic": stylistic,
     },
+    // No `templateEngineSyntax` for Liquid here: jekyll-vite needs `{{ }}` nested inside
+    // `{% %}` (see _layouts/page.html), which the Nunjucks preset cannot parse.
     rules: {
       "@stylistic/eol-last": ["error", "always"],
       "@stylistic/no-trailing-spaces": "error",
@@ -103,19 +126,4 @@ export default defineConfig([
       }],
     },
   },
-  {
-    files: ["**/*.css"],
-    plugins: { css },
-    language: "css/css",
-    extends: [css.configs.recommended],
-    rules: {
-      "css/use-baseline": ["error", {
-        allowSelectors: ["nesting"],
-        // `scrollbar-width` is only "newly" baseline; hiding the scrollbar is a
-        // progressive enhancement here, so a visible one is an acceptable fallback.
-        allowProperties: ["user-select", "zoom", "resize", "scrollbar-width"],
-      }],
-      "css/no-invalid-properties": ["error", { allowUnknownVariables: true }],
-    },
-  },
-]);
+);

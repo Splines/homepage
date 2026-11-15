@@ -20,6 +20,13 @@
 
   {% if page.katex.enabled %}
   <link href="{{ '/assets/katex/katex.min.css' | relative_url }}" rel="stylesheet">
+  {% vite_typescript_tag math-selection %}
+
+  {% comment %} set by _plugins/katex.rb {% endcomment %}
+  {% if page.katex_site_macros contains '\explain' %}
+  <link href="{{ '/assets/css/explain.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+  {% endif %}
+
   {% endif %}
 
   {% if page.code %}
@@ -28,7 +35,18 @@
   {% endif %}
 
   <script defer src="{{ '/assets/js/image-modal.js' | relative_url }}"></script>
+  {% vite_typescript_tag ref-preview %}
   {% vite_typescript_tag comments %}
+
+  {% if page.table_of_contents %}
+  {% vite_typescript_tag toc %}
+  {% endif %}
+
+  {% if page.vite_entrypoint %}
+  {% assign post_dir_length = page.relative_path.size | minus: page.name.size %}
+  {% assign post_entrypoint = page.relative_path | slice: 0, post_dir_length | append: page.vite_entrypoint | prepend: '/' %}
+  {% vite_typescript_tag {{ post_entrypoint }} %}
+  {% endif %}
 
 </head>
 
@@ -49,7 +67,10 @@
 
     <hr class="header-content-separator">
 
-    <div>
+    <div class="post-content">
+      {% if page.table_of_contents %}
+      <aside class="toc-rail">{{ content | table_of_contents }}</aside>
+      {% endif %}
       {{ content }}
     </div>
 

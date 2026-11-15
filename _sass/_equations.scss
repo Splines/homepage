@@ -1,0 +1,77 @@
+// Equation references from _plugins/equations.rb, in prose and in math.
+.eq-ref,
+.eq-ref-missing,
+.katex a[href^="#eq-"] {
+  // avoid ligatures that would turn "(1)" into a circled digit
+  font-variant-ligatures: no-common-ligatures;
+  text-decoration: none;
+}
+
+// KaTeX stacks content (e.g. the rows of {aligned} or a denominator) in a table:
+// the first row holds the content, shifted relative to the baseline, the second an
+// empty cell reserving the depth below it. That cell is positioned and comes later,
+// so it covers everything below the baseline, which then cannot be clicked to select.
+.katex .vlist-t2 > .vlist-r:nth-child(2) > .vlist {
+  pointer-events: none;
+}
+
+// Selection on pages with math, see math-selection.ts. Pages cannot know the
+// browser's selection color, so they set their own, which the highlight of math
+// below can match. :root outranks the selection color of code blocks.
+$selection: #e5d8ce; // a tint of the brown of links
+$selection-inactive: #e6e4e2; // when the window is not focused
+
+:root.math-selection {
+  --selection: #{$selection};
+
+  ::selection {
+    background: $selection;
+  }
+
+  &.window-inactive {
+    --selection: #{$selection-inactive};
+
+    ::selection {
+      background: $selection-inactive;
+    }
+  }
+
+  // We do our custom styling of these selection, so don't show any native
+  // Browser selection behind the math to avoid flickering until we render ours.
+  .katex ::selection {
+    background: transparent;
+  }
+}
+
+// Selected math: one background behind the whole equation instead of the
+// selection behind each of KaTeX's many boxes.
+.katex.katex-selected {
+  background: var(--selection);
+  // Inline math: grow the background to the full line, like the selection of the
+  // text around it (measured by the script). Inline padding does not move anything.
+  padding-block: var(--katex-selection-above, 0) var(--katex-selection-below, 0);
+}
+
+// Display math spans the full line, so only highlight its content (measured by the
+// script). Not the equation number, it is not copied either.
+.katex-display > .katex.katex-selected {
+  padding-block: 0;
+  background: none;
+
+  > .katex-html {
+    // stacking context, so that the background goes behind the math, not behind the page
+    isolation: isolate;
+
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      // like the selection of text, a bit more than the glyphs
+      left: calc(var(--katex-selection-left, 0px) - 0.15em);
+      top: calc(var(--katex-selection-top, 0px) - 0.1em);
+      width: calc(var(--katex-selection-width, 0px) + 0.3em);
+      height: calc(var(--katex-selection-height, 0px) + 0.2em);
+      background: var(--selection);
+    }
+  }
+}

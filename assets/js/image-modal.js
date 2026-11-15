@@ -176,7 +176,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * Animates the image back to its original position and cleans up.
-   * @param {{img: HTMLImageElement, clone: HTMLElement, frame: HTMLElement, aspectRatio: number}} modalData
+   * @param {{
+   *   img: HTMLImageElement, clone: HTMLElement, frame: HTMLElement, aspectRatio: number
+   * }} modalData
    * @param {HTMLElement} backdrop
    */
   function animateBackToOrigin(modalData, backdrop) {

@@ -22,6 +22,7 @@
   },
   "include": [
     "assets/vite/**/*.js",
-    "assets/vite/**/*.ts"
+    "assets/vite/**/*.ts",
+    "_blog/**/*.ts"
   ]
 }

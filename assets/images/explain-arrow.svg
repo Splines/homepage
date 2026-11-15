@@ -1,0 +1,10 @@
+<!-- Downward arrow for the \explain macro in math, used as a CSS mask, see _equations.scss.
+     It stretches to any height: the head keeps its shape at the bottom (meet, YMax) and
+     the stem reaches up beyond the viewBox to the top of the image. Drawn in one piece,
+     since KaTeX's large \downarrow is stacked from pieces that can drift apart by a pixel.
+     Units are 1/1000 of the arrow's width. -->
+<svg xmlns="http://www.w3.org/2000/svg">
+  <svg width="100%" height="100%" viewBox="0 0 778 1000" preserveAspectRatio="xMidYMax meet" overflow="visible">
+    <path d="M389 -100000V950M249 765Q340 850 389 965Q438 850 529 765" fill="none" stroke="#000" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</svg>

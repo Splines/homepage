@@ -15,7 +15,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  # Build and deploy in a single job: a separate deploy job costs a second runner
+  # start-up plus an artifact upload/download of the whole site (~15-20s).
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,28 +44,12 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: built-site
-          path: ./_site
-          if-no-files-found: error
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: built-site
-          path: ./_site
-
-      # https://github.com/cloudflare/wrangler-action#deploy-your-pages-site-production--preview
+      # Calls Wrangler directly instead of cloudflare/wrangler-action: the action
+      # first probes for a local install with `npx --no-install` (which takes ~5s
+      # to fail), then installs Wrangler and checks its version again (~12s total).
+      # https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/
       - name: Deploy to Cloudflare Pages
-        id: deployment
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./_site --project-name=splines
+        run: npx --yes wrangler@4 pages deploy ./_site --project-name=splines
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

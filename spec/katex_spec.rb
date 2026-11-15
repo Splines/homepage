@@ -47,6 +47,27 @@ RSpec.describe Katex do
     end
   end
 
+  describe 'site-wide macros' do
+    let(:site) { { '\explain' => 'E(#1)', '\ex' => 'X' } }
+
+    it 'only passes those the text uses' do
+      expect(Katex.macros_for('$\explain{a}$', {}, site)).to eq([{ '\explain' => 'E(#1)' }, ['\explain']])
+    end
+
+    it 'matches whole command names only' do
+      expect(Katex.macros_for('$\explained \exp$', {}, site)).to eq([{}, []])
+    end
+
+    it 'finds them in page macros, too' do
+      page = { '\step' => '\ex+1' }
+      expect(Katex.macros_for('$\step$', page, site)).to eq([{ '\ex' => 'X', '\step' => '\ex+1' }, ['\ex']])
+    end
+
+    it 'lets page macros override them' do
+      expect(Katex.macros_for('$\ex$', { '\ex' => 'Y' }, site).first).to eq({ '\ex' => 'Y' })
+    end
+  end
+
   describe 'code' do
     it 'leaves dollars in inline code untouched' do
       expect(process('`a += $3.99`')).to eq('`a += $3.99`')

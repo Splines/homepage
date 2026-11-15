@@ -67,6 +67,12 @@ h1 {
   @media (min-width: 1000px) {
     font-size: 2.9rem;
   }
+
+  // The text color only tints the gold foil and is mostly transparent. A selection
+  // replaces the foil with its background, so give selected text a solid color.
+  &::selection {
+    color: v.$primary;
+  }
 }
 
 h2 {
