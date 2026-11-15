@@ -84,7 +84,7 @@ Next, let's attach this thermometer to a fluid particle $\bm X$ and let it move 
 
 $$
 \dv{}{t} T \bigl(\phi(\bm X, t), t\bigr) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
-$$
+$$ <eq:material-derivative>
 
 Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor-expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
 
@@ -227,7 +227,7 @@ Let's recap our setting in statistical physics: we consider a real system of $N$
 
 ## Liouville's theorem
 
-So let's do this! Note that instead of the mass density $\rho$ of fluids, we consider the probability density $\rho$ in phase space. And the mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. Let's expand its divergence term:
+So let's do this! Note that instead of the mass density $\rho$ of fluids, we call it the probability density $\rho$ in phase space. Mass conservation becomes the conservation of probability. The continuity equation is then exactly the same as in fluid dynamics, namely @eq:continuity. Let's expand its divergence term:
 
 $$
 \begin{aligned}
@@ -237,7 +237,7 @@ $$
 \end{aligned}
 $$ <eq:continuity-expanded>
 
-We focus on the term $\nabla \cdot \bm v$ now. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$:
+We focus on $\nabla \cdot \bm v$ first. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$ and nabla is the gradient in phase space, $\nabla = (\partial / \partial \bm q, \partial / \partial \bm p)$.
 
 $$
 \begin{aligned}
@@ -278,17 +278,17 @@ We have used Hamilton's equations to arrive here. A general flow, e.g. with fric
     <span>Density of copies: <output aria-live="off" data-output="density">&times; 1.00</output></span>
   </div>
   <figcaption>
-    Copies of a pendulum, $\Ham = p^2/2 - \cos q$, starting in a disk. Three of them, released from rest at different angles, are also shown in real space. Swings with a larger amplitude take longer, so the pendulums drift out of step and the disk gets wound up into a thin spiral, but its area stays exactly the same. With friction, $\dot p = -\sin q - \gamma p$, the flow is no longer Hamiltonian: we have $\nabla \cdot \bm v = -\gamma$, the area shrinks like $e^{-\gamma t}$ and the copies get crowded.
+    Copies of a pendulum, $\Ham = p^2/2 - \cos q$, in real space and phase space, released from rest at different angles. Swings with a larger amplitude take longer. So with time, the disk of copies in phase space gets stretched into a spiral, but its area stays the same. With friction, the area shrinks and the copies get more crammed together.
   </figcaption>
 </figure>
 
-With this, the expanded continuity equation @eq:continuity-expanded simplifies to
+Next, we continue with the expanded continuity equation @eq:continuity-expanded. Since $\nabla \cdot \bm v = 0$, the last term vanishes and we are left with
 
 $$
 \pdv{\rho}{t} + \underbrace{\bm v \cdot \nabla \rho}_{\text{convective part}} = 0
 $$ <eq:liouville-partial>
 
-We can write the left-hand side as a total derivative along the trajectory of a copy of the system in phase space. To see this, we follow a single copy along its trajectory $(\bm q(t), \bm p(t))$ and look at the density it sees, i.e. $\rho(\bm q(t), \bm p(t), t)$. The chain rule gives:
+Déjà vu? Absolutely. This is just the material time derivative @eq:material-derivative for the density $\rho$ in phase space. We can verify this by following a single copy of the system along its trajectory $(\bm q(t), \bm p(t))$ and looking at the density it sees. The chain rule gives:
 
 $$
 \dv{}{t} \rho(\bm q(t), \bm p(t), t)
@@ -296,18 +296,17 @@ $$
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
 $$
 
-which is exactly the left-hand side of @eq:liouville-partial, and nothing else than the material time derivative from fluid dynamics. Finally, this results in:
+Finally, this results in:
 
 <div class="fl-key" markdown="1">
 <p class="fl-key-title">Liouville's theorem</p>
 
-Consider an ensemble of copies of a system that evolve according to Hamilton's equations, with a twice continuously differentiable Hamiltonian $\Ham(\bm q, \bm p, t)$. If copies are neither created nor destroyed, their probability density $\rho$ in phase space is constant along every trajectory:
+Consider an ensemble of copies of a system that evolve according to Hamilton's equations. If copies are neither created nor destroyed, their probability density $\rho$ in phase space is constant along every trajectory:
 
 $$
 \dv{\rho}{t} = 0
 $$ <eq:liouville>
 
-In other words: the probability fluid in phase space is incompressible. A region of phase space that moves with the flow may change its shape, but never its volume.
 </div>
 
 Or equivalently, the density only depends on the initial conditions of the copy, not on time:
@@ -316,15 +315,14 @@ $$
 \rho(\bm q(t), \bm p(t), t) = \rho(\bm q(0), \bm p(0), 0)
 $$ <eq:liouville-integrated>
 
-It's worth pausing for a moment to see where exactly each assumption entered:
+Let's see again where our assumptions were used:
 
-- _Conservation of probability_ gave us the continuity equation @eq:continuity. Copies of the system don't just pop into existence or vanish.
-- _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$. With friction, the continuity equation still holds, but Liouville's theorem does not, see the pendulum above.
-- _Smoothness_: we need $\Ham$ to be twice continuously differentiable to swap the partial derivatives (Schwarz), and $\rho$ to be differentiable to write down the continuity equation in the first place.
+- _Conservation of probability_ @eq:mass-conservation resulted in the continuity equation @eq:continuity. Copies of the system don't spawn or vanish.
+- _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$, i.e. the incompressibility of the probability fluid. This is not true for general flows, e.g. with friction.
 
-Note what we did _not_ need: the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
+Note that the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
 
-Note also the difference between the two time derivatives: $\partial \rho / \partial t$ is the change at a _fixed_ point in phase space, i.e. the Eulerian perspective in fluid dynamics, where you stand still and watch the fluid flow past you. In contrast, $\mathrm{d}\rho / \mathrm{d}t$ is the change seen by a copy _moving_ along its trajectory, i.e. the Lagrangian perspective in fluid dynamics, where you ride along with a single fluid particle. In our case, we follow a single copy of the system along its trajectory in phase space.
+<!-- Note also the difference between the two time derivatives: $\partial \rho / \partial t$ is the change at a _fixed_ point in phase space, i.e. the Eulerian perspective in fluid dynamics, where you stand still and watch the fluid flow past you. In contrast, $\mathrm{d}\rho / \mathrm{d}t$ is the change seen by a copy _moving_ along its trajectory, i.e. the Lagrangian perspective in fluid dynamics, where you ride along with a single fluid particle. In our case, we follow a single copy of the system along its trajectory in phase space. -->
 
 
 ## Liouville's equation
