@@ -43,7 +43,7 @@ $$
   </div>
 </figure>
 
-In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote it with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
+In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote them with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
 
 <figure class="fl-figure fl-wide" data-scene="eulerian">
   <canvas class="fl-canvas fl-canvas-strip" aria-label="A flow watched at a point x fixed in space, marked with a blue target. Particles drift past it, and every now and then one passes right through it." role="img"></canvas>
@@ -115,7 +115,7 @@ $$
 \dv{m}{t} = \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x \overset{!}{=} 0
 $$ <eq:mass-conservation>
 
-Next, we use Reynolds transport theorem (without proof):
+Next, we use the Reynolds transport theorem (without proof):
 
 <div class="fl-panel" markdown="1">
 <p class="fl-key-title">Reynolds transport theorem</p>
@@ -225,12 +225,13 @@ You can click on "Many copies" to fill the phase space with many copies of the s
 
 Let's recap our general setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field.
 
-To describe what states of the system are more likely than others, we introduce a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us how many copies of the system are in a small region around $(\bm q, \bm p)$ at time $t$. The total probability of finding the system somewhere in phase space is always 1 (normalization):
+To describe which states of the system are more likely than others, we introduce a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
+
 $$
 \int_{\RR^{6N}} \rho(\bm q, \bm p, t) \,\mathrm{d}\bm q \, \mathrm{d}\bm p = 1
 $$
 
-This is analogous to the mass density of a fluid, and to the mass conservation, which now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
+This is analogous to the mass density of a fluid, and mass conservation now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
 
 
 ## Liouville's theorem
@@ -381,7 +382,7 @@ The copies themselves still move along their trajectories. Only the _statistics_
 
 To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point at the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is in phase space at the beginning.
 
-Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (i.e. not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
+Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
 
 <figure class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
@@ -421,7 +422,7 @@ Before we can answer the question about equilibrium, let's look at the following
       <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing (as all copies spiral into the origin).</p>
     </div>
     <div data-explains="traffic" hidden>
-      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point you see a constant density there.</p>
+      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point, you see a constant density there.</p>
     </div>
   </figcaption>
 </figure>
@@ -478,9 +479,9 @@ $$
 
 So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is occupied at time $t$ by exactly one copy. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
-- _At most one copy:_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one unique solution to Hamilton's equations that passes through this state ( forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$, i.e. they were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+- _At most one copy:_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
 
-- _At least one copy:_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
+- _At least one copy:_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
 Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique copy with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
 
@@ -509,11 +510,13 @@ Let's see again where our assumptions were used:
 
 You may wonder how the density at a fixed point can stay the same, given that the copies keep moving and carry their values of $\rho$ with them. Couldn't these values get shuffled around? No, because a copy is only ever replaced by a copy with the _same_ density. Every copy stays on its energy surface, and by the ansatz, $\rho$ has the same value $\Phi(E)$ everywhere on that surface. So whatever copy arrives at a fixed point comes from the same energy surface as the copy that just left. In terms of the balance equation @eq:balance: as much probability flows into any fixed region as flows out of it.
 
-The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle have different densities. So the observer standing observe a change in density as the blob passey by.
+The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle have different densities. So the observer standing still observes a change in density as the blob passes by.
 
 Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
-So to summarize: Hamilton's equations tell us how a copy of the system moves through phase space. It gives us an incompressible probability fluid in phase space. Which fluid we pour in is up to us (choice of initial density). Liouville's theorem tells us that the density along every trajectory stays the same, no matter what we pour in. Jeans' theorem tells us that if we pour it in such that its density only depends on the energy, the ensemble is in equilibrium and stays like this forever.
+---
+
+To summarize: Hamilton's equations tell us how a copy of the system moves through phase space. They give us an incompressible probability fluid in phase space. Which fluid we pour in is up to us (choice of initial density). Liouville's theorem tells us that the density along every trajectory stays the same, no matter what we pour in. Jeans' theorem tells us that if we pour it in such that its density only depends on the energy, the ensemble is in equilibrium and stays like this forever.
 
 I hope this was somewhat helpful to you. I find it fascinating that the same mathematical structure appears in fluid dynamics and in statistical physics and that we can actually use tools from fluid dynamics to better understand statistical physics.
 
@@ -523,4 +526,4 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 
 [^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
-[^sampling]: In the above animation, you can still see the particles rotating. But only because you look at individual points sampled from the density. Imagine you sampled infinitely many points from the density: then the picture would be a uniform ring at all times.
+[^sampling]: In the above animation, you can still see the dots rotating. But only because you look at individual points sampled from the density. Imagine you sampled infinitely many points from the density: then the picture would be the same ring at all times.
