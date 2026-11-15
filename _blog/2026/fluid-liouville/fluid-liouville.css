@@ -300,18 +300,31 @@
   font-size: 0.85rem;
   text-align: center;
   color: #88593a;
-}
-
-.fl-matrix-row {
-  align-self: center;
-  padding-right: 0.3em;
-  text-align: right;
 
   small {
     display: block;
     font-size: 0.75rem;
     color: var(--fl-text);
   }
+}
+
+.fl-matrix-row {
+  align-self: center;
+  padding-right: 0.3em;
+  text-align: right;
+}
+
+/* Names the axes: what decides the column (to the right) and the row (below). */
+.fl-matrix-corner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6em;
+  padding-right: 0.3em;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: right;
+  color: var(--fl-text);
 }
 
 .fl-cell {
@@ -354,7 +367,8 @@
 
 @media (max-width: 559px) {
   .fl-matrix-head,
-  .fl-matrix-row {
+  .fl-matrix-row,
+  .fl-matrix-corner {
     font-size: 0.75rem;
   }
 
