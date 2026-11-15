@@ -7,6 +7,44 @@
   text-decoration: none;
 }
 
+// Long equations scroll on their own instead of widening the page. Scrolling one
+// direction clips the other, so a little padding keeps tall glyphs from being cut.
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.15em;
+}
+
+// KaTeX positions equation numbers absolutely at the right edge, where they cover
+// equations that are too wide, e.g. on phones. Keep them in the flow instead: an empty
+// item on the left and the number on the right share the free space equally, so the
+// equation stays centered while it fits. Once it doesn't, the number follows it after a
+// gap and the line grows wider, so a scrollable .katex-display can scroll to it.
+.katex-display > .katex > .katex-html:has(> .tag) {
+  display: flex;
+  align-items: baseline;
+  width: max-content;
+  min-width: 100%;
+
+  &::before {
+    content: "";
+    flex: 1 1 0;
+  }
+
+  > .tag {
+    position: static;
+    flex: 1 1 0;
+    text-align: right;
+
+    // The gap is content, not padding: padding would count towards the size the
+    // number takes even when there is enough space and push the equation off-center.
+    &::before {
+      content: "";
+      padding-left: 1em;
+    }
+  }
+}
+
 // KaTeX stacks content (e.g. the rows of {aligned} or a denominator) in a table:
 // the first row holds the content, shifted relative to the baseline, the second an
 // empty cell reserving the depth below it. That cell is positioned and comes later,
@@ -62,7 +100,8 @@ $selection-inactive: #e6e4e2; // when the window is not focused
     // stacking context, so that the background goes behind the math, not behind the page
     isolation: isolate;
 
-    &::before {
+    // ::after, as ::before centers equations with a number, see above
+    &::after {
       content: "";
       position: absolute;
       z-index: -1;
