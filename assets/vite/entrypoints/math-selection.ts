@@ -113,11 +113,13 @@ function measure(equation: Element) {
  * Stores how far the line extends above and below inline math: the selection of the
  * text around it covers the full line, the background of the math only its content.
  * Zero-size probes aligned to the top and bottom of the line tell where the line is.
+ * They are plain inlines: an inline-block would allow a line break after it, so at the
+ * start of a line it could stay behind on the previous line while the math wraps.
  */
 function measureInlineMath(equation: HTMLElement) {
   const probe = (align: string) => {
     const span = document.createElement("span");
-    span.style.cssText = `display: inline-block; width: 0; height: 0; vertical-align: ${align};`;
+    span.style.cssText = `font-size: 0; line-height: 0; vertical-align: ${align};`;
     equation.prepend(span);
     return span;
   };
