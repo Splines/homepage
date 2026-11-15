@@ -100,7 +100,8 @@ $selection-inactive: #e6e4e2; // when the window is not focused
     // stacking context, so that the background goes behind the math, not behind the page
     isolation: isolate;
 
-    &::before {
+    // ::after, as ::before centers equations with a number, see above
+    &::after {
       content: "";
       position: absolute;
       z-index: -1;
