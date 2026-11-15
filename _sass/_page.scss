@@ -53,6 +53,12 @@ figure {
   &.image {
     display: flex;
     justify-content: center;
+
+    // Flex items don't shrink below their natural width by default, so wide images
+    // (plus their padding) would stick out on small screens and widen the page.
+    > img {
+      min-width: 0;
+    }
   }
 }
 
