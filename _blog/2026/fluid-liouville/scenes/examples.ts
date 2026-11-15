@@ -23,7 +23,7 @@ export interface PhaseExample {
   riderStart: Point;
   /** Position of the observer who stands still. */
   fixedPoint: Point;
-  /** If set, q is an angle with this period and the picture repeats along q. */
+  /** If set, q is an angle with this period, and positions are wrapped into the bounds. */
   qPeriod?: number;
   /** Color copies by the angle of their start position, to show that they move. */
   colorByAngle?: boolean;
@@ -93,7 +93,8 @@ function ring(): PhaseExample {
       return [r * Math.cos(angle), r * Math.sin(angle)];
     },
     riderStart: [2.1, 0],
-    fixedPoint: [0, -1.7],
+    // In the middle of the ring, where the density is highest.
+    fixedPoint: [0, -Math.sqrt(2 * energy)],
     colorByAngle: true,
   };
 }
@@ -190,7 +191,7 @@ function traffic(): PhaseExample {
     speed: 1,
     density: (q, p) => profile(p) / (normalization * speedAt(wrap(q))),
     densityScale: (0.9 * profile(0)) / (normalization * (1 - a)),
-    // Unwrapped: q keeps growing lap after lap, so a camera can follow it smoothly.
+    // Unwrapped: q keeps growing lap after lap. The scene wraps it back into the bounds.
     flow: ([q, p], t) => {
       const time = timeAt(q) + t;
       const laps = Math.floor(time / lap);

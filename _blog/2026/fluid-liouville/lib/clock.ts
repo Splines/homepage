@@ -56,6 +56,11 @@ export class Clock {
     return this.wantsToPlay;
   }
 
+  /** Simulated duration of one loop of the current animation. */
+  get period(): number {
+    return this.animation.period;
+  }
+
   toggle(): void {
     this.wantsToPlay = !this.wantsToPlay;
     this.sync();

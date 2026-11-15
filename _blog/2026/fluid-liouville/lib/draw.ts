@@ -193,6 +193,31 @@ export function drawFormula(
   }
 }
 
+/**
+ * Draws a line from (x0, y0) to (x1, y1) in screen coordinates with an arrowhead at its
+ * end, in the current stroke and fill style.
+ */
+export function drawArrow(
+  ctx: CanvasRenderingContext2D,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  size = 7,
+): void {
+  const angle = Math.atan2(y1 - y0, x1 - x0);
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x1, y1);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x1 - size * Math.cos(angle - 0.4), y1 - size * Math.sin(angle - 0.4));
+  ctx.lineTo(x1 - size * Math.cos(angle + 0.4), y1 - size * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+}
+
 /** Draws thin axes through the origin, labeled at their positive ends. */
 export function drawAxes(view: View, color: string, labels: [string, string]): void {
   const { ctx, width, height } = view;

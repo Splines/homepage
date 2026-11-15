@@ -1,5 +1,5 @@
 import { playTimeline } from "../lib/controls";
-import { createCloud, drawDots, drawLabel, MATH_FONT } from "../lib/draw";
+import { createCloud, drawArrow, drawDots, drawLabel, MATH_FONT } from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { createRandom, normal, type Random } from "../lib/random";
 import { View, type Bounds, type Point } from "../lib/view";
@@ -26,7 +26,6 @@ const FLASH_DURATION = 0.5;
 const PLOT = { left: -1.8, right: 1.8, bottom: -1.25, top: -0.86 };
 /** How far the axis arrows reach beyond the plot, in world units. */
 const AXIS_OVERHANG = 0.06;
-const ARROW_SIZE = 7;
 const PLOT_SAMPLES = 400;
 
 /** Velocity profile of the channel: fastest in the middle, slower near the walls. */
@@ -53,27 +52,6 @@ function sampleFluid(random: Random): Point[] {
     if (Math.abs(y) < WALL * 0.98) points.push([puffX + PUFF_SPREAD * normal(random), y]);
   }
   return points;
-}
-
-/** Draws a line from (x0, y0) to (x1, y1) in screen coordinates with an arrowhead at its end. */
-function drawArrow(
-  ctx: CanvasRenderingContext2D,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-): void {
-  const angle = Math.atan2(y1 - y0, x1 - x0);
-  ctx.beginPath();
-  ctx.moveTo(x0, y0);
-  ctx.lineTo(x1, y1);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x1 - ARROW_SIZE * Math.cos(angle - 0.4), y1 - ARROW_SIZE * Math.sin(angle - 0.4));
-  ctx.lineTo(x1 - ARROW_SIZE * Math.cos(angle + 0.4), y1 - ARROW_SIZE * Math.sin(angle + 0.4));
-  ctx.closePath();
-  ctx.fill();
 }
 
 /**

@@ -406,7 +406,7 @@ export function mountIncompressible(root: HTMLElement): void {
 
   const clock = new Clock(animation, root);
   bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
-  bindTimeSlider(slider, clock, PERIOD);
+  bindTimeSlider(slider, clock);
   bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-friction]")], "friction", (value) => {
     gamma = value === "on" ? FRICTION : 0;
     snapshots = [];

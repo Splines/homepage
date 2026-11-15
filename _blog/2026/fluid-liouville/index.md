@@ -296,7 +296,7 @@ $$
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
 $$
 
-Finally, this results in:
+As we've seen $\mathrm{d} \rho / \mathrm{d} t$ is the perspective of riding along with a copy of the system, i.e. considering a trajectory in phase space. Putting everything together, we finally arrive at Liouville's theorem:
 
 <div class="fl-key" markdown="1">
 <p class="fl-key-title">Liouville's theorem</p>
@@ -321,8 +321,6 @@ Let's see again where our assumptions were used:
 - _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$, i.e. the incompressibility of the probability fluid. This is not true for general flows, e.g. with friction.
 
 Note that the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
-
-<!-- Note also the difference between the two time derivatives: $\partial \rho / \partial t$ is the change at a _fixed_ point in phase space, i.e. the Eulerian perspective in fluid dynamics, where you stand still and watch the fluid flow past you. In contrast, $\mathrm{d}\rho / \mathrm{d}t$ is the change seen by a copy _moving_ along its trajectory, i.e. the Lagrangian perspective in fluid dynamics, where you ride along with a single fluid particle. In our case, we follow a single copy of the system along its trajectory in phase space. -->
 
 
 ## Liouville's equation
@@ -362,19 +360,25 @@ $$
 $$ <eq:stationary>
 
 
-## Standing still or riding along
+## Back to Lagrangian and Eulerian perspectives
 
-We now have two time derivatives of the same density $\rho(\bm q, \bm p, t)$, and I think it's worth getting a feeling for them. Imagine two observers in phase space: one of them stands still at a fixed point and measures $\partial \rho / \partial t$. The other one sits on a copy of the system, rides along with it and measures $\mathrm{d}\rho / \mathrm{d}t$.
+We have seen two time derivatives of the density $\rho(\bm q, \bm p, t)$ in phase space. Let's discuss their difference again and see some examples.
 
-Before we used Hamilton's equations, the expanded continuity equation @eq:continuity-expanded told us
+The partial time derivative $\partial \rho / \partial t$ is the change at a _fixed_ point in phase space, i.e. the Eulerian perspective in fluid dynamics, where you stand still and watch the fluid flow past you. In contrast, $\mathrm{d}\rho / \mathrm{d}t$ is the change seen by a copy _moving_ along its trajectory, i.e. the Lagrangian perspective in fluid dynamics, where you ride along with a single fluid particle.
+
+Before we used Hamilton's equations, we arrived at the expanded continuity equation @eq:continuity-expanded:
 
 $$
 \dv{\rho}{t} = \pdv{\rho}{t} + \bm v \cdot \nabla \rho = -\rho \, (\nabla \cdot \bm v)
 $$
 
-So what the rider measures only depends on whether the flow compresses phase space. For Hamiltonian flows, it is always zero. What the observer standing still measures, $\partial \rho / \partial t = \mathrm{d}\rho / \mathrm{d}t - \bm v \cdot \nabla \rho$, also depends on how $\rho$ is arranged with respect to the flow. It vanishes only if inflow and outflow of probability balance at that point, $\nabla \cdot (\rho \bm v) = 0$. For an incompressible flow, this means that the copies arriving at the fixed point carry the same density as the ones leaving it.
+This shows that Liouville's theorem $\mathrm{d}\rho / \mathrm{d}t = 0$ is fulfilled when the flow in phase space is incompressible, $\nabla \cdot \bm v = 0$, (or also in the uninteresting case $\rho = 0$). $\nabla \cdot \bm v = 0$ is true for Hamiltonian flows, but not for general flows that may involve friction. So the density along a trajectory can change in general, but it stays constant for Hamiltonian flows.
 
-All four combinations can happen. Pick one in the matrix to load it into the animation below, and switch the camera to stand still in phase space or to ride along with a copy.
+The observer standing still measures $\partial \rho / \partial t$. By the continuity equation @eq:continuity, this is $\partial \rho / \partial t = -\nabla \cdot (\rho \bm v)$, i.e. the current $\bm j = \rho \bm v$ is divergence-free. Or in other words with the balance equation @eq:balance: the partial derivative vanishes exactly when as much probability flows into a fixed region as flows out of it. Probability can still move around though. It only means that every copy that leaves is replaced by one that arrives with the same density.
+
+Whether that happens depends on how $\rho$ is arranged with respect to the flow, not on the flow alone. For a Hamiltonian flow, $\nabla \cdot \bm v = 0$ leaves us with $\partial \rho / \partial t = -\bm v \cdot \nabla \rho$, which vanishes when the copies move along the contour lines of $\rho$, i.e. $\bm v \perp \nabla \rho$.
+
+To better see all four combinations of the two derivatives being zero or not, we can look at the following matrix. Pick the examples to see how the density $\rho$ behaves in phase space and what the two observers measure.
 
 <div class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
@@ -382,44 +386,33 @@ All four combinations can happen. Pick one in the matrix to load it into the ani
     <span class="fl-matrix-head">$\partial \rho / \partial t = 0$</span>
     <span class="fl-matrix-head">$\partial \rho / \partial t \neq 0$</span>
     <span class="fl-matrix-head fl-matrix-row">$\mathrm{d}\rho / \mathrm{d}t = 0$<small>e.g. Hamiltonian</small></span>
-    <button class="fl-cell" aria-label="Ring: total and partial derivative are both zero" aria-pressed="false" data-example="ring" type="button"><strong>Ring</strong><small>Density that only depends on the energy</small></button>
-    <button class="fl-cell" aria-label="Blob: total derivative zero, partial derivative not zero" aria-pressed="true" data-example="blob" type="button"><strong>Blob</strong><small>Harmonic oscillator with a Gaussian blob</small></button>
+    <button class="fl-cell" aria-label="Ring: total and partial derivative are both zero" aria-pressed="false" data-example="ring" type="button"><strong>Harmonic Oscillator: Ring</strong><small>Density that only depends on the energy</small></button>
+    <button class="fl-cell" aria-label="Blob: total derivative zero, partial derivative not zero" aria-pressed="true" data-example="blob" type="button"><strong>Harmonic Oscillator: Blob</strong><small>Non-zero density only in some region of phase space.</small></button>
     <span class="fl-matrix-head fl-matrix-row">$\mathrm{d}\rho / \mathrm{d}t \neq 0$<small>not Hamiltonian</small></span>
     <button class="fl-cell" aria-label="Traffic jam: total derivative not zero, partial derivative zero" aria-pressed="false" data-example="traffic" type="button"><strong>Traffic jam</strong><small>Speed depends on the position</small></button>
     <button class="fl-cell" aria-label="Damped oscillator: total and partial derivative are both not zero" aria-pressed="false" data-example="damped" type="button"><strong>Damped oscillator</strong><small>Friction squeezes the ensemble</small></button>
   </div>
   <div class="fl-lab">
     <div class="fl-stage">
-      <canvas class="fl-canvas fl-canvas-square" aria-label="Phase space with a density of copies of a system, an observer standing still at a fixed point (blue ring) and an observer riding along with one copy (brown ring)." data-canvas="phase" role="img"></canvas>
+      <canvas class="fl-canvas fl-canvas-square" aria-label="Phase space with the density of copies of a system as an orange wash and the copies as dots. A blue ring marks an observer standing still at a fixed point, a brown ring an observer riding along with one copy." data-canvas="phase" role="img"></canvas>
     </div>
-    <div>
+    <div class="fl-lab-column">
       <canvas class="fl-canvas fl-canvas-series" aria-label="Plot over one loop of the density measured by the observer standing still (blue) and by the observer riding along (brown)." data-canvas="series" role="img"></canvas>
-      <div class="fl-readouts">
-        <span><span class="fl-swatch fl-swatch-ring-fixed"></span>Standing still, $\rho$: <output aria-live="off" data-output="fixed">0</output></span>
-        <span><span class="fl-swatch fl-swatch-ring"></span>Riding along, $\rho$: <output aria-live="off" data-output="rider">0</output></span>
-      </div>
       <div class="fl-controls">
         <button class="fl-button fl-play" aria-label="Play animation" type="button">
           <svg class="fl-icon-play" aria-hidden="true" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" /></svg>
           <svg class="fl-icon-pause" aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
         </button>
-        <div class="fl-choice" aria-label="Camera" role="group">
-          <button class="fl-button" aria-pressed="true" data-camera="still" type="button">Stand still</button>
-          <button class="fl-button" aria-pressed="false" data-camera="ride" type="button">Ride along</button>
-        </div>
+        <input class="fl-slider" aria-label="Time t" max="1" min="0" step="any" type="range" value="0">
       </div>
-      <p class="fl-readouts">
-        <span><span class="fl-swatch fl-swatch-density"></span>Density $\rho$</span>
-        <span><span class="fl-swatch fl-swatch-ink"></span>Copies of the system</span>
-      </p>
     </div>
   </div>
   <div class="fl-explanation" aria-live="polite">
     <div data-explains="blob">
-      <p><strong>Blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> For the harmonic oscillator $\Ham = (q^2 + p^2)/2$, Hamilton's equations give $\bm v = (p, -q)$: phase space turns clockwise like a rigid body, and the blob is carried around without changing its shape. The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period. Here, $\partial \rho / \partial t = -\bm v \cdot \nabla \rho \neq 0$ since the contours of the blob are not circles around the origin, so the flow carries density across them.</p>
+      <p><strong>Blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> The harmonic oscillator turns phase space clockwise like a rigid body (the blog doesn't change its shape). The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period.</p>
     </div>
     <div data-explains="ring" hidden>
-      <p><strong>Ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same oscillator, but now the density only depends on the energy, $\rho = \Phi(\Ham)$, here a Gaussian ring around $\Ham = 1.8$. Then $\bm v \cdot \nabla \rho = \Phi'(\Ham) \, \bm v \cdot \nabla \Ham = 0$ since the velocity runs along the energy contours, so $\partial \rho / \partial t = 0$, too. The copies are colored in alternating sectors of their initial angle: they clearly still move, but every copy leaving the fixed point is replaced by one with the same energy, and the density does not change at all. This is the equilibrium from @eq:stationary. That it works for any $\Phi(\Ham)$ is the content of Jeans' theorem, but that's a story for another time.</p>
+      <p><strong>Ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Harmonic oscillator, but now the density only depends on the energy, $\rho = \Phi(\Ham)$, here a Gaussian ring around some fixed $\Ham$. Then $\bm v \cdot \nabla \rho = \Phi'(\Ham) \, \bm v \cdot \nabla \Ham = 0$ since the velocity runs along the energy contours, so $\partial \rho / \partial t = 0$. See also Jeans' theorem to learn more about this.</p>
     </div>
     <div data-explains="damped" hidden>
       <p><strong>Damped oscillator: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> With friction, $\dot q = p$ and $\dot p = -q - \gamma p$ (here $\gamma = 0.3$). This flow is not Hamiltonian: $\nabla \cdot \bm v = -\gamma$, so $\mathrm{d}\rho / \mathrm{d}t = \gamma \rho$. Every patch of copies shrinks in area like $e^{-\gamma t}$ while keeping its probability, so the density around the rider grows exponentially. The observer standing still sees the blob pass by once, and then nothing, since all copies spiral into the origin.</p>

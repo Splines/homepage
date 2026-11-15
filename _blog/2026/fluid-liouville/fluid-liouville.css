@@ -143,11 +143,14 @@
   }
 }
 
+/* Next to a square canvas, the plot fills the height its column leaves for it. */
 .fl-canvas-series {
   aspect-ratio: 2 / 1;
 
   @media (min-width: 760px) {
-    aspect-ratio: 16 / 10;
+    flex: 1 1 0;
+    min-height: 0;
+    aspect-ratio: auto;
   }
 }
 
@@ -258,7 +261,7 @@
   visibility: hidden;
 }
 
-/* ----------------------------------------------------- readouts, legend */
+/* ------------------------------------------------------------ readouts */
 
 .fl-readouts {
   display: flex;
@@ -281,53 +284,6 @@
   font-size: 0.85rem;
   line-height: 1.35rem;
   color: var(--fl-text);
-}
-
-.fl-swatch {
-  display: inline-block;
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 0.3em;
-  vertical-align: -0.05em;
-  border-radius: 50%;
-}
-
-.fl-swatch-accent {
-  background: var(--fl-accent);
-}
-
-.fl-swatch-fixed {
-  background: var(--fl-fixed);
-}
-
-.fl-swatch-ink {
-  background: var(--fl-ink);
-}
-
-.fl-swatch-ring {
-  background: transparent;
-  border: 2px solid var(--fl-accent);
-}
-
-.fl-swatch-ring-fixed {
-  background: transparent;
-  border: 2px solid var(--fl-fixed);
-}
-
-.fl-swatch-inflow {
-  background: transparent;
-  border: 2px solid var(--fl-inflow);
-}
-
-.fl-swatch-outflow {
-  background: transparent;
-  border: 2px solid var(--fl-outflow);
-}
-
-.fl-swatch-density {
-  border-radius: 3px;
-  background: var(--fl-density);
-  opacity: 0.6;
 }
 
 /* ------------------------------------------------- derivative matrix */
@@ -417,6 +373,12 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
   }
+}
+
+.fl-lab-column {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
 }
 
 .fl-explanation {
