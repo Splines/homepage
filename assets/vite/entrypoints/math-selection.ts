@@ -113,14 +113,16 @@ function measure(equation: Element) {
  * Stores how far the line extends above and below inline math: the selection of the
  * text around it covers the full line, the background of the math only its content.
  * Zero-size probes aligned to the top and bottom of the line tell where the line is.
- * They are plain inlines: an inline-block would allow a line break after it, so at the
- * start of a line it could stay behind on the previous line while the math wraps.
+ * They go right after the first box of the math, not before it: when the line breaks
+ * just before the math, a probe at its very start stays behind on the previous line.
  */
 function measureInlineMath(equation: HTMLElement) {
+  const first = equation.querySelector(":scope > .katex-html > .base");
+  if (!first) return;
   const probe = (align: string) => {
     const span = document.createElement("span");
     span.style.cssText = `font-size: 0; line-height: 0; vertical-align: ${align};`;
-    equation.prepend(span);
+    first.after(span);
     return span;
   };
   const top = probe("top");
