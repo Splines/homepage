@@ -3,9 +3,9 @@
  *
  * Highlight: KaTeX builds math from many nested inline-blocks of different heights, and
  * browsers only paint the selection behind the text inside each of them. Selected math
- * thus looks like a patchwork of boxes. Instead, every equation that the selection touches
- * gets the class `katex-selected`, and `_equations.scss` hides the native selection inside
- * it and paints one background behind the whole equation. For display math, that
+ * thus looks like a patchwork of boxes. Instead, `_equations.scss` hides the native
+ * selection inside math, and every equation that the selection touches gets the class
+ * `katex-selected`, which paints one background behind the whole equation. For display math, that
  * background only covers the equation itself, not the full width of the line, so its box
  * is measured here. As pages cannot know the browser's selection color, the page sets its
  * own (also for text) and grays it out when the window loses focus, like browsers do.
@@ -30,10 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("blur", () => setInactive(true));
 
   let selected = new Set<Element>();
-  let frame = 0;
 
   const update = () => {
-    frame = 0;
     const range = selectedRange();
     const touched = new Set<Element>();
     if (range) {
@@ -45,17 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
     for (const equation of selected) {
       if (!touched.has(equation)) equation.classList.remove(SELECTED_CLASS);
     }
+    // only newly selected math, the others were measured before (or on resize)
     for (const equation of touched) {
+      if (selected.has(equation)) continue;
       equation.classList.add(SELECTED_CLASS);
       measure(equation);
     }
     selected = touched;
   };
 
-  // selectionchange fires for every pointer move while dragging
-  document.addEventListener("selectionchange", () => {
-    frame ||= requestAnimationFrame(update);
-  });
+  // Right away, not in the next frame: until then, newly selected math has no highlight.
+  document.addEventListener("selectionchange", update);
   window.addEventListener("resize", () => {
     for (const equation of selected) measure(equation);
   });
