@@ -12,7 +12,7 @@ katex:
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 excerpt: >
-  TODO
+  It it surprising how many ideas and formulas from fluid dynamics appear in statistical physics. In this post, we derive Liouville's theorem from mass conservation, Reynold's transport theorem and Hamilton's equations. We then use it to see which ensembles are in equilibrium with Jeans' theorem.
 ---
 
 Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's Theorem and start with mass conservation, then use Reynold's Transport Theorem and finally Hamilton's equations. At the end, we'll use it to see which ensembles are in equilibrium with Jeans' theorem.
@@ -362,7 +362,7 @@ $$ <eq:stationary>
 
 ## Jeans' theorem
 
-Liouville's theorem $\mathrm{d}\rho / \mathrm{d}t = 0$ is a statement from the Lagrangian perspective: if we ride along with a copy of our system, the density never changes. However, in statistical physics, we are often more interested in the Eulerian perspective. Standing still at a fixed point in phase space, does the density change? If it doesn't change at any point, the ensemble is in (statistical) equilibrium, see @eq:stationary. Then every ensemble average $\langle A \rangle = \int A \, \rho \,\mathrm{d}\bm q \,\mathrm{d}\bm p$ of an observable $A(\bm q, \bm p)$ is constant in time as well:
+Liouville's theorem $\mathrm{d}\rho / \mathrm{d}t = 0$ @eq:liouville is a statement from the Lagrangian perspective: if we ride along with a copy of our system, the density never changes. However, in statistical physics, we are often more interested in the Eulerian perspective. Standing still at a fixed point in phase space, does the density change? If it doesn't change at any point, the ensemble is in (statistical) equilibrium, see @eq:stationary. Then every ensemble average $\langle A \rangle = \int A \, \rho \,\mathrm{d}\bm q \,\mathrm{d}\bm p$ of an observable $A(\bm q, \bm p)$ is constant in time as well:
 
 $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
@@ -498,7 +498,7 @@ You may wonder how the density at a fixed point can stay the same, given that th
 
 The ring in the above matrix is an example of Jean's theorem. Every copy circles the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant. In the blob, on the other hand, copies with very different densities share the same circle, so the observer standing still sees them pass by.
 
-Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
+Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
 So to summarize: Hamilton's equations give us the flow, and with it an incompressible probability fluid in phase space. Which fluid we pour in is up to us. Liouville's theorem tells us that the density along every trajectory stays the same, no matter what we pour in. Jeans' theorem tells us that if we pour it in such that its density only depends on the energy, the ensemble is in equilibrium and stays like this forever.
 
