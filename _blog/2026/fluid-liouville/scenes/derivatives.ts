@@ -1,18 +1,18 @@
-import { Clock, type Animation } from "../lib/clock";
-import { bindChoice, bindPlayButton, bindTimeSlider } from "../lib/controls";
 import {
-  MATH_FONT,
-  createCloud,
-  drawArrow,
-  drawAxes,
-  drawDensity,
+  drawCloud,
   drawDots,
+  drawPhaseAxes,
+  drawPlot,
   drawRing,
   drawTarget,
-  type PointCloud,
+  drawText,
+  measureText,
+  type Series,
+  type TextRun,
 } from "../lib/draw";
 import { readPalette, type Palette } from "../lib/palette";
 import { createRandom } from "../lib/random";
+import { Timeline, bindChoice } from "../lib/timeline";
 import { View, type Point } from "../lib/view";
 import { EXAMPLES, type PhaseExample } from "./examples";
 
@@ -20,15 +20,17 @@ const COPY_COUNT = 900;
 const SERIES_SAMPLES = 400;
 /** Radius of the ring around the copy that the observer rides along with. */
 const RIDER_RADIUS = 9;
+/** Margins in CSS pixels around the plot of the measured densities. */
+const PLOT_MARGIN = { left: 22, right: 28, top: 44, bottom: 20 };
 
 /** An example with everything that only depends on the example, computed once on selection. */
 interface LoadedExample {
   example: PhaseExample;
   starts: Point[];
   /** ρ measured by the observer standing still, sampled over one loop. */
-  fixedSeries: Float64Array;
+  fixedSeries: number[];
   /** ρ measured by the observer riding along, sampled over one loop. */
-  riderSeries: Float64Array;
+  riderSeries: number[];
   seriesMax: number;
 }
 
@@ -36,108 +38,80 @@ function loadExample(id: string): LoadedExample {
   const example = EXAMPLES[id]();
   const random = createRandom(23);
   const starts = Array.from({ length: COPY_COUNT }, () => example.sample(random));
-
-  const fixedSeries = new Float64Array(SERIES_SAMPLES + 1);
-  const riderSeries = new Float64Array(SERIES_SAMPLES + 1);
-  for (let i = 0; i <= SERIES_SAMPLES; i++) {
-    const t = (example.period * i) / SERIES_SAMPLES;
-    fixedSeries[i] = example.density(...example.fixedPoint, t);
-    riderSeries[i] = example.density(...example.flow(example.riderStart, t), t);
-  }
+  const times = Array.from({ length: SERIES_SAMPLES + 1 }, (_, i) =>
+    (example.period * i) / SERIES_SAMPLES);
+  const fixedSeries = times.map(t => example.density(...example.fixedPoint, t));
+  const riderSeries = times.map(t => example.density(...example.flow(example.riderStart, t), t));
   const seriesMax = 1.1 * Math.max(...fixedSeries, ...riderSeries);
   return { example, starts, fixedSeries, riderSeries, seriesMax };
 }
 
-/** Text next to the plot, e.g. its legend. */
-const PLOT_FONT = "14px Rethink, sans-serif";
+/** Maps a periodic coordinate q back into the example's bounds. */
+function wrap([q, p]: Point, example: PhaseExample): Point {
+  if (!example.qPeriod) return [q, p];
+  const period = example.qPeriod;
+  const { xMin } = example.bounds;
+  return [((((q - xMin) % period) + period) % period) + xMin, p];
+}
+
+const densityCanvas = document.createElement("canvas");
+const densityContext = densityCanvas.getContext("2d")!;
 
 /**
- * Plots both measured densities over one loop: the whole loop faintly, the part up to
- * time t solid. A legend above the plot names the two observers.
+ * Paints a density field as a translucent wash whose opacity grows with
+ * `density / max`. The field is sampled at a coarse resolution and smoothed when
+ * scaled up, which is plenty for smooth densities and cheap enough for every frame.
  */
-function drawSeries(
-  canvas: HTMLCanvasElement,
-  loaded: LoadedExample,
-  t: number,
-  palette: Palette,
+function drawDensity(
+  view: View,
+  density: (x: number, y: number) => number,
+  max: number,
+  hexColor: string,
 ): void {
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  if (width === 0 || height === 0) return;
-  const ctx = canvas.getContext("2d")!;
-  const ratio = window.devicePixelRatio || 1;
-  if (canvas.width !== Math.round(width * ratio)) canvas.width = Math.round(width * ratio);
-  if (canvas.height !== Math.round(height * ratio)) canvas.height = Math.round(height * ratio);
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-  ctx.clearRect(0, 0, width, height);
-
-  const margin = { left: 22, right: 28, top: 44, bottom: 20 };
-  const plotWidth = width - margin.left - margin.right;
-  const plotHeight = height - margin.top - margin.bottom;
-  const x = (i: number) => margin.left + (plotWidth * i) / SERIES_SAMPLES;
-  const y = (value: number) => margin.top + plotHeight * (1 - value / loaded.seriesMax);
-
-  // Axes with arrowheads, ρ at the tip of the vertical one, t after the horizontal one.
-  const originX = margin.left;
-  const originY = margin.top + plotHeight;
-  const axisTop = margin.top - 14;
-  const axisRight = margin.left + plotWidth + 10;
-  ctx.strokeStyle = palette.muted;
-  ctx.fillStyle = palette.muted;
-  ctx.lineWidth = 1;
-  drawArrow(ctx, originX, originY, originX, axisTop);
-  drawArrow(ctx, originX, originY, axisRight, originY);
-  ctx.font = MATH_FONT;
-  ctx.fillStyle = palette.text;
-  ctx.textBaseline = "middle";
-  ctx.textAlign = "left";
-  ctx.fillText("ρ", originX + 9, axisTop + 2);
-  ctx.fillText("t", axisRight + 6, originY);
-
-  const progress = t / loaded.example.period;
-  const current = Math.min(SERIES_SAMPLES, Math.round(progress * SERIES_SAMPLES));
-  const curves: [Float64Array, string, string][] = [
-    [loaded.fixedSeries, palette.fixed, "Standing still"],
-    [loaded.riderSeries, palette.accent, "Riding along"],
-  ];
-  ctx.lineJoin = "round";
-  for (const [series, color] of curves) {
-    ctx.strokeStyle = color;
-    ctx.globalAlpha = 0.22;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    for (let i = 0; i <= SERIES_SAMPLES; i++) ctx.lineTo(x(i), y(series[i]));
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = 2.25;
-    ctx.beginPath();
-    for (let i = 0; i <= current; i++) ctx.lineTo(x(i), y(series[i]));
-    ctx.stroke();
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x(current), y(series[current]), 3.5, 0, 2 * Math.PI);
-    ctx.fill();
+  const pixelsPerSample = 4;
+  const columns = Math.max(1, Math.round(view.width / pixelsPerSample));
+  const rows = Math.max(1, Math.round(view.height / pixelsPerSample));
+  densityCanvas.width = columns;
+  densityCanvas.height = rows;
+  const image = densityContext.createImageData(columns, rows);
+  const rgb = parseInt(hexColor.slice(1), 16);
+  for (let row = 0; row < rows; row++) {
+    const y = view.worldY(((row + 0.5) / rows) * view.height);
+    for (let column = 0; column < columns; column++) {
+      const x = view.worldX(((column + 0.5) / columns) * view.width);
+      const level = Math.min(1, density(x, y) / max);
+      const k = 4 * (row * columns + column);
+      image.data[k] = (rgb >> 16) & 255;
+      image.data[k + 1] = (rgb >> 8) & 255;
+      image.data[k + 2] = rgb & 255;
+      image.data[k + 3] = Math.round(200 * Math.sqrt(level));
+    }
   }
+  densityContext.putImageData(image, 0, 0);
+  view.ctx.imageSmoothingEnabled = true;
+  view.ctx.drawImage(densityCanvas, 0, 0, view.width, view.height);
+}
 
-  // Legend, right-aligned in the row above the plot.
-  ctx.font = PLOT_FONT;
-  ctx.textAlign = "left";
+/** A legend for the series, right-aligned in the row above the plot. */
+function drawLegend(view: View, series: Series[], labels: string[], palette: Palette): void {
+  const { ctx } = view;
   const swatch = 16;
   const gap = 6;
   const spacing = 16;
-  const entryWidths = curves.map(([, , label]) => swatch + gap + ctx.measureText(label).width);
-  let left = width - 10 - entryWidths.reduce((sum, w) => sum + w, 0) - spacing;
-  const legendY = 16;
-  curves.forEach(([, color, label], i) => {
+  const size = 14;
+  const runs = labels.map((label): TextRun[] => [[label, "text"]]);
+  const widths = runs.map(run => swatch + gap + measureText(view, run, size));
+  let left = view.width - 10 - widths.reduce((sum, width) => sum + width, 0) - spacing;
+  const y = 16;
+  series.forEach(({ color }, i) => {
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.25;
     ctx.beginPath();
-    ctx.moveTo(left, legendY);
-    ctx.lineTo(left + swatch, legendY);
+    ctx.moveTo(left, y);
+    ctx.lineTo(left + swatch, y);
     ctx.stroke();
-    ctx.fillStyle = palette.text;
-    ctx.fillText(label, left + swatch + gap, legendY);
-    left += entryWidths[i] + spacing;
+    drawText(view, runs[i], left + swatch + gap, y, { color: palette.text, align: "left", size });
+    left += widths[i] + spacing;
   });
 }
 
@@ -149,73 +123,60 @@ function drawSeries(
  */
 export function mountDerivatives(root: HTMLElement): void {
   const phaseCanvas = root.querySelector<HTMLCanvasElement>("[data-canvas='phase']")!;
-  const seriesCanvas = root.querySelector<HTMLCanvasElement>("[data-canvas='series']")!;
-  const slider = root.querySelector<HTMLInputElement>("input[type='range']")!;
   const explanations = [...root.querySelectorAll<HTMLElement>("[data-explains]")];
   const palette = readPalette(root);
 
-  const exampleButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-example]")];
   const initialId = root.querySelector<HTMLElement>("[data-example][aria-pressed='true']")!
     .dataset.example!;
   let loaded = loadExample(initialId);
-  const view = new View(phaseCanvas, loaded.example.bounds);
-  const copies: PointCloud = createCloud(COPY_COUNT);
-  let rider: Point = loaded.example.riderStart;
+  const phase = new View(phaseCanvas, loaded.example.bounds);
+  // The plot is laid out in CSS pixels, so the bounds do not matter.
+  const plot = new View(root.querySelector<HTMLCanvasElement>("[data-canvas='series']")!, {
+    xMin: 0,
+    xMax: 1,
+    yMin: 0,
+    yMax: 1,
+  });
+  const loopSeconds = ({ period, speed }: PhaseExample) => period / speed;
 
-  const animation: Animation = {
-    get period() {
-      return loaded.example.period;
-    },
-    get speed() {
-      return loaded.example.speed;
-    },
-    reset() {},
-    update(t) {
-      const { example, starts } = loaded;
-      starts.forEach((start, i) => {
-        [copies.x[i], copies.y[i]] = example.flow(start, t);
-        if (example.qPeriod) copies.x[i] = wrapToBounds(copies.x[i], example);
-      });
-      rider = example.flow(example.riderStart, t);
-      if (example.qPeriod) rider = [wrapToBounds(rider[0], example), rider[1]];
-    },
-    draw(t) {
-      const { example } = loaded;
-      slider.value = String(t / example.period);
-      drawSeries(seriesCanvas, loaded, t, palette);
-      if (!view.begin()) return;
+  const timeline = new Timeline(root, (progress) => {
+    const { example, starts } = loaded;
+    const t = progress * example.period;
 
-      drawDensity(view, (q, p) => example.density(q, p, t), example.densityScale, palette.density);
-      drawAxes(view, palette.muted, ["q", "p"]);
-      view.ctx.globalAlpha = 0.6;
-      drawDots(view, copies, 1.3, palette.ink);
-      view.ctx.globalAlpha = 1;
-      drawTarget(view, ...example.fixedPoint, palette.fixed, 2.25, palette.paper);
-      drawRing(view, ...rider, RIDER_RADIUS, palette.accent, 2.25, palette.paper);
-      view.ctx.fillStyle = palette.ink;
-      view.ctx.beginPath();
-      view.ctx.arc(view.screenX(rider[0]), view.screenY(rider[1]), 2.5, 0, 2 * Math.PI);
-      view.ctx.fill();
-    },
-  };
+    if (plot.begin()) {
+      const series = [
+        { values: loaded.fixedSeries, color: palette.fixed },
+        { values: loaded.riderSeries, color: palette.accent },
+      ];
+      const box = {
+        left: PLOT_MARGIN.left,
+        top: PLOT_MARGIN.top,
+        right: plot.width - PLOT_MARGIN.right,
+        bottom: plot.height - PLOT_MARGIN.bottom,
+      };
+      drawPlot(plot, box, series, loaded.seriesMax, progress, [["ρ", "italic"]], palette);
+      drawLegend(plot, series, ["Standing still", "Riding along"], palette);
+    }
 
-  const clock = new Clock(animation, root);
-  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
-  bindTimeSlider(slider, clock);
+    if (!phase.begin()) return;
+    drawDensity(phase, (q, p) => example.density(q, p, t), example.densityScale, palette.density);
+    drawPhaseAxes(phase, palette);
+    phase.ctx.globalAlpha = 0.6;
+    drawCloud(phase, starts.map(start => wrap(example.flow(start, t), example)), 1.3, palette.ink);
+    phase.ctx.globalAlpha = 1;
+    const rider = wrap(example.flow(example.riderStart, t), example);
+    drawTarget(phase, example.fixedPoint, palette.fixed, 2.25, palette.paper);
+    drawRing(phase, rider, RIDER_RADIUS, palette.accent, 2.25, palette.paper);
+    drawDots(phase, [rider], 2.5, palette.ink);
+  }, loopSeconds(loaded.example));
+
   const phaseLabel = phaseCanvas.getAttribute("aria-label") ?? "";
-  bindChoice(exampleButtons, "example", (id) => {
-    const button = exampleButtons.find(b => b.dataset.example === id)!;
+  bindChoice(root, "example", (id, button) => {
     phaseCanvas.setAttribute("aria-label", `${phaseLabel} Example: ${button.getAttribute("aria-label")!}.`);
     loaded = loadExample(id);
-    view.bounds = loaded.example.bounds;
+    phase.bounds = loaded.example.bounds;
+    timeline.seconds = loopSeconds(loaded.example);
     explanations.forEach(element => (element.hidden = element.dataset.explains !== id));
-    clock.restart();
+    timeline.restart();
   });
-}
-
-/** Maps a periodic coordinate q back into the example's bounds. */
-function wrapToBounds(q: number, example: PhaseExample): number {
-  const period = example.qPeriod ?? Infinity;
-  const { xMin } = example.bounds;
-  return ((((q - xMin) % period) + period) % period) + xMin;
 }

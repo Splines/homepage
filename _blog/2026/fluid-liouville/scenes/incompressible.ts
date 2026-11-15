@@ -1,18 +1,17 @@
-import { Clock, type Animation } from "../lib/clock";
-import { bindChoice, bindPlayButton, bindTimeSlider, setText } from "../lib/controls";
 import {
-  MATH_FONT,
-  createCloud,
-  drawAxes,
+  drawCloud,
+  drawCornerTitle,
   drawDots,
-  drawRing,
-  tracePolyline,
-  type PointCloud,
+  drawPhaseAxes,
+  drawText,
+  paintRegion,
+  traceCircle,
+  tracePath,
 } from "../lib/draw";
 import { readPalette, type Palette } from "../lib/palette";
 import { createRandom, inDisk } from "../lib/random";
+import { Timeline, bindChoice } from "../lib/timeline";
 import { View, type Bounds, type Point } from "../lib/view";
-import { drawCornerTitle } from "./drift";
 
 const FRAME: Bounds = { xMin: -Math.PI, xMax: Math.PI, yMin: -2.2, yMax: 2.2 };
 const REGION_CENTER: Point = [1.55, 0];
@@ -35,6 +34,8 @@ const STEPS_PER_SNAPSHOT = 120;
 const STEP = 1 / 120;
 /** Simulated duration of one loop. */
 const PERIOD = 22;
+/** Simulated time units per real second. */
+const SPEED = 1.6;
 /** Damping rate γ of the version with friction. */
 const FRICTION = 0.1;
 /** Energies of the faint guide curves; E = 1 is the separatrix. */
@@ -56,115 +57,82 @@ const BOB_RADIUS = 9;
 const ANGLE_ARC_RADIUS = 0.32;
 
 /**
- * One step of the pendulum H = p²/2 − cos q with friction −γp, split into exactly
- * solvable parts (Strang splitting): friction, kick, drift, kick, friction.
- * Kick and drift preserve area exactly (the step is symplectic); each friction part
- * scales p and thus area by exp(−γ h/2). So areas evolve exactly like exp(−γt).
+ * Advances a copy by `steps` steps of the pendulum H = p²/2 − cos q with friction −γp,
+ * each split into exactly solvable parts (Strang splitting): friction, kick, drift, kick,
+ * friction. Kick and drift preserve area exactly (the step is symplectic); each friction
+ * part scales p and thus area by exp(−γ h/2). So areas evolve exactly like exp(−γt).
  */
-function step(state: PointCloud, index: number, gamma: number): void {
+function step([q, p]: Point, gamma: number, steps: number): Point {
   const damping = Math.exp((-gamma * STEP) / 2);
-  let q = state.x[index];
-  let p = state.y[index] * damping;
-  p -= (Math.sin(q) * STEP) / 2;
-  q += p * STEP;
-  p -= (Math.sin(q) * STEP) / 2;
-  state.x[index] = q;
-  state.y[index] = p * damping;
+  for (let s = 0; s < steps; s++) {
+    p *= damping;
+    p -= (Math.sin(q) * STEP) / 2;
+    q += p * STEP;
+    p -= (Math.sin(q) * STEP) / 2;
+    p *= damping;
+  }
+  return [q, p];
 }
 
-/** Area enclosed by the closed polygon through the first `count` points (shoelace formula). */
-function polygonArea(cloud: PointCloud, count: number): number {
+/** Point on the boundary of the initial region, at a fraction `s` of a full turn. */
+function onInitialCircle(s: number): Point {
+  const angle = 2 * Math.PI * s;
+  return [
+    REGION_CENTER[0] + REGION_RADIUS * Math.cos(angle),
+    REGION_CENTER[1] + REGION_RADIUS * Math.sin(angle),
+  ];
+}
+
+/** Area enclosed by a closed polygon (shoelace formula). */
+function polygonArea(points: Point[]): number {
   let twiceArea = 0;
-  for (let i = 0, j = count - 1; i < count; j = i++) {
-    twiceArea += cloud.x[j] * cloud.y[i] - cloud.x[i] * cloud.y[j];
-  }
+  points.forEach(([x, y], i) => {
+    const [nextX, nextY] = points[(i + 1) % points.length];
+    twiceArea += x * nextY - nextX * y;
+  });
   return Math.abs(twiceArea) / 2;
 }
 
-interface BoundarySnapshot {
-  points: PointCloud;
-  parameter: Float64Array;
+/** A point of the region's boundary and where it started on the initial circle. */
+interface Knot {
+  s: number;
+  point: Point;
 }
 
-/** State of the whole scene after a number of integrator steps. */
-interface Snapshot {
-  copies: PointCloud;
-  highlights: PointCloud;
-  boundary: BoundarySnapshot;
+/** State of the whole scene after a number of integrator steps. Never changed in place. */
+interface State {
+  steps: number;
+  /** The first copies are the HIGHLIGHTS. */
+  copies: Point[];
+  boundary: Knot[];
 }
-
-const cloneCloud = (cloud: PointCloud): PointCloud => ({ x: cloud.x.slice(), y: cloud.y.slice() });
 
 /**
- * Boundary of a region of phase space, carried along by the flow. Stretched segments
- * are refined by integrating a new point from its start position on the initial circle,
- * so the outline stays smooth however much the region gets wound up.
+ * Advances the copies and the boundary of the region by `steps` integrator steps. Stretched
+ * boundary segments are refined by integrating a new point from its start on the initial
+ * circle, so the outline stays smooth however much the region gets wound up.
  */
-class FlowingBoundary {
-  readonly points = createCloud(MAX_BOUNDARY_POINTS);
-  count = 0;
-  /** Position of each point along the initial circle, as a fraction of a full turn. */
-  private readonly parameter = new Float64Array(MAX_BOUNDARY_POINTS);
-
-  reset(): void {
-    this.count = BOUNDARY_START_POINTS;
-    for (let i = 0; i < this.count; i++) this.place(i, i / this.count);
-  }
-
-  save(): BoundarySnapshot {
-    return {
-      points: { x: this.points.x.slice(0, this.count), y: this.points.y.slice(0, this.count) },
-      parameter: this.parameter.slice(0, this.count),
-    };
-  }
-
-  restore(snapshot: BoundarySnapshot): void {
-    this.points.x.set(snapshot.points.x);
-    this.points.y.set(snapshot.points.y);
-    this.parameter.set(snapshot.parameter);
-    this.count = snapshot.parameter.length;
-  }
-
-  /** Advances all points by `steps` integrator steps. */
-  advance(steps: number, gamma: number): void {
-    for (let i = 0; i < this.count; i++) {
-      for (let s = 0; s < steps; s++) step(this.points, i, gamma);
-    }
-  }
-
-  /** Inserts points into overly long segments; `stepsSoFar` is the number of steps since t = 0. */
-  refine(stepsSoFar: number, gamma: number): void {
-    let insertions = 0;
-    for (let i = 0; i < this.count && this.count < MAX_BOUNDARY_POINTS; i++) {
-      const next = (i + 1) % this.count;
-      const { x, y } = this.points;
-      const length = Math.hypot(x[next] - x[i], y[next] - y[i]);
-      if (length < MAX_SEGMENT_LENGTH) continue;
-      if (++insertions > MAX_INSERTIONS_PER_PASS) return;
-
-      const end = next === 0 ? 1 : this.parameter[next];
-      this.shiftRight(i + 1);
-      this.place(i + 1, (this.parameter[i] + end) / 2);
-      for (let s = 0; s < stepsSoFar; s++) step(this.points, i + 1, gamma);
-      i++; // Check the second half of the split segment in the next pass.
-    }
-  }
-
-  /** Puts point `index` at the given position along the initial circle. */
-  private place(index: number, parameter: number): void {
-    const angle = 2 * Math.PI * parameter;
-    this.parameter[index] = parameter;
-    this.points.x[index] = REGION_CENTER[0] + REGION_RADIUS * Math.cos(angle);
-    this.points.y[index] = REGION_CENTER[1] + REGION_RADIUS * Math.sin(angle);
-  }
-
-  /** Makes room for a new point at `index`. */
-  private shiftRight(index: number): void {
-    this.points.x.copyWithin(index + 1, index, this.count);
-    this.points.y.copyWithin(index + 1, index, this.count);
-    this.parameter.copyWithin(index + 1, index, this.count);
-    this.count++;
-  }
+function advance(state: State, steps: number, gamma: number): State {
+  const total = state.steps + steps;
+  const moved = state.boundary.map(({ s, point }) => ({ s, point: step(point, gamma, steps) }));
+  const boundary: Knot[] = [];
+  let insertions = 0;
+  moved.forEach((knot, i) => {
+    boundary.push(knot);
+    const next = moved[(i + 1) % moved.length];
+    if (insertions >= MAX_INSERTIONS_PER_PASS) return;
+    if (moved.length + insertions >= MAX_BOUNDARY_POINTS) return;
+    const [dx, dy] = [next.point[0] - knot.point[0], next.point[1] - knot.point[1]];
+    if (Math.hypot(dx, dy) < MAX_SEGMENT_LENGTH) return;
+    const s = (knot.s + (i === moved.length - 1 ? 1 : next.s)) / 2;
+    boundary.push({ s, point: step(onInitialCircle(s), gamma, total) });
+    insertions++;
+  });
+  return {
+    steps: total,
+    copies: state.copies.map(copy => step(copy, gamma, steps)),
+    boundary,
+  };
 }
 
 /**
@@ -191,11 +159,10 @@ function drawEnergyGuides(view: View, color: string): void {
       }
     } else {
       for (const sign of [1, -1]) {
-        for (let k = 0; k <= samples; k++) {
+        ctx.moveTo(view.screenX(FRAME.xMin), view.screenY(sign * momentum(energy, FRAME.xMin)));
+        for (let k = 1; k <= samples; k++) {
           const q = FRAME.xMin + ((FRAME.xMax - FRAME.xMin) * k) / samples;
-          const point: Point = [view.screenX(q), view.screenY(sign * momentum(energy, q))];
-          if (k === 0) ctx.moveTo(...point);
-          else ctx.lineTo(...point);
+          ctx.lineTo(view.screenX(q), view.screenY(sign * momentum(energy, q)));
         }
       }
     }
@@ -203,18 +170,13 @@ function drawEnergyGuides(view: View, color: string): void {
   }
 }
 
-function highlightColors(palette: Palette): string[] {
-  return [palette.fixed, palette.outflow, `rgb(${palette.density.join(", ")})`];
-}
-
 /**
  * Pendulums with angles q (0 = hanging down, counterclockwise from there to the right)
  * on a common pivot. The angle of the first one is marked with an arc.
  */
-function drawPendulums(view: View, states: PointCloud, palette: Palette): void {
+function drawPendulums(view: View, angles: number[], colors: string[], palette: Palette): void {
   if (!view.begin()) return;
   const { ctx } = view;
-  const colors = highlightColors(palette);
   const pivotX = view.screenX(PIVOT[0]);
   const pivotY = view.screenY(PIVOT[1]);
   const length = ROD_LENGTH * view.scale;
@@ -222,8 +184,7 @@ function drawPendulums(view: View, states: PointCloud, palette: Palette): void {
   // Circle the bobs move on, and the rest position.
   ctx.strokeStyle = palette.faint;
   ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.arc(pivotX, pivotY, length, 0, 2 * Math.PI);
+  traceCircle(view, PIVOT, ROD_LENGTH);
   ctx.stroke();
   ctx.strokeStyle = palette.muted;
   ctx.setLineDash([4, 4]);
@@ -234,7 +195,7 @@ function drawPendulums(view: View, states: PointCloud, palette: Palette): void {
   ctx.setLineDash([]);
 
   // Angle q of the first pendulum, measured from the rest position.
-  const q = states.x[0];
+  const q = angles[0];
   const arcRadius = ANGLE_ARC_RADIUS * view.scale;
   ctx.strokeStyle = colors[0];
   ctx.lineWidth = 1.5;
@@ -244,21 +205,14 @@ function drawPendulums(view: View, states: PointCloud, palette: Palette): void {
   ctx.stroke();
   if (Math.abs(q) > 0.25) {
     const middle = Math.PI / 2 - q / 2;
-    ctx.font = MATH_FONT;
-    ctx.fillStyle = colors[0];
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(
-      "q",
-      pivotX + (arcRadius + 11) * Math.cos(middle),
-      pivotY + (arcRadius + 11) * Math.sin(middle),
-    );
+    const x = pivotX + (arcRadius + 11) * Math.cos(middle);
+    const y = pivotY + (arcRadius + 11) * Math.sin(middle);
+    drawText(view, [["q", "italic"]], x, y, { color: colors[0] });
   }
 
-  for (let i = states.x.length - 1; i >= 0; i--) {
-    const angle = states.x[i];
-    const bobX = pivotX + length * Math.sin(angle);
-    const bobY = pivotY + length * Math.cos(angle);
+  for (let i = angles.length - 1; i >= 0; i--) {
+    const bobX = pivotX + length * Math.sin(angles[i]);
+    const bobY = pivotY + length * Math.cos(angles[i]);
     ctx.strokeStyle = palette.text;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -282,6 +236,11 @@ function drawPendulums(view: View, states: PointCloud, palette: Palette): void {
   drawCornerTitle(view, "Real space", palette);
 }
 
+/** Writes `value` into an `<output>`, touching the DOM only on change. */
+function setText(element: Element, value: string): void {
+  if (element.textContent !== value) element.textContent = value;
+}
+
 /**
  * A region of copies of a pendulum moving through phase space, next to a few of the
  * copies swinging in real space. Without friction, the region is wound up into a spiral
@@ -293,123 +252,71 @@ export function mountIncompressible(root: HTMLElement): void {
     root.querySelector<HTMLCanvasElement>(`[data-canvas="${name}"]`)!;
   const real = new View(canvas("real"), REAL_FRAME);
   const view = new View(canvas("phase"), FRAME);
-  const slider = root.querySelector<HTMLInputElement>("input[type='range']")!;
   const areaOutput = root.querySelector<HTMLOutputElement>("[data-output='area']")!;
   const densityOutput = root.querySelector<HTMLOutputElement>("[data-output='density']")!;
   const palette = readPalette(root);
-  const colors = highlightColors(palette);
+  const colors = [palette.fixed, palette.outflow, palette.density];
 
   const random = createRandom(5);
-  const copiesStart = Array.from(
-    { length: COPY_COUNT },
-    () => inDisk(random, REGION_CENTER, REGION_RADIUS),
-  );
-  const copies = createCloud(COPY_COUNT);
-  const highlights = createCloud(HIGHLIGHTS.length);
-  const boundary = new FlowingBoundary();
+  const initial: State = {
+    steps: 0,
+    copies: [
+      ...HIGHLIGHTS,
+      ...Array.from({ length: COPY_COUNT }, () => inDisk(random, REGION_CENTER, REGION_RADIUS)),
+    ],
+    boundary: Array.from({ length: BOUNDARY_START_POINTS }, (_, i) => {
+      const s = i / BOUNDARY_START_POINTS;
+      return { s, point: onInitialCircle(s) };
+    }),
+  };
+  const initialArea = polygonArea(initial.boundary.map(knot => knot.point));
   let gamma = 0;
-  let stepsSoFar = 0;
-  let initialArea = 1;
-  /** Saved states by multiple of STEPS_PER_SNAPSHOT; only valid for the current friction. */
-  let snapshots: Snapshot[] = [];
+  let state = initial;
+  /** Saved states, one every STEPS_PER_SNAPSHOT steps; only valid for the current friction. */
+  let snapshots = [initial];
 
-  const saveState = (): Snapshot => ({
-    copies: cloneCloud(copies),
-    highlights: cloneCloud(highlights),
-    boundary: boundary.save(),
-  });
-
-  /** Continues from the latest saved state at or before `target` steps, if that helps. */
-  const restoreBefore = (target: number) => {
+  /** Integrates to `target` steps, from the current state or a closer saved one. */
+  const advanceTo = (target: number) => {
     const index = Math.min(Math.floor(target / STEPS_PER_SNAPSHOT), snapshots.length - 1);
-    const steps = index * STEPS_PER_SNAPSHOT;
-    if (index < 0 || (steps <= stepsSoFar && target >= stepsSoFar)) return;
-    const snapshot = snapshots[index];
-    copies.x.set(snapshot.copies.x);
-    copies.y.set(snapshot.copies.y);
-    highlights.x.set(snapshot.highlights.x);
-    highlights.y.set(snapshot.highlights.y);
-    boundary.restore(snapshot.boundary);
-    stepsSoFar = steps;
+    const saved = snapshots[index];
+    if (saved.steps > state.steps || target < state.steps) state = saved;
+    while (state.steps < target) {
+      // Passes end on multiples of STEPS_PER_PASS, so they also hit every snapshot.
+      const steps = Math.min(target - state.steps, STEPS_PER_PASS - (state.steps % STEPS_PER_PASS));
+      state = advance(state, steps, gamma);
+      if (state.steps === snapshots.length * STEPS_PER_SNAPSHOT) snapshots.push(state);
+    }
   };
 
-  const animation: Animation = {
-    period: PERIOD,
-    speed: 1.6,
-    reset() {
-      copiesStart.forEach(([q, p], i) => {
-        copies.x[i] = q;
-        copies.y[i] = p;
-      });
-      HIGHLIGHTS.forEach(([q, p], i) => {
-        highlights.x[i] = q;
-        highlights.y[i] = p;
-      });
-      boundary.reset();
-      initialArea = polygonArea(boundary.points, boundary.count);
-      stepsSoFar = 0;
-      if (snapshots.length === 0) snapshots.push(saveState());
-    },
-    update(t) {
-      const target = Math.floor(t / STEP);
-      restoreBefore(target);
-      while (stepsSoFar < target) {
-        // Passes end on multiples of STEPS_PER_PASS, so they also hit every snapshot.
-        const steps = Math.min(target - stepsSoFar, STEPS_PER_PASS - (stepsSoFar % STEPS_PER_PASS));
-        for (let i = 0; i < COPY_COUNT; i++) {
-          for (let s = 0; s < steps; s++) step(copies, i, gamma);
-        }
-        for (let i = 0; i < HIGHLIGHTS.length; i++) {
-          for (let s = 0; s < steps; s++) step(highlights, i, gamma);
-        }
-        boundary.advance(steps, gamma);
-        stepsSoFar += steps;
-        boundary.refine(stepsSoFar, gamma);
-        if (stepsSoFar === snapshots.length * STEPS_PER_SNAPSHOT) snapshots.push(saveState());
-      }
-    },
-    draw(t) {
-      slider.value = String(t / PERIOD);
-      drawPendulums(real, highlights, palette);
-      if (!view.begin()) return;
-      const { ctx } = view;
-      drawEnergyGuides(view, palette.faint);
-      drawAxes(view, palette.muted, ["q", "p"]);
+  const timeline = new Timeline(root, (progress) => {
+    advanceTo(Math.floor((progress * PERIOD) / STEP));
+    const highlights = state.copies.slice(0, HIGHLIGHTS.length);
+    drawPendulums(real, highlights.map(([q]) => q), colors, palette);
+    if (!view.begin()) return;
 
-      tracePolyline(view, boundary.points, true, boundary.count);
-      ctx.globalAlpha = 0.14;
-      ctx.fillStyle = palette.accent;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = palette.accent;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ctx.globalAlpha = 0.75;
-      drawDots(view, copies, 1.2, palette.ink);
-      ctx.globalAlpha = 1;
+    drawEnergyGuides(view, palette.faint);
+    drawPhaseAxes(view, palette);
+    const boundary = state.boundary.map(knot => knot.point);
+    tracePath(view, boundary, true);
+    paintRegion(view.ctx, palette.accent);
+    view.ctx.globalAlpha = 0.75;
+    drawCloud(view, state.copies, 1.2, palette.ink);
+    view.ctx.globalAlpha = 1;
+    highlights.forEach((highlight, i) => {
+      drawDots(view, [highlight], HIGHLIGHT_RADIUS + 3, palette.paper);
+      drawDots(view, [highlight], HIGHLIGHT_RADIUS, colors[i]);
+    });
+    drawCornerTitle(view, "Phase space", palette);
 
-      for (let i = 0; i < HIGHLIGHTS.length; i++) {
-        const [q, p] = [highlights.x[i], highlights.y[i]];
-        drawRing(view, q, p, HIGHLIGHT_RADIUS + 1.5, palette.paper, 3);
-        ctx.fillStyle = colors[i];
-        ctx.beginPath();
-        ctx.arc(view.screenX(q), view.screenY(p), HIGHLIGHT_RADIUS, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-      drawCornerTitle(view, "Phase space", palette);
+    const ratio = polygonArea(boundary) / initialArea;
+    setText(areaOutput, `${Math.round(100 * ratio)} %`);
+    setText(densityOutput, `× ${(1 / ratio).toFixed(2)}`);
+  }, PERIOD / SPEED);
 
-      const ratio = polygonArea(boundary.points, boundary.count) / initialArea;
-      setText(areaOutput, `${Math.round(100 * ratio)} %`);
-      setText(densityOutput, `× ${(1 / ratio).toFixed(2)}`);
-    },
-  };
-
-  const clock = new Clock(animation, root);
-  bindPlayButton(root.querySelector<HTMLButtonElement>(".fl-play")!, clock);
-  bindTimeSlider(slider, clock);
-  bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-friction]")], "friction", (value) => {
+  bindChoice(root, "friction", (value) => {
     gamma = value === "on" ? FRICTION : 0;
-    snapshots = [];
-    clock.restart();
+    state = initial;
+    snapshots = [initial];
+    timeline.restart();
   });
 }

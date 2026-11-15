@@ -11,16 +11,14 @@ export interface Bounds {
 
 /**
  * Camera onto a world plane (y pointing up) that is drawn into a canvas in CSS pixels.
- *
- * The bounds are fit into the canvas with a uniform scale and centered. The offset
- * shifts the camera without zooming, e.g. to ride along with a particle.
+ * The bounds are fit into the canvas with a uniform scale and centered.
  */
 export class View {
   readonly ctx: CanvasRenderingContext2D;
   width = 0;
   height = 0;
+  /** CSS pixels per world unit. */
   scale = 1;
-  offset: Point = [0, 0];
 
   constructor(readonly canvas: HTMLCanvasElement, public bounds: Bounds) {
     this.ctx = canvas.getContext("2d")!;
@@ -51,35 +49,23 @@ export class View {
     return true;
   }
 
-  /** World point at the center of the canvas. */
-  get center(): Point {
-    const { xMin, xMax, yMin, yMax } = this.bounds;
-    return [(xMin + xMax) / 2 + this.offset[0], (yMin + yMax) / 2 + this.offset[1]];
-  }
-
   screenX(x: number): number {
-    return this.width / 2 + (x - this.center[0]) * this.scale;
+    const { xMin, xMax } = this.bounds;
+    return this.width / 2 + (x - (xMin + xMax) / 2) * this.scale;
   }
 
   screenY(y: number): number {
-    return this.height / 2 - (y - this.center[1]) * this.scale;
+    const { yMin, yMax } = this.bounds;
+    return this.height / 2 - (y - (yMin + yMax) / 2) * this.scale;
   }
 
   worldX(px: number): number {
-    return this.center[0] + (px - this.width / 2) / this.scale;
+    const { xMin, xMax } = this.bounds;
+    return (xMin + xMax) / 2 + (px - this.width / 2) / this.scale;
   }
 
   worldY(py: number): number {
-    return this.center[1] - (py - this.height / 2) / this.scale;
-  }
-
-  /** World rectangle that is currently visible on the canvas. */
-  visible(): Bounds {
-    return {
-      xMin: this.worldX(0),
-      xMax: this.worldX(this.width),
-      yMin: this.worldY(this.height),
-      yMax: this.worldY(0),
-    };
+    const { yMin, yMax } = this.bounds;
+    return (yMin + yMax) / 2 - (py - this.height / 2) / this.scale;
   }
 }

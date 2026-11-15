@@ -46,8 +46,11 @@ function gaussian(center: Point, spread: Point) {
   };
 }
 
-/** Harmonic oscillator H = (q² + p²)/2: phase space turns clockwise like a rigid body. */
-function rotate([q, p]: Point, t: number): Point {
+/**
+ * Exact flow of the harmonic oscillator H = (q² + p²)/2: Hamilton's equations q̇ = p,
+ * ṗ = −q turn phase space clockwise around the origin by the angle t, like a rigid body.
+ */
+export function harmonicFlow([q, p]: Point, t: number): Point {
   const c = Math.cos(t);
   const s = Math.sin(t);
   return [q * c + p * s, -q * s + p * c];
@@ -62,9 +65,9 @@ function blob(): PhaseExample {
     bounds: OSCILLATOR_BOUNDS,
     period: TAU,
     speed: 0.8,
-    density: (q, p, t) => initial.density(...rotate([q, p], -t)),
+    density: (q, p, t) => initial.density(...harmonicFlow([q, p], -t)),
     densityScale: initial.peak,
-    flow: rotate,
+    flow: harmonicFlow,
     sample: initial.sample,
     riderStart: [2.05, 0.12],
     fixedPoint: [0, -1.9],
@@ -83,7 +86,7 @@ function ring(): PhaseExample {
     speed: 0.8,
     density: (q, p) => phi((q * q + p * p) / 2),
     densityScale: peak,
-    flow: rotate,
+    flow: harmonicFlow,
     sample: (random) => {
       const h = Math.max(1e-4, energy + spread * normal(random));
       const angle = TAU * random();

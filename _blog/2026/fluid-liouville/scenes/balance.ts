@@ -1,7 +1,14 @@
-import { playTimeline } from "../lib/controls";
-import { createCloud, drawArrow, drawDots, drawLabel, MATH_FONT } from "../lib/draw";
+import {
+  drawCloud,
+  drawPlot,
+  drawText,
+  paintRegion,
+  traceCircle,
+  type TextRun,
+} from "../lib/draw";
 import { readPalette } from "../lib/palette";
 import { createRandom, normal, type Random } from "../lib/random";
+import { Timeline } from "../lib/timeline";
 import { View, type Bounds, type Point } from "../lib/view";
 
 /** The channel on top, the plot of the mass m(t) below it. */
@@ -12,6 +19,7 @@ const CENTER_SPEED = 0.42;
 /** Flow speed at the walls relative to the center of the channel. */
 const WALL_SPEED_RATIO = 0.35;
 
+/** Simulated time of one loop, played in as many real seconds. */
 const PERIOD = 10;
 const REGION_CENTER: Point = [0, 0];
 const REGION_RADIUS = 0.4;
@@ -24,9 +32,8 @@ const FLASH_DURATION = 0.5;
 
 /** Where the plot of m(t) goes, in world coordinates. */
 const PLOT = { left: -1.8, right: 1.8, bottom: -1.25, top: -0.86 };
-/** How far the axis arrows reach beyond the plot, in world units. */
-const AXIS_OVERHANG = 0.06;
 const PLOT_SAMPLES = 400;
+const MASS_LABEL: TextRun[] = [["Mass in ", "text"], ["V", "italic"]];
 
 /** Velocity profile of the channel: fastest in the middle, slower near the walls. */
 function speedAt(y: number): number {
@@ -66,12 +73,10 @@ export function mountBalance(root: HTMLElement): void {
   const palette = readPalette(root);
 
   const start = sampleFluid(createRandom(11));
-  const count = start.length;
-  const positions = createCloud(count);
   // A particle at height y is inside V while its x lies in [cx - h, cx + h] with
   // h = √(R² - y²). Particles that never get close enough enter and leave at +∞.
-  const entersAt = new Float64Array(count).fill(Infinity);
-  const leavesAt = new Float64Array(count).fill(Infinity);
+  const entersAt = start.map(() => Infinity);
+  const leavesAt = start.map(() => Infinity);
   start.forEach(([x, y], i) => {
     const dy = y - REGION_CENTER[1];
     if (Math.abs(dy) >= REGION_RADIUS) return;
@@ -81,108 +86,56 @@ export function mountBalance(root: HTMLElement): void {
     leavesAt[i] = (REGION_CENTER[0] + halfChord - x) / speed;
   });
   const isInside = (i: number, t: number) => entersAt[i] <= t && t < leavesAt[i];
-  const massAt = (t: number) => {
-    let total = 0;
-    for (let i = 0; i < count; i++) total += isInside(i, t) ? 1 : 0;
-    return total;
-  };
+  const mass = Array.from({ length: PLOT_SAMPLES + 1 }, (_, k) => {
+    const t = (k / PLOT_SAMPLES) * PERIOD;
+    return start.filter((_, i) => isInside(i, t)).length;
+  });
+  const massMax = 1.1 * Math.max(...mass);
 
-  const massCurve = Float64Array.from(
-    { length: PLOT_SAMPLES + 1 },
-    (_, k) => massAt((k / PLOT_SAMPLES) * PERIOD),
-  );
-  const massMax = 1.1 * Math.max(...massCurve);
-  const plotX = (t: number) => PLOT.left + (t / PERIOD) * (PLOT.right - PLOT.left);
-  const plotY = (mass: number) => PLOT.bottom + (mass / massMax) * (PLOT.top - PLOT.bottom);
-
-  const traceCurve = (until: number) => {
-    const { ctx } = view;
-    const last = Math.min(PLOT_SAMPLES, Math.floor((until / PERIOD) * PLOT_SAMPLES));
-    ctx.beginPath();
-    for (let k = 0; k <= last; k++) {
-      const t = (k / PLOT_SAMPLES) * PERIOD;
-      ctx.lineTo(view.screenX(plotX(t)), view.screenY(plotY(massCurve[k])));
-    }
-  };
-
-  /** Rings around particles that crossed ∂V recently, fading out. Ignores crossings at t < 0. */
-  const drawFlashes = (time: number, crossedAt: Float64Array, color: string) => {
-    const { ctx } = view;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1.2;
-    for (let i = 0; i < count; i++) {
-      const age = time - crossedAt[i];
-      if (crossedAt[i] <= 0 || age < 0 || age > FLASH_DURATION) continue;
-      ctx.globalAlpha = 0.8 * (1 - age / FLASH_DURATION);
-      ctx.beginPath();
-      ctx.arc(view.screenX(positions.x[i]), view.screenY(positions.y[i]), 3.2, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  };
-
-  playTimeline(root, (progress) => {
+  new Timeline(root, (progress) => {
     if (!view.begin()) return;
     const { ctx } = view;
     const time = progress * PERIOD;
-    start.forEach(([x, y], i) => {
-      positions.x[i] = x + speedAt(y) * time;
-      positions.y[i] = y;
-    });
+    const positions = start.map(([x, y]): Point => [x + speedAt(y) * time, y]);
 
     // Fixed region V.
-    ctx.beginPath();
-    const [centerX, centerY] = [view.screenX(REGION_CENTER[0]), view.screenY(REGION_CENTER[1])];
-    ctx.arc(centerX, centerY, REGION_RADIUS * view.scale, 0, 2 * Math.PI);
-    ctx.globalAlpha = 0.07;
-    ctx.fillStyle = palette.fixed;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = palette.fixed;
-    ctx.lineWidth = 1.75;
-    ctx.stroke();
+    traceCircle(view, REGION_CENTER, REGION_RADIUS);
+    paintRegion(ctx, palette.fixed, 0.07, 1.75);
+    drawText(
+      view,
+      [["V", "italic"]],
+      view.screenX(REGION_CENTER[0]),
+      view.screenY(REGION_CENTER[1]) - REGION_RADIUS * view.scale - 12,
+      { color: palette.fixed },
+    );
 
-    drawDots(view, positions, 1.3, palette.muted, i => !isInside(i, time));
-    drawDots(view, positions, 1.6, palette.fixed, i => isInside(i, time));
-    drawFlashes(time, entersAt, palette.inflow);
-    drawFlashes(time, leavesAt, palette.outflow);
+    drawCloud(view, positions.filter((_, i) => !isInside(i, time)), 1.3, palette.muted);
+    drawCloud(view, positions.filter((_, i) => isInside(i, time)), 1.6, palette.fixed);
 
-    drawLabel(view, "V", REGION_CENTER[0], REGION_CENTER[1], palette.fixed, 0, -REGION_RADIUS * view.scale - 12);
+    // Rings around particles that crossed ∂V recently, fading out. Ignores crossings at t < 0.
+    const drawFlashes = (crossedAt: number[], color: string) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.2;
+      positions.forEach(([x, y], i) => {
+        const age = time - crossedAt[i];
+        if (crossedAt[i] <= 0 || age < 0 || age > FLASH_DURATION) return;
+        ctx.globalAlpha = 0.8 * (1 - age / FLASH_DURATION);
+        ctx.beginPath();
+        ctx.arc(view.screenX(x), view.screenY(y), 3.2, 0, 2 * Math.PI);
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    };
+    drawFlashes(entersAt, palette.inflow);
+    drawFlashes(leavesAt, palette.outflow);
 
-    // Plot of the mass m(t) inside V: axes, the whole loop faintly, the past solid.
-    const originX = view.screenX(PLOT.left);
-    const originY = view.screenY(PLOT.bottom);
-    const axisTop = view.screenY(PLOT.top + AXIS_OVERHANG);
-    const axisRight = view.screenX(PLOT.right + AXIS_OVERHANG);
-    ctx.strokeStyle = palette.muted;
-    ctx.fillStyle = palette.muted;
-    ctx.lineWidth = 1;
-    drawArrow(ctx, originX, originY, originX, axisTop);
-    drawArrow(ctx, originX, originY, axisRight, originY);
-    ctx.lineJoin = "round";
-    traceCurve(PERIOD);
-    ctx.strokeStyle = palette.faint;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    traceCurve(time);
-    ctx.strokeStyle = palette.fixed;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(view.screenX(plotX(time)), view.screenY(plotY(massAt(time))), 3.5, 0, 2 * Math.PI);
-    ctx.fillStyle = palette.fixed;
-    ctx.fill();
-
-    // Axis labels: "Mass in V" next to the tip of the vertical axis, t after the horizontal one.
-    ctx.fillStyle = palette.text;
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "left";
-    ctx.font = "14px Rethink, sans-serif";
-    const prefix = "Mass in ";
-    ctx.fillText(prefix, originX + 10, axisTop);
-    const prefixWidth = ctx.measureText(prefix).width;
-    ctx.font = MATH_FONT;
-    ctx.fillText("V", originX + 10 + prefixWidth, axisTop);
-    ctx.fillText("t", axisRight + 8, originY);
+    const box = {
+      left: view.screenX(PLOT.left),
+      top: view.screenY(PLOT.top),
+      right: view.screenX(PLOT.right),
+      bottom: view.screenY(PLOT.bottom),
+    };
+    const series = [{ values: mass, color: palette.fixed }];
+    drawPlot(view, box, series, massMax, progress, MASS_LABEL, palette);
   }, PERIOD);
 }

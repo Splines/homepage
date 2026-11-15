@@ -74,16 +74,27 @@
 
 /* --------------------------------------------------------- animations */
 
+/* The `--fl-*` colors are read by the scripts (lib/palette.ts) to draw the canvases. */
 .fl-figure {
+  /* Background of the canvases, also halos that separate marks from what is below. */
   --fl-paper: #fffdf9;
+  /* Fluid particles or copies of the system. */
   --fl-ink: #2b231d;
+  /* Background particles and guides that should stay in the background. */
   --fl-muted: #b3a493;
+  /* Very light guide lines. */
   --fl-faint: #efe6db;
+  /* Things that move with the flow: material volumes, the observer riding along. */
   --fl-accent: #88593a;
+  /* Things fixed in space: control volumes, the observer standing still. */
   --fl-fixed: #3c6a87;
+  /* Color wash of a density field (hex, as it is parsed). */
   --fl-density: #c98b4f;
+  /* Particles entering a fixed region. */
   --fl-inflow: #3c6a87;
+  /* Particles leaving a fixed region. */
   --fl-outflow: #c0573f;
+  /* Plain text on the canvas, like a title in a corner. */
   --fl-text: #5a4636;
 
   margin: 1.8em 0 2em;

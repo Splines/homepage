@@ -1,17 +1,17 @@
-import { playTimeline } from "../lib/controls";
 import {
-  createCloud,
-  drawDots,
-  drawFormula,
+  drawCloud,
+  drawText,
   formulaSize,
-  measureFormula,
-  tracePolyline,
-  type FormulaOptions,
-  type MathRun,
-  type PointCloud,
+  measureText,
+  paintRegion,
+  traceCircle,
+  tracePath,
+  type TextOptions,
+  type TextRun,
 } from "../lib/draw";
 import { readPalette } from "../lib/palette";
-import { createRandom, inDisk, onCircle } from "../lib/random";
+import { createRandom, inDisk } from "../lib/random";
+import { Timeline } from "../lib/timeline";
 import { View, type Bounds, type Point } from "../lib/view";
 
 /** Radius of the vortex core, inside which the fluid turns almost like a rigid body. */
@@ -21,10 +21,9 @@ const CORE_RATE = 1.25;
 /** Simulated time of one loop, played in as many real seconds. */
 const DURATION = 10;
 
-/** The frame spans -1 ≤ y ≤ 1 and is widened to the shape of the canvas, at most 2:1. */
+/** Fits the height; the canvas (3:2 or 2:1) shows more to the left and right. */
 const FRAME: Bounds = { xMin: -1.5, xMax: 1.5, yMin: -1, yMax: 1 };
-const MAX_ASPECT = 2;
-/** Fluid particles fill a disk that covers the widest frame. */
+/** Fluid particles fill a disk that covers the widest canvas. */
 const FLUID_RADIUS = 2.3;
 const PARTICLE_COUNT = 4000;
 
@@ -34,44 +33,22 @@ const BOUNDARY_POINTS = 1600;
 /** Space in CSS pixels between the volume and its label. */
 const LABEL_GAP = 8;
 
-const MOVING_LABEL: MathRun[] = [["V", "italic"], ["(", "upright"], ["t", "italic"], [")", "upright"]];
-const INITIAL_LABEL: MathRun[] = [["V", "italic"]];
-
-/** Angular velocity of a Lamb–Oseen-like vortex at radius r: inner layers turn faster. */
-function angularVelocity(r: number): number {
-  const s = (r / CORE_RADIUS) ** 2;
-  return s < 1e-9 ? CORE_RATE : (CORE_RATE * (1 - Math.exp(-s))) / s;
-}
+const MOVING_LABEL: TextRun[] = [["V", "italic"], ["(", "upright"], ["t", "italic"], [")", "upright"]];
+const INITIAL_LABEL: TextRun[] = [["V", "italic"]];
 
 /**
- * Particles carried by the vortex. The flow map is exact: every particle keeps its
- * distance r from the center and turns by the angle Ω(r) t.
+ * Flow map of a Lamb–Oseen-like vortex: every particle keeps its distance r from the
+ * center and turns by the angle Ω(r) t, where inner layers turn faster.
  */
-class VortexParticles {
-  readonly positions: PointCloud;
-  private readonly radius: Float64Array;
-  private readonly startAngle: Float64Array;
-  private readonly rate: Float64Array;
-
-  constructor(start: Point[]) {
-    this.positions = createCloud(start.length);
-    this.radius = Float64Array.from(start, ([x, y]) => Math.hypot(x, y));
-    this.startAngle = Float64Array.from(start, ([x, y]) => Math.atan2(y, x));
-    this.rate = this.radius.map(angularVelocity);
-  }
-
-  /** Moves every particle to its position at time t. */
-  moveTo(t: number): void {
-    const { x, y } = this.positions;
-    for (let i = 0; i < x.length; i++) {
-      const angle = this.startAngle[i] + this.rate[i] * t;
-      x[i] = this.radius[i] * Math.cos(angle);
-      y[i] = this.radius[i] * Math.sin(angle);
-    }
-  }
+function vortex([x, y]: Point, t: number): Point {
+  const r = Math.hypot(x, y);
+  const s = (r / CORE_RADIUS) ** 2;
+  const rate = s < 1e-9 ? CORE_RATE : (CORE_RATE * (1 - Math.exp(-s))) / s;
+  const angle = Math.atan2(y, x) + rate * t;
+  return [r * Math.cos(angle), r * Math.sin(angle)];
 }
 
-/** Draws a circumflex over the "V" of a formula drawn centered at screen point (x, y). */
+/** Draws a circumflex over the "V" of a formula drawn centered at (x, y) in CSS pixels. */
 function drawHat(view: View, x: number, y: number, size: number, color: string): void {
   const { ctx } = view;
   // Shifted to the right, as the italic V leans over.
@@ -97,88 +74,70 @@ export function mountMaterialVolume(root: HTMLElement): void {
   const palette = readPalette(root);
 
   const random = createRandom(7);
-  const start = Array.from({ length: PARTICLE_COUNT }, () => inDisk(random, [0, 0], FLUID_RADIUS));
-  const isMaterial = start.map(
-    ([x, y]) => Math.hypot(x - MATERIAL_CENTER[0], y - MATERIAL_CENTER[1]) < MATERIAL_RADIUS,
-  );
-  const fluid = new VortexParticles(start);
-  const initialBoundary = onCircle(MATERIAL_CENTER, MATERIAL_RADIUS, BOUNDARY_POINTS);
+  const fluid = Array.from({ length: PARTICLE_COUNT }, () => inDisk(random, [0, 0], FLUID_RADIUS));
+  const isMaterial = ([x, y]: Point) =>
+    Math.hypot(x - MATERIAL_CENTER[0], y - MATERIAL_CENTER[1]) < MATERIAL_RADIUS;
+  const material = fluid.filter(isMaterial);
+  const others = fluid.filter(point => !isMaterial(point));
   // The first boundary point is the one farthest from the center of the vortex. As every
   // particle keeps its distance to the center, it stays the outermost point of V(t), so a
   // label just outside of it never covers the volume.
-  const boundary = new VortexParticles(initialBoundary);
-  const initialCloud = createCloud(BOUNDARY_POINTS);
-  initialBoundary.forEach(([x, y], i) => {
-    initialCloud.x[i] = x;
-    initialCloud.y[i] = y;
+  const initialBoundary = Array.from({ length: BOUNDARY_POINTS }, (_, i): Point => {
+    const angle = (2 * Math.PI * i) / BOUNDARY_POINTS;
+    return [
+      MATERIAL_CENTER[0] + MATERIAL_RADIUS * Math.cos(angle),
+      MATERIAL_CENTER[1] + MATERIAL_RADIUS * Math.sin(angle),
+    ];
   });
 
-  playTimeline(root, (t) => {
-    const { clientWidth, clientHeight } = view.canvas;
-    const aspect = clientHeight > 0 ? clientWidth / clientHeight : FRAME.xMax;
-    const halfWidth = Math.min(MAX_ASPECT, aspect);
-    view.bounds = { ...FRAME, xMin: -halfWidth, xMax: halfWidth };
+  new Timeline(root, (progress) => {
     if (!view.begin()) return;
     const { ctx } = view;
-    const time = DURATION * t;
-    fluid.moveTo(time);
-    boundary.moveTo(time);
+    const time = DURATION * progress;
+    const boundary = initialBoundary.map(point => vortex(point, time));
 
     // Streamlines of the vortex as faint guides.
     ctx.strokeStyle = palette.faint;
     ctx.lineWidth = 1;
     for (let r = 0.4; r < FLUID_RADIUS; r += 0.4) {
-      ctx.beginPath();
-      ctx.arc(view.screenX(0), view.screenY(0), r * view.scale, 0, 2 * Math.PI);
+      traceCircle(view, [0, 0], r);
       ctx.stroke();
     }
 
-    // Initial region V̂, dimmed.
-    tracePolyline(view, initialCloud, true);
-    ctx.globalAlpha = 0.06;
-    ctx.fillStyle = palette.accent;
-    ctx.fill();
+    // Initial region V̂, dimmed and dashed.
+    tracePath(view, initialBoundary, true);
     ctx.globalAlpha = 0.5;
     ctx.setLineDash([5, 4]);
-    ctx.strokeStyle = palette.accent;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+    paintRegion(ctx, palette.accent, 0.12);
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
 
     // Labels: V̂ below the initial region, V(t) radially outside the outermost point of V(t).
     const size = formulaSize(view);
-    const label: FormulaOptions = { color: palette.accent, halo: palette.paper, size };
+    const label: TextOptions = { color: palette.accent, halo: palette.paper, size };
     const initialX = view.screenX(MATERIAL_CENTER[0]);
     const initialY = view.screenY(MATERIAL_CENTER[1] - MATERIAL_RADIUS) + LABEL_GAP + 0.75 * size;
-    const tip: Point = [boundary.positions.x[0], boundary.positions.y[0]];
+    const tip = boundary[0];
     const [ux, uy] = [tip[0] / Math.hypot(...tip), tip[1] / Math.hypot(...tip)];
-    const width = measureFormula(view, MOVING_LABEL, size);
+    const width = measureText(view, MOVING_LABEL, size);
     const distance = LABEL_GAP + (Math.abs(ux) * width) / 2 + (Math.abs(uy) * size) / 2;
-    const initialAnchor: Point = [view.worldX(initialX), view.worldY(initialY)];
-    const drawLabels = (layer: FormulaOptions["layer"]) => {
+    const tipX = view.screenX(tip[0]) + ux * distance;
+    const tipY = view.screenY(tip[1]) - uy * distance;
+    const drawLabels = (layer: TextOptions["layer"]) => {
       ctx.globalAlpha = 0.6;
-      drawFormula(view, INITIAL_LABEL, ...initialAnchor, { ...label, layer });
+      drawText(view, INITIAL_LABEL, initialX, initialY, { ...label, layer });
       if (layer !== "halo") drawHat(view, initialX, initialY, size, palette.accent);
       ctx.globalAlpha = 1;
-      const offset = { dx: ux * distance, dy: -uy * distance };
-      drawFormula(view, MOVING_LABEL, ...tip, { ...label, ...offset, layer });
+      drawText(view, MOVING_LABEL, tipX, tipY, { ...label, layer });
     };
     // The labels are split around the marks, so that their halos hide no particle.
     drawLabels("halo");
 
     // Material volume V(t).
-    tracePolyline(view, boundary.positions, true);
-    ctx.globalAlpha = 0.14;
-    ctx.fillStyle = palette.accent;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = palette.accent;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    drawDots(view, fluid.positions, 1.3, palette.muted, i => !isMaterial[i]);
-    drawDots(view, fluid.positions, 1.7, palette.accent, i => isMaterial[i]);
+    tracePath(view, boundary, true);
+    paintRegion(ctx, palette.accent);
+    drawCloud(view, others.map(point => vortex(point, time)), 1.3, palette.muted);
+    drawCloud(view, material.map(point => vortex(point, time)), 1.7, palette.accent);
 
     drawLabels("text");
   }, DURATION);

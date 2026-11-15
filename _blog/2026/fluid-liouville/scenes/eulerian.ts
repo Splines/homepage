@@ -1,23 +1,16 @@
-import { playTimeline } from "../lib/controls";
 import {
-  TARGET_RADIUS,
-  TARGET_TICK,
-  drawFormula,
-  drawTarget,
-  formulaSize,
-  type FormulaOptions,
-  type MathRun,
-} from "../lib/draw";
-import { readPalette } from "../lib/palette";
-import { View, type Point } from "../lib/view";
-import {
-  DOT_RADIUS,
-  FRAME,
+  TARGET_REACH,
   drawCornerTitle,
   drawDots,
-  flow,
-  inverseFlow,
-} from "./drift";
+  drawTarget,
+  drawText,
+  formulaSize,
+  type TextOptions,
+} from "../lib/draw";
+import { readPalette } from "../lib/palette";
+import { Timeline } from "../lib/timeline";
+import { View, type Point } from "../lib/view";
+import { DOT_RADIUS, FRAME, SECONDS, flow, inverseFlow } from "./drift";
 
 /** The point x fixed in space. */
 const FIXED_POINT: Point = [2.45, -0.04];
@@ -38,9 +31,6 @@ const PARTICLES: Point[] = [
   [2.3, 0.25],
 ];
 
-/** "x" */
-const FIXED_FORMULA: MathRun[] = [["x", "boldItalic"]];
-
 /**
  * Eulerian description: the same flow as in the Lagrangian scene, watched at a point x
  * fixed in space. Particles come and go, some of them passing right through x.
@@ -49,19 +39,20 @@ export function mountEulerian(root: HTMLElement): void {
   const view = new View(root.querySelector<HTMLCanvasElement>("canvas")!, FRAME);
   const palette = readPalette(root);
 
-  playTimeline(root, (t) => {
+  new Timeline(root, (t) => {
     if (!view.begin()) return;
-    const label: FormulaOptions = {
+    const x = view.screenX(FIXED_POINT[0]);
+    const y = view.screenY(FIXED_POINT[1]) - TARGET_REACH - 13;
+    const label: TextOptions = {
       color: palette.fixed,
       halo: palette.paper,
       size: formulaSize(view),
-      dy: -TARGET_RADIUS - TARGET_TICK - 13,
     };
     // The label is split around the particles, so that its halo hides none of them.
-    drawFormula(view, FIXED_FORMULA, ...FIXED_POINT, { ...label, layer: "halo" });
+    drawText(view, [["x", "boldItalic"]], x, y, { ...label, layer: "halo" });
     drawDots(view, PARTICLES.map(particle => flow(particle, t)), DOT_RADIUS, palette.muted);
-    drawTarget(view, ...FIXED_POINT, palette.fixed);
-    drawFormula(view, FIXED_FORMULA, ...FIXED_POINT, { ...label, layer: "text" });
+    drawTarget(view, FIXED_POINT, palette.fixed, 2);
+    drawText(view, [["x", "boldItalic"]], x, y, { ...label, layer: "text" });
     drawCornerTitle(view, "Eulerian description", palette);
-  });
+  }, SECONDS);
 }

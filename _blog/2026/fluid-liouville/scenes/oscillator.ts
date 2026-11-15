@@ -1,13 +1,19 @@
-import { bindChoice, playTimeline } from "../lib/controls";
-import { createCloud, drawAxes, drawDots, drawRing } from "../lib/draw";
+import {
+  drawArrow,
+  drawCloud,
+  drawCornerTitle,
+  drawDots,
+  drawPhaseAxes,
+  traceCircle,
+} from "../lib/draw";
 import { readPalette, type Palette } from "../lib/palette";
 import { createRandom, inDisk } from "../lib/random";
-import { View, type Bounds, type Point } from "../lib/view";
-import { drawCornerTitle } from "./drift";
+import { Timeline, bindChoice } from "../lib/timeline";
+import { View, type Point } from "../lib/view";
+import { harmonicFlow } from "./examples";
 
 /** Both canvases show -Q_RANGE ≤ q ≤ Q_RANGE across their full width, so q lines up. */
 const Q_RANGE = 2.4;
-const PHASE_FRAME: Bounds = { xMin: -Q_RANGE, xMax: Q_RANGE, yMin: -Q_RANGE, yMax: Q_RANGE };
 /** The wall the springs are attached to. */
 const WALL_Q = -2.25;
 const SPRING_COILS = 11;
@@ -30,16 +36,6 @@ const GUIDE_RADII = [0.5, 1, 1.5, 2];
 /** Pixels between the canvas edges and the outer springs; more at the bottom for the title. */
 const SPRINGS_TOP = 22;
 const SPRINGS_BOTTOM = 44;
-
-/**
- * Exact flow of the harmonic oscillator H = (q² + p²)/2 with m = k = 1. Hamilton's
- * equations q̇ = p, ṗ = −q turn every state clockwise around the origin by the angle t.
- */
-function evolve([q, p]: Point, t: number): Point {
-  const c = Math.cos(t);
-  const s = Math.sin(t);
-  return [q * c + p * s, p * c - q * s];
-}
 
 function copyColors(palette: Palette): string[] {
   return [palette.accent, palette.fixed, palette.outflow, palette.ink];
@@ -67,39 +63,12 @@ function traceSpring(
   ctx.lineTo(x1, y);
 }
 
-/** Draws a horizontal arrow from x0 to x1 at height y (CSS pixels). */
-function drawArrow(
-  ctx: CanvasRenderingContext2D,
-  x0: number,
-  x1: number,
-  y: number,
-  color: string,
-): void {
-  const direction = Math.sign(x1 - x0);
-  const head = Math.min(6, Math.abs(x1 - x0));
-  ctx.strokeStyle = color;
-  ctx.fillStyle = color;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(x0, y);
-  ctx.lineTo(x1 - direction * head, y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x1, y);
-  ctx.lineTo(x1 - direction * head, y - head / 1.6);
-  ctx.lineTo(x1 - direction * head, y + head / 1.6);
-  ctx.closePath();
-  ctx.fill();
-}
-
 /**
  * Copies of a mass on a spring, each at its position q. An arrow above every block
- * shows its momentum p.
+ * shows its momentum p. Only q is a world coordinate here; the springs are laid out
+ * vertically in CSS pixels.
  */
 function drawSprings(view: View, states: Point[], palette: Palette): void {
-  const { clientWidth, clientHeight } = view.canvas;
-  const halfHeight = clientWidth > 0 ? (Q_RANGE * clientHeight) / clientWidth : Q_RANGE;
-  view.bounds = { xMin: -Q_RANGE, xMax: Q_RANGE, yMin: -halfHeight, yMax: halfHeight };
   if (!view.begin()) return;
   const { ctx } = view;
   const colors = copyColors(palette);
@@ -150,7 +119,11 @@ function drawSprings(view: View, states: Point[], palette: Palette): void {
 
     const arrowLength = 0.3 * p * view.scale;
     if (Math.abs(arrowLength) > 2) {
-      drawArrow(ctx, x, x + arrowLength, y - blockHeight / 2 - 7, colors[i]);
+      ctx.strokeStyle = colors[i];
+      ctx.fillStyle = colors[i];
+      ctx.lineWidth = 1.5;
+      const arrowY = y - blockHeight / 2 - 7;
+      drawArrow(ctx, x, arrowY, x + arrowLength, arrowY, 6);
     }
   });
 
@@ -166,8 +139,14 @@ function drawSprings(view: View, states: Point[], palette: Palette): void {
 export function mountOscillator(root: HTMLElement): void {
   const canvas = (name: string) =>
     root.querySelector<HTMLCanvasElement>(`[data-canvas="${name}"]`)!;
-  const springs = new View(canvas("springs"), PHASE_FRAME);
-  const phase = new View(canvas("phase"), PHASE_FRAME);
+  // Zero height, so that the q range alone sets the scale and fills the width.
+  const springs = new View(canvas("springs"), { xMin: -Q_RANGE, xMax: Q_RANGE, yMin: 0, yMax: 0 });
+  const phase = new View(canvas("phase"), {
+    xMin: -Q_RANGE,
+    xMax: Q_RANGE,
+    yMin: -Q_RANGE,
+    yMax: Q_RANGE,
+  });
   const palette = readPalette(root);
   const colors = copyColors(palette);
 
@@ -176,36 +155,29 @@ export function mountOscillator(root: HTMLElement): void {
     amplitude * Math.sin(angle),
   ]);
   const random = createRandom(11);
-  const ensembleStarts = Array.from(
+  const ensemble = Array.from(
     { length: ENSEMBLE_COUNT },
     () => inDisk(random, [0, 0], ENSEMBLE_RADIUS),
   );
-  const ensemble = createCloud(ENSEMBLE_COUNT);
   let showEnsemble = false;
 
-  const clock = playTimeline(root, (t) => {
-    const time = 2 * Math.PI * t;
-    const states = starts.map(start => evolve(start, time));
+  const timeline = new Timeline(root, (progress) => {
+    const time = 2 * Math.PI * progress;
+    const states = starts.map(start => harmonicFlow(start, time));
     drawSprings(springs, states, palette);
 
     if (!phase.begin()) return;
     const { ctx } = phase;
-    const originX = phase.screenX(0);
-    const originY = phase.screenY(0);
     ctx.strokeStyle = palette.faint;
     ctx.lineWidth = 1;
     for (const radius of GUIDE_RADII) {
-      ctx.beginPath();
-      ctx.arc(originX, originY, radius * phase.scale, 0, 2 * Math.PI);
+      traceCircle(phase, [0, 0], radius);
       ctx.stroke();
     }
-    drawAxes(phase, palette.muted, ["q", "p"]);
+    drawPhaseAxes(phase, palette);
 
     if (showEnsemble) {
-      ensembleStarts.forEach((start, i) => {
-        [ensemble.x[i], ensemble.y[i]] = evolve(start, time);
-      });
-      drawDots(phase, ensemble, 1.5, palette.ink);
+      drawCloud(phase, ensemble.map(start => harmonicFlow(start, time)), 1.5, palette.ink);
     }
 
     // Orbits of the highlighted copies: circles of constant energy.
@@ -213,25 +185,21 @@ export function mountOscillator(root: HTMLElement): void {
     ctx.globalAlpha = 0.4;
     COPIES.forEach(([amplitude], i) => {
       ctx.strokeStyle = colors[i];
-      ctx.beginPath();
-      ctx.arc(originX, originY, amplitude * phase.scale, 0, 2 * Math.PI);
+      traceCircle(phase, [0, 0], amplitude);
       ctx.stroke();
     });
     ctx.globalAlpha = 1;
 
-    states.forEach(([q, p], i) => {
-      drawRing(phase, q, p, COPY_DOT_RADIUS + 1.5, palette.paper, 3);
-      ctx.fillStyle = colors[i];
-      ctx.beginPath();
-      ctx.arc(phase.screenX(q), phase.screenY(p), COPY_DOT_RADIUS, 0, 2 * Math.PI);
-      ctx.fill();
+    states.forEach((state, i) => {
+      drawDots(phase, [state], COPY_DOT_RADIUS + 3, palette.paper);
+      drawDots(phase, [state], COPY_DOT_RADIUS, colors[i]);
     });
 
     drawCornerTitle(phase, "Phase space", palette);
   }, PERIOD_SECONDS);
 
-  bindChoice([...root.querySelectorAll<HTMLButtonElement>("[data-copies]")], "copies", (value) => {
+  bindChoice(root, "copies", (value) => {
     showEnsemble = value === "many";
-    clock.redraw();
+    timeline.redraw();
   });
 }

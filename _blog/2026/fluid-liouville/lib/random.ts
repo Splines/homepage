@@ -26,11 +26,3 @@ export function inDisk(random: Random, center: Point, radius: number): Point {
   const angle = 2 * Math.PI * random();
   return [center[0] + r * Math.cos(angle), center[1] + r * Math.sin(angle)];
 }
-
-/** `count` points evenly spaced on a circle, counterclockwise from angle 0. */
-export function onCircle(center: Point, radius: number, count: number): Point[] {
-  return Array.from({ length: count }, (_, i) => {
-    const angle = (2 * Math.PI * i) / count;
-    return [center[0] + radius * Math.cos(angle), center[1] + radius * Math.sin(angle)];
-  });
-}
