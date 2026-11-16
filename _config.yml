@@ -52,6 +52,8 @@ exclude:
   - tmp/
   - assets/vite/ # Vite source dir; the compiled bundle is emitted to /vite
   - _blog/**/*.ts # post-scoped Vite sources, bundled by Vite (see SPECS.md)
+  - _blog/**/*.py # post-scoped scripts, e.g. to render a preview image
+  - _blog/**/*.pyc # Python bytecode cache of those scripts
   - vite.config.mts
   - Rakefile
   - spec/
