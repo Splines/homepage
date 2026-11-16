@@ -26,10 +26,10 @@ _Tip: Hover over footnote and equation references to get a preview without scrol
 
 There are two different views to describe the motion of a fluid:
 
-In the **Lagrangian** (material) description, we follow each fluid particle individually. A particle is labeled by its position $\bm X$ at the initial time $t = 0$. Its motion is described by a map[^phi] $\phi$ that tells us where this particle is at time $t$:
+In the **Lagrangian** (material) description, we follow each fluid particle individually. A particle is labeled by its position $\bm X \in \RR^3$ at the initial time $t = 0$. Its motion is described by a map[^phi] $\phi: \RR^3 \times \RR \to \RR^3$ that tells us where particle $\bm X$ is at time $t$:
 
 $$
-\phi(\bm X, 0) = \bm X, \qquad \bm x = \phi(\bm X, t)
+\phi(\bm X, 0) = \bm X, \qquad \bm x := \phi(\bm X, t)
 $$
 
 <figure class="fl-figure fl-wide" data-scene="lagrangian">
@@ -65,7 +65,7 @@ T \bigl(\phi(\bm X, t), t\bigr)
 = \hat T \bigl(\phi^{-1}(\bm x, t), t\bigr)
 $$
 
-But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, e.g. what a thermometer fixed in some place would measure. But what about a thermometer that moves along, say with velocity $\bm u$? At time $t$, it is at $\bm x$, a short moment $\delta t$ later at $\bm x + \bm u \, \delta t$. Taylor-expanding $T$ in both arguments to first order gives:
+But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, e.g. what a thermometer fixed in some place would measure. But what about one that moves along, say with momentary velocity $\bm u$? At time $t$, it is at $\bm x$, a short moment $\delta t$ later at $\bm x + \bm u \, \delta t$. Taylor-expanding $T$ in both arguments to first order gives:
 
 $$
 T(\bm x + \bm u \, \delta t, \, t + \delta t)
@@ -91,7 +91,7 @@ Note how it makes sense to denote this by a total time derivative $\mathrm{d}T /
 
 ### Material volume
 
-Before moving on, let us also introduce the _material volume_ $V(t)$: we take a region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
+Before moving on, let us also introduce the _material volume_ $V(t)$: we take a connected region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
 
 Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behaved" in the sense that $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with[^well-behaved]. You can see this in the following animation.
 
@@ -133,7 +133,7 @@ $$
 \int_{V(t)} \left( \pdv{\rho}{t} + \nabla \cdot (\rho \bm v) \right) \mathrm{d}\bm x \overset{!}{=} 0
 $$
 
-This holds for arbitrary material volumes $V(t)$, so the integrand has to vanish everywhere, which gives the continuity equation:
+This holds for arbitrary material volumes $V(t)$, so the integrand has to vanish everywhere[^vanish], which gives the continuity equation:
 
 <div class="fl-key fl-key-inline">
 <p class="fl-key-title">Continuity equation</p>
@@ -522,7 +522,9 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
-[^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it.
+[^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
+
+[^vanish]: For this conclusion, we need the integrand to be continuous (which is the case since $\rho$ and $\bm v$ are continuously differentiable). Let's see why this must be the case. We do this by contradiction. Assume that at some time $t$, the integrand is positive at a point $\bm x_0$. By continuity, it is then also positive on a small ball $B$ around $\bm x_0$. We define $\hat V$ as the set of particles that end up in $B$ at time $t$, i.e. $\hat V = \phi^{-1}(B, t)$. This $\hat V$ is connected (as $B$ is connected and $\phi^{-1}(\cdot, t)$ is continuous), so it is a valid starting region for a material volume. And at time $t$, this material volume is exactly the ball: $V(t) = \phi(\hat V, t) = B$. Since the integral equation holds for _every_ material volume, it also holds for this one, so the integral over $B$ has to vanish. But integrating something positive over $B$ gives something positive, a contradiction. The same works if the integrand is negative at $\bm x_0$. Without continuity, we couldn't construct the contradiction since the integrand could be positive at a single point and zero everywhere else, and then the integral over any volume would still vanish. So we need continuity to conclude that the integrand vanishes everywhere (and not just "almost everywhere").
 
 [^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
