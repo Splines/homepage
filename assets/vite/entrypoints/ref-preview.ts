@@ -7,8 +7,8 @@
  *   equations can be scrolled and links in footnotes clicked. Clicking the reference
  *   jumps to its target as usual.
  * - Touch: the first tap opens the preview instead of jumping, with a "Jump to" link at
- *   the bottom. Tapping the same reference again jumps, too. Tapping elsewhere or
- *   scrolling the page closes it.
+ *   the bottom. Tapping the same reference again, tapping elsewhere or scrolling the
+ *   page closes it.
  * - Keyboard: references are plain links, Enter jumps directly.
  *
  * Mouse and touch are told apart by the pointer of each event, not by the device, so
@@ -118,10 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const link = target?.closest<HTMLAnchorElement>(REF_SELECTOR);
     // detail is 0 for clicks triggered by the keyboard
     const byTouch = event.detail > 0 && lastPointerType === "touch";
-    if (link && byTouch && !(mode === "tap" && link === current)) {
+    if (link && byTouch) {
       event.preventDefault();
+      // Tapping the open reference again closes its preview, the jump link is for jumping.
+      const wasOpen = mode === "tap" && link === current;
       hide();
-      open(link, "tap");
+      if (!wasOpen) open(link, "tap");
       return;
     }
     hide();
