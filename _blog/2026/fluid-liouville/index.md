@@ -16,6 +16,8 @@ table_of_contents: true
 preview_image: preview.png
 preview_image_alt: >
   Phase space of a pendulum: its energy levels have the form of "cat eyes". Some volume in this phase space is highlighted in brown. This volume is deformed as a spiral.
+description: >
+  It's surprising how many ideas from fluid dynamics appear in statistical physics. We derive Liouville's theorem from mass conservation, the Reynolds transport theorem and Hamilton's equations.
 excerpt: >
   It is surprising how many ideas and formulas from fluid dynamics appear in statistical physics. In this post, we derive Liouville's theorem from mass conservation, the Reynolds transport theorem and Hamilton's equations. We then use Jeans' theorem to see which ensembles are in equilibrium.
 ---
