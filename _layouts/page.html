@@ -12,6 +12,13 @@
   <!-- for Giscus mapping between blog post and GitHub Discussion -->
   <meta content="{{ page.title }}" property="og:title">
 
+  <!-- Search engine & social media description -->
+  {% assign description = page.description | default: page.excerpt | default: site.description
+    | strip_html | strip_newlines | strip | truncate: 160 | escape %}
+  <meta content="{{ description }}" name="description">
+  <meta content="{{ description }}" property="og:description">
+  <meta content="{{ description }}" name="twitter:description">
+
   <!-- Social Media Preview -->
   {% if page.preview_image %}
   {% assign preview_image_url = page.bundle_url | default: page.url | append: page.preview_image | absolute_url %}
