@@ -13,6 +13,8 @@ Jekyll::Hooks.register :blog, :post_init do |doc|
 
   doc.data["slug"]      ||= slug
   doc.data["permalink"] ||= "/blog/#{year}/#{slug}/"
+  # Where the post's assets are served. Differs from the post's URL for drafts.
+  doc.data["bundle_url"] = "/blog/#{year}/#{slug}/"
 end
 
 # Drafts appear in the landing page's post list only for a local `jekyll serve`

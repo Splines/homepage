@@ -11,6 +11,19 @@
   {% vite_client_tag %}
   <!-- for Giscus mapping between blog post and GitHub Discussion -->
   <meta content="{{ page.title }}" property="og:title">
+
+  <!-- Social Media Preview -->
+  {% if page.preview_image %}
+  {% assign preview_image_url = page.bundle_url | default: page.url | append: page.preview_image | absolute_url %}
+  <meta content="{{ preview_image_url }}" property="og:image">
+  <meta content="summary_large_image" name="twitter:card">
+  <meta content="{{ preview_image_url }}" name="twitter:image">
+  {% if page.preview_image_alt %}
+  <meta content="{{ page.preview_image_alt | strip | escape }}" property="og:image:alt">
+  <meta content="{{ page.preview_image_alt | strip | escape }}" name="twitter:image:alt">
+  {% endif %}
+  {% endif %}
+
   <link href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
   <link href="{{ '/assets/css/page.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
 
