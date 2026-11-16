@@ -18,8 +18,7 @@ trap cleanup INT TERM EXIT
 bin/vite dev &
 bin/jekyll-vite wait
 
-# --future: also render posts dated later than today
-bundle exec jekyll serve --livereload --incremental --future &
+bundle exec jekyll serve --livereload --incremental &
 
 # Exit (and trigger cleanup) as soon as either process stops.
 wait -n
