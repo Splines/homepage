@@ -69,8 +69,8 @@
 
       {% assign posts = site.blog | sort: "date" | reverse %}
       {% for post in posts %}
-      {% unless post.draft %}
-      <div class="post-card">
+      {% if post.draft != true or site.show_drafts_in_lists == true %}
+      <div class="post-card{% if post.draft %} post-card-draft{% endif %}">
         <a class="post-card-link" href="{{ post.url | relative_url }}"></a>
 
         <h2>
@@ -78,9 +78,13 @@
         </h2>
 
         <p class="post-time">
+          {% if post.draft %}
+          draft, only listed here in local previews
+          {% else %}
           <time datetime="{{ post.date | date: '%Y-%m-%d' }}">
             {{ post.date | date: "%B %Y" }}
           </time>
+          {% endif %}
         </p>
 
         <p class="post-excerpt">
@@ -88,7 +92,7 @@
         </p>
 
       </div>
-      {% endunless %}
+      {% endif %}
       {% endfor %}
 
     </div>

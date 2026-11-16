@@ -59,6 +59,11 @@ h2 {
   }
 }
 
+// Drafts only show up here in local previews (see _plugins/blog_bundles.rb)
+.post-card-draft {
+  border-style: dashed;
+}
+
 .post-card-link {
   position: absolute;
   top: 0;
