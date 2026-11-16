@@ -12,9 +12,25 @@
   <!-- for Giscus mapping between blog post and GitHub Discussion -->
   <meta content="{{ page.title }}" property="og:title">
 
+  {% assign canonical_url = page.url | absolute_url %}
+  <meta content="{{ canonical_url }}" property="og:url">
+  <meta content="{{ site.title }}" property="og:site_name">
+  <meta content="en_US" property="og:locale">
+  <meta content="article" property="og:type">
+
+  {% if page.draft %}
+  <!-- Drafts live under a hidden URL. Keep them out of search engines in case it leaks. -->
+  <meta content="noindex" name="robots">
+  {% else %}
+  <link href="{{ canonical_url }}" rel="canonical">
+  {% assign published_time = page.date | date_to_xmlschema %}
+  <meta content="{{ published_time }}" property="article:published_time">
+  <meta content="{{ published_time }}" property="article:modified_time">
+  {% endif %}
+
   <!-- Search engine & social media description -->
   {% assign description = page.description | default: page.excerpt | default: site.description
-    | strip_html | strip_newlines | strip | truncate: 160 | escape %}
+  | strip_html | strip_newlines | strip | truncate: 160 | escape %}
   <meta content="{{ description }}" name="description">
   <meta content="{{ description }}" property="og:description">
   <meta content="{{ description }}" name="twitter:description">
