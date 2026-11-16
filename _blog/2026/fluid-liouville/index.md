@@ -43,7 +43,7 @@ $$
   </div>
 </figure>
 
-In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote them with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
+In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote them with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as an observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
 
 <figure class="fl-figure fl-wide" data-scene="eulerian">
   <canvas class="fl-canvas fl-canvas-strip" aria-label="A flow watched at a point x fixed in space, marked with a blue target. Particles drift past it, and every now and then one passes right through it." role="img"></canvas>
@@ -198,7 +198,7 @@ $$
 q(t) = q_0 \cos t + p_0 \sin t, \qquad p(t) = p_0 \cos t - q_0 \sin t
 $$
 
-So every state moves clockwise on a circle around the origin. The radius of one trajectory stays constant, $r^2 = q^2 + p^2 = q_0^2 + p_0^2$, since the energy $\Ham = (q^2 + p^2)/2$ is conserved.
+So every state moves clockwise on a circle around the origin. The radius of each trajectory remains constant, $r^2 = q^2 + p^2 = q_0^2 + p_0^2$, since the energy $\Ham = (q^2 + p^2)/2$ is conserved.
 
 <figure class="fl-figure fl-wide" data-scene="oscillator">
   <div class="fl-lab">
@@ -297,7 +297,7 @@ $$
 \pdv{\rho}{t} + \underbrace{\bm v \cdot \nabla \rho}_{\text{convective part}} = 0
 $$ <eq:liouville-partial>
 
-Déjà vu? Absolutely. This is just the material time derivative @eq:material-derivative for the density $\rho$ in phase space. We can verify this by following a single copy of the system along its trajectory $(\bm q(t), \bm p(t))$ and looking at the density it sees. The chain rule gives:
+Déjà vu? Absolutely. This is just the material time derivative $\mathrm{d} \rho / \mathrm{d} t$ corresponding to the Lagrangian perspective: we ride along with a single copy of the system through phase space and track the density it sees on its trajectory $(\bm q(t), \bm p(t))$. We can also verify this with the chain rule:
 
 $$
 \dv{}{t} \rho(\bm q(t), \bm p(t), t)
@@ -305,7 +305,7 @@ $$
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
 $$
 
-As we've seen, $\mathrm{d} \rho / \mathrm{d} t$ is the perspective of riding along with a copy of the system, i.e. considering a trajectory in phase space. Putting everything together, we finally arrive at Liouville's theorem:
+Putting this together with @eq:liouville-partial, we find that the material time derivative of $\rho$ vanishes:
 
 <div class="fl-key" markdown="1">
 <p class="fl-key-title">Liouville's theorem</p>
@@ -360,7 +360,7 @@ $$
 $$ <eq:liouville-equation>
 </div>
 
-So the change of $\rho$ at a fixed point is completely determined by $\rho$ and the Hamiltonian $\Ham$.
+So the change of $\rho$ at a fixed point only depends on how $\rho$ and the Hamiltonian $\Ham$ vary in phase space around that point, i.e. on their first derivatives with respect to $q_i$ and $p_i$. Their values themselves don't matter (e.g. adding a constant to $\Ham$ doesn't change anything).
 
 Note how @eq:liouville-equation gives us a condition for when $\rho$ is stationary in phase space, i.e. when the statistics of our ensemble don't change at any point anymore. This is what we call (statistical) equilibrium:
 
@@ -477,13 +477,13 @@ $$
 \end{aligned}
 $$
 
-So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is occupied at time $t$ by exactly one copy. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
+So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where possibly $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
-- _At most one copy:_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
 
-- _At least one copy:_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
+- _At least one trajectory (surjective):_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
-Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique copy with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
+Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique trajectory with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
 
 $$
 \rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t
@@ -512,7 +512,7 @@ You may wonder how the density at a fixed point can stay the same, given that th
 
 The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle have different densities. So the observer standing still observes a change in density as the blob passes by.
 
-Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
+Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$[^microcanonical]. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
 ---
 
@@ -531,3 +531,5 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 [^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
 [^sampling]: In the above animation, you can still see the dots rotating. But only because you look at individual points sampled from the density. Imagine you sampled infinitely many points from the density: then the picture would be the same ring at all times.
+
+[^microcanonical]: This notation is sloppy (yet intuitive): $\delta(\Ham - E_0)$ is not a function, but a distribution and is therefore not a probability density in the usual sense. To make this at least somewhat rigorous, consider the thin shell $E_0 \le \Ham \le E_0 + \Delta E$ in phase space. Its volume is approximately $\Omega(E_0) \, \Delta E$, where $\Omega(E_0) := \int \delta(\Ham - E_0) \,\mathrm{d}\bm q \,\mathrm{d}\bm p$ is the phase space volume per unit energy. Next, spread the probability uniformly over the shell: $\rho = 1/\bigl(\Omega(E_0) \, \Delta E\bigr)$ inside the shell and $\rho = 0$ outside. As this density only depends on the energy, Jeans' theorem applies (strictly speaking, only after smoothing out the edges since we need $\rho$ to be continuously differentiable). In the limit $\Delta E \to 0$, we get the microcanonical ensemble $\rho = \delta(\Ham - E_0) / \Omega(E_0)$, which is stationary by Jeans' theorem. Note also that the factor $1/\Omega(E_0)$ is needed to normalize the total probability to $1$ and to fix the units: $\delta(\Ham - E_0)$ has units of $1/\text{energy}$ (like $1/\Delta E$), but a probability density in phase space needs units of $1/(\text{phase space volume})$. Dividing by $\Omega(E_0)$, which has units of $(\text{phase space volume})/(\text{energy})$, fixes this.
