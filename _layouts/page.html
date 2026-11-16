@@ -58,10 +58,14 @@
       <p>
         written by <a href="{{ '/' | relative_url }}">{{ site.author }}</a>
         <br>
+        {% if page.draft %}
+        <span class="draft-notice">draft, not yet published</span>
+        {% else %}
         published
         <time datetime="{{ page.date | date: '%Y-%m-%d' }}">
           {{ page.date | date: "%B %-d, %Y" }}
         </time>
+        {% endif %}
       </p>
     </header>
 

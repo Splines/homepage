@@ -15,12 +15,14 @@ Jekyll::Hooks.register :blog, :post_init do |doc|
   doc.data["permalink"] ||= "/blog/#{year}/#{slug}/"
 end
 
-# Guard against empty `date:` front matter in blog posts.
+# Guard against empty `date:` front matter in published blog posts.
+# Drafts (`draft: true`) may leave the date out until they are published.
 class BlogDateGuard < Jekyll::Generator
   priority :high
 
   def generate(site)
-    undated = site.collections["blog"]&.docs&.reject { |doc| doc.data["date"] } || []
+    docs = site.collections["blog"]&.docs || []
+    undated = docs.reject { |doc| doc.data["draft"] || doc.data["date"] }
     return if undated.empty?
 
     list = undated.map { |doc| "  - #{doc.relative_path}" }.join("\n")
