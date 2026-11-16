@@ -142,7 +142,7 @@ $$
 $$ <eq:continuity>
 </div>
 
-One can also turn this into a balance equation for a _fixed_ region $V$ in space. Simply apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term turns into a surface integral:
+Before moving on, let's turn this into a balance equation. First, apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term becomes a surface integral:
 
 $$
 0 \overset{@eq:mass-conservation}{=} \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x
@@ -150,7 +150,7 @@ $$
 \int_{V(t)} \pdv{\rho}{t} \,\mathrm{d}\bm x + \int_{\partial V(t)} \mathrm{d}\bm A \cdot \rho \bm v
 $$
 
-Now let's define the current $\bm j := \rho \bm v$. We want to analyze a _fixed_ region $V$, which corresponds to a material volume $V(t)$ at some instant $t$. Since $V$ itself doesn't move, we can pull the partial time derivative out of the integral over $V$, and we get the balance equation for the mass $m_V(t)$ inside $V$:
+So far, $V(t)$ moved with the fluid. Now, we want to analyze a _fixed_ control region $V$ instead, through which the fluid flows. To do so, pick any instant $\tilde t$ and choose the material volume that coincides with $V$ at exactly this instant, i.e. $V(\tilde t) = V$. Since $V$ itself doesn't move, we can pull the partial time derivative out of the integral over $V$, and get the balance equation for the mass $m_V(t)$ inside $V$, where we additionally defined the current $\bm j := \rho \bm v$:
 
 $$
 -\int_{\partial V} \mathrm{d}\bm A \cdot \bm j
@@ -180,7 +180,7 @@ In phase space, each point represents a possible state of our system. The axes o
 
 The funny thing is that this abstract point in phase space, representing a state of a particle system, can itself be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
 
-Let's see this with the famous harmonic oscillator: a mass $m$ on a spring with stiffness $k$ that moves back and forth on a line. We just consider $N=1$ particle in one dimension, so the state of the system is described by the position $q$ and momentum $p$ alone. The phase space is then 2-dimensional. The Hamiltonian is the total energy:
+Let's see this with the famous harmonic oscillator: a mass $m$ on a spring with stiffness $k$ that moves back and forth on a line. We just consider $N=1$ particle in one dimension, so the state of the system is described by the position $q$ and momentum $p$ alone. The phase space is then 2-dimensional. The Hamiltonian is the total energy[^energy]:
 
 $$
 \Ham(q, p) = \frac{p^2}{2m} + \frac{k}{2} q^2
@@ -525,6 +525,8 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 [^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
 
 [^vanish]: For this conclusion, we need the integrand to be continuous (which is the case since $\rho$ and $\bm v$ are continuously differentiable). Let's see why this must be the case. We do this by contradiction. Assume that at some time $t$, the integrand is positive at a point $\bm x_0$. By continuity, it is then also positive on a small ball $B$ around $\bm x_0$. We define $\hat V$ as the set of particles that end up in $B$ at time $t$, i.e. $\hat V = \phi^{-1}(B, t)$. This $\hat V$ is connected (as $B$ is connected and $\phi^{-1}(\cdot, t)$ is continuous), so it is a valid starting region for a material volume. And at time $t$, this material volume is exactly the ball: $V(t) = \phi(\hat V, t) = B$. Since the integral equation holds for _every_ material volume, it also holds for this one, so the integral over $B$ has to vanish. But integrating something positive over $B$ gives something positive, a contradiction. The same works if the integrand is negative at $\bm x_0$. Without continuity, we couldn't construct the contradiction since the integrand could be positive at a single point and zero everywhere else, and then the integral over any volume would still vanish. So we need continuity to conclude that the integrand vanishes everywhere (and not just "almost everywhere").
+
+[^energy]: This holds for the harmonic oscillator and many other simple mechanical systems, where $\Ham$ is kinetic plus potential energy. But it's not true in general (e.g. when we describe a system in a rotating coordinate system). We only use that $\Ham$ is the _total_ energy in our examples. Neither Liouville's nor Jeans' theorem needs it. For Jeans' theorem, we will simply call the value of $\Ham$ the "energy".
 
 [^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
