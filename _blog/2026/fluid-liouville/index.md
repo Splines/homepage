@@ -28,10 +28,10 @@ _Tip: Hover over footnote and equation references to get a preview without scrol
 
 There are two different views to describe the motion of a fluid:
 
-In the **Lagrangian** (material) description, we follow each fluid particle individually. A particle is labeled by its position $\bm X$ at the initial time $t = 0$. Its motion is described by a map[^phi] $\phi$ that tells us where this particle is at time $t$:
+In the **Lagrangian** (material) description, we follow each fluid particle individually. A particle is labeled by its position $\bm X \in \RR^3$ at the initial time $t = 0$. Its motion is described by a map[^phi] $\phi: \RR^3 \times \RR \to \RR^3$ that tells us where particle $\bm X$ is at time $t$:
 
 $$
-\phi(\bm X, 0) = \bm X, \qquad \bm x = \phi(\bm X, t)
+\phi(\bm X, 0) = \bm X, \qquad \bm x := \phi(\bm X, t)
 $$
 
 <figure class="fl-figure fl-wide" data-scene="lagrangian">
@@ -45,7 +45,7 @@ $$
   </div>
 </figure>
 
-In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote them with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
+In this material view, quantities like temperature are attached to a particle $\bm X$ and we denote them with a hat: $\hat T(\bm X, t)$. But this can quickly become impractical if you think of just how many particles swirl around to make up a fluid. We don't want to track each of those individually. Instead, in the **Eulerian** (spatial) view, we stand still as an observer: a position $\bm x$ in space is fixed. Now we watch what particles happen to pass by and measure the change of temperature at that fixed point: $T(\bm x, t)$.
 
 <figure class="fl-figure fl-wide" data-scene="eulerian">
   <canvas class="fl-canvas fl-canvas-strip" aria-label="A flow watched at a point x fixed in space, marked with a blue target. Particles drift past it, and every now and then one passes right through it." role="img"></canvas>
@@ -67,7 +67,7 @@ T \bigl(\phi(\bm X, t), t\bigr)
 = \hat T \bigl(\phi^{-1}(\bm x, t), t\bigr)
 $$
 
-But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, e.g. what a thermometer fixed in some place would measure. But what about a thermometer that moves along, say with velocity $\bm u$? At time $t$, it is at $\bm x$, a short moment $\delta t$ later at $\bm x + \bm u \, \delta t$. Taylor-expanding $T$ in both arguments to first order gives:
+But their time derivatives differ. The partial derivative $\partial T / \partial t$ is the change at a fixed position, e.g. what a thermometer fixed in some place would measure. But what about one that moves along, say with instantaneous velocity $\bm u$? At time $t$, it is at $\bm x$, a short moment $\delta t$ later at $\bm x + \bm u \, \delta t$. Taylor-expanding $T$ in both arguments to first order gives:
 
 $$
 T(\bm x + \bm u \, \delta t, \, t + \delta t)
@@ -93,7 +93,7 @@ Note how it makes sense to denote this by a total time derivative $\mathrm{d}T /
 
 ### Material volume
 
-Before moving on, let us also introduce the _material volume_ $V(t)$: we take a region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
+Before moving on, let us also introduce the _material volume_ $V(t)$: we take a connected region $\hat V$ at $t = 0$ and let it move with the fluid, $V(t) = \phi(\hat V, t)$. We slightly abuse the notation here and pass in a set of points $\hat V$ to the map $\phi$, which is defined for single points. But this is just a shorthand for applying $\phi$ to every point in $\hat V$.
 
 Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behaved" in the sense that $V(t)$ may stretch, twist and deform, but it stays in one piece and it always consists of the same particles it started with[^well-behaved]. You can see this in the following animation.
 
@@ -135,7 +135,7 @@ $$
 \int_{V(t)} \left( \pdv{\rho}{t} + \nabla \cdot (\rho \bm v) \right) \mathrm{d}\bm x \overset{!}{=} 0
 $$
 
-This holds for arbitrary material volumes $V(t)$, so the integrand has to vanish everywhere, which gives the continuity equation:
+This holds for arbitrary material volumes $V(t)$, so the integrand has to vanish everywhere[^vanish], which gives the continuity equation:
 
 <div class="fl-key fl-key-inline">
 <p class="fl-key-title">Continuity equation</p>
@@ -144,7 +144,7 @@ $$
 $$ <eq:continuity>
 </div>
 
-One can also turn this into a balance equation for a _fixed_ region $V$ in space. Simply apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term turns into a surface integral:
+Before moving on, let's turn this into a balance equation. First, apply Gauß' theorem to the second term of @eq:reynolds with $f = \rho$. The divergence term becomes a surface integral:
 
 $$
 0 \overset{@eq:mass-conservation}{=} \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x
@@ -152,7 +152,7 @@ $$
 \int_{V(t)} \pdv{\rho}{t} \,\mathrm{d}\bm x + \int_{\partial V(t)} \mathrm{d}\bm A \cdot \rho \bm v
 $$
 
-Now let's define the current $\bm j := \rho \bm v$. We want to analyze a _fixed_ region $V$, which corresponds to a material volume $V(t)$ at some instant $t$. Since $V$ itself doesn't move, we can pull the partial time derivative out of the integral over $V$, and we get the balance equation for the mass $m_V(t)$ inside $V$:
+So far, $V(t)$ moved with the fluid. Now, we want to analyze a _fixed_ control region $V$ instead, through which the fluid flows. To do so, pick any instant $\tilde t$ and choose the material volume that coincides with $V$ at exactly this instant, i.e. $V(\tilde t) = V$. Since $V$ itself doesn't move, we can pull the partial time derivative out of the integral over $V$. As $\tilde t$ was arbitrary, this works at every instant, and we get the balance equation for the mass $m_V(t)$ inside $V$, where we additionally define the current $\bm j := \rho \bm v$:
 
 $$
 -\int_{\partial V} \mathrm{d}\bm A \cdot \bm j
@@ -182,7 +182,7 @@ In phase space, each point represents a possible state of our system. The axes o
 
 The funny thing is that this abstract point in phase space, representing a state of a particle system, can itself be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
 
-Let's see this with the famous harmonic oscillator: a mass $m$ on a spring with stiffness $k$ that moves back and forth on a line. We just consider $N=1$ particle in one dimension, so the state of the system is described by the position $q$ and momentum $p$ alone. The phase space is then 2-dimensional. The Hamiltonian is the total energy:
+Let's see this with the famous harmonic oscillator: a mass $m$ on a spring with stiffness $k$ that moves back and forth on a line. We just consider $N=1$ particle in one dimension, so the state of the system is described by the position $q$ and momentum $p$ alone. The phase space is then 2-dimensional. The Hamiltonian is the total energy[^energy]:
 
 $$
 \Ham(q, p) = \frac{p^2}{2m} + \frac{k}{2} q^2
@@ -200,7 +200,7 @@ $$
 q(t) = q_0 \cos t + p_0 \sin t, \qquad p(t) = p_0 \cos t - q_0 \sin t
 $$
 
-So every state moves clockwise on a circle around the origin. The radius of one trajectory stays constant, $r^2 = q^2 + p^2 = q_0^2 + p_0^2$, since the energy $\Ham = (q^2 + p^2)/2$ is conserved.
+So every state moves clockwise on a circle around the origin. The radius of each trajectory remains constant, $r^2 = q^2 + p^2 = q_0^2 + p_0^2$, since the energy $\Ham = (q^2 + p^2)/2$ is conserved.
 
 <figure class="fl-figure fl-wide" data-scene="oscillator">
   <div class="fl-lab">
@@ -299,7 +299,7 @@ $$
 \pdv{\rho}{t} + \underbrace{\bm v \cdot \nabla \rho}_{\text{convective part}} = 0
 $$ <eq:liouville-partial>
 
-Déjà vu? Absolutely. This is just the material time derivative @eq:material-derivative for the density $\rho$ in phase space. We can verify this by following a single copy of the system along its trajectory $(\bm q(t), \bm p(t))$ and looking at the density it sees. The chain rule gives:
+Déjà vu? Absolutely. This is just the material time derivative @eq:material-derivative, now for $\rho$, i.e. $\mathrm{d} \rho / \mathrm{d} t$ corresponding to the Lagrangian perspective: we ride along with a single copy of the system through phase space and track the density it sees on its trajectory $(\bm q(t), \bm p(t))$. We can also verify this with the chain rule:
 
 $$
 \dv{}{t} \rho(\bm q(t), \bm p(t), t)
@@ -307,7 +307,7 @@ $$
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
 $$
 
-As we've seen, $\mathrm{d} \rho / \mathrm{d} t$ is the perspective of riding along with a copy of the system, i.e. considering a trajectory in phase space. Putting everything together, we finally arrive at Liouville's theorem:
+Putting this together with @eq:liouville-partial, we find that the material time derivative of $\rho$ vanishes:
 
 <div class="fl-key" markdown="1">
 <p class="fl-key-title">Liouville's theorem</p>
@@ -362,7 +362,7 @@ $$
 $$ <eq:liouville-equation>
 </div>
 
-So the change of $\rho$ at a fixed point is completely determined by $\rho$ and the Hamiltonian $\Ham$.
+So the change of $\rho$ at a fixed point only depends on how $\rho$ and the Hamiltonian $\Ham$ vary in phase space around that point, i.e. on their first derivatives with respect to $q_i$ and $p_i$. Their values themselves don't matter (e.g. adding a constant to $\Ham$ doesn't change anything).
 
 Note how @eq:liouville-equation gives us a condition for when $\rho$ is stationary in phase space, i.e. when the statistics of our ensemble don't change at any point anymore. This is what we call (statistical) equilibrium:
 
@@ -479,13 +479,13 @@ $$
 \end{aligned}
 $$
 
-So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is occupied at time $t$ by exactly one copy. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
+So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where possibly $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
-- _At most one copy:_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
 
-- _At least one copy:_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
+- _At least one trajectory (surjective):_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
-Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique copy with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
+Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique trajectory with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
 
 $$
 \rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t
@@ -514,7 +514,7 @@ You may wonder how the density at a fixed point can stay the same, given that th
 
 The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle have different densities. So the observer standing still observes a change in density as the blob passes by.
 
-Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
+Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$[^microcanonical]. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
 ---
 
@@ -524,8 +524,14 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
-[^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, since $\phi(\cdot, t)$ and its inverse are continuous, $V(t)$ cannot tear apart or get holes in it.
+[^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
+
+[^vanish]: For this conclusion, we need the integrand to be continuous (which is the case if we assume $\rho$ and $\bm v$ to be continuously differentiable). Let's see why the integrand then has to vanish everywhere. We do this by contradiction. Assume that at some time $t$, the integrand is positive at a point $\bm x_0$. By continuity, it is then also positive on a small ball $B$ around $\bm x_0$. We define $\hat V$ as the set of particles that end up in $B$ at time $t$, i.e. $\hat V = \phi^{-1}(B, t)$. This $\hat V$ is connected (as $B$ is connected and $\phi^{-1}(\cdot, t)$ is continuous), so it is a valid starting region for a material volume. And at time $t$, this material volume is exactly the ball: $V(t) = \phi(\hat V, t) = B$. Since the integral equation holds for _every_ material volume, it also holds for this one, so the integral over $B$ has to vanish. But integrating something positive over $B$ gives something positive, a contradiction. The same works if the integrand is negative at $\bm x_0$. Without continuity, we couldn't construct the contradiction since the integrand could be positive at a single point and zero everywhere else, and then the integral over any volume would still vanish. So we need continuity to conclude that the integrand vanishes everywhere (and not just "almost everywhere").
+
+[^energy]: This holds for the harmonic oscillator and many other simple mechanical systems, where $\Ham$ is kinetic plus potential energy. But it's not true in general (e.g. when we describe a system in a rotating coordinate system). We only use that $\Ham$ is the _total_ energy in our examples. Neither Liouville's nor Jeans' theorem needs it. For Jeans' theorem, we will simply call the value of $\Ham$ the "energy".
 
 [^jeans]: In stellar dynamics, Jeans' theorem is usually stated for any integrals of motion, not just the energy: a density that depends on $(\bm q, \bm p)$ only through conserved quantities (e.g. energy and angular momentum) is stationary. The proof is the same as for the energy.
 
 [^sampling]: In the above animation, you can still see the dots rotating. But only because you look at individual points sampled from the density. Imagine you sampled infinitely many points from the density: then the picture would be the same ring at all times.
+
+[^microcanonical]: This notation is sloppy (yet intuitive): $\delta(\Ham - E_0)$ is not a function, but a distribution and is therefore not a probability density in the usual sense. To make this at least somewhat rigorous, consider the thin shell $E_0 \le \Ham \le E_0 + \Delta E$ in phase space. Its volume is approximately $\Omega(E_0) \, \Delta E$, where $\Omega(E_0) := \int \delta(\Ham - E_0) \,\mathrm{d}\bm q \,\mathrm{d}\bm p$ is the phase space volume per unit energy. Next, spread the probability uniformly over the shell: $\rho = 1/\bigl(\Omega(E_0) \, \Delta E\bigr)$ inside the shell and $\rho = 0$ outside. As this density only depends on the energy, Jeans' theorem applies (strictly speaking, only after smoothing out the edges since we need $\rho$ to be continuously differentiable). In the limit $\Delta E \to 0$, we get the microcanonical ensemble $\rho = \delta(\Ham - E_0) / \Omega(E_0)$, which is stationary by Jeans' theorem. Note also that the factor $1/\Omega(E_0)$ is needed to normalize the total probability to $1$ and to fix the units: $\delta(\Ham - E_0)$ has units of $1/\text{energy}$ (like $1/\Delta E$), but a probability density in phase space needs units of $1/(\text{phase space volume})$. Dividing by $\Omega(E_0)$, which has units of $(\text{phase space volume})/(\text{energy})$, fixes this.
