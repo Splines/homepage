@@ -2,7 +2,6 @@
 layout: page
 draft: true
 permalink: /blog/drafts/5a7f11d8b35b9201
-date: 2026-11-14
 title: "A Fluid Dynamics View on Liouville's Theorem"
 katex:
   enabled: true

@@ -15,12 +15,38 @@ Jekyll::Hooks.register :blog, :post_init do |doc|
   doc.data["permalink"] ||= "/blog/#{year}/#{slug}/"
 end
 
-# Guard against empty `date:` front matter in blog posts.
+# Drafts appear in the landing page's post list only for a local `jekyll serve`
+# (e.g. via `bin/dev`), so their excerpt can be previewed. A `jekyll build` never
+# lists them, whatever the environment.
+def show_drafts_in_lists?(site)
+  site.config["serving"] == true && Jekyll.env != "production"
+end
+
+Jekyll::Hooks.register :site, :pre_render do |site, payload|
+  payload["site"]["show_drafts_in_lists"] = show_drafts_in_lists?(site)
+end
+
+# Safety net for deploys: fail the production build if a draft's URL ended up
+# on the landing page anyway.
+Jekyll::Hooks.register :pages, :post_render do |page|
+  next unless Jekyll.env == "production" && page.url == "/"
+
+  drafts = page.site.collections["blog"]&.docs&.select { |doc| doc.data["draft"] } || []
+  leaked = drafts.select { |doc| page.output.include?(%(href="#{doc.url}")) }
+  next if leaked.empty?
+
+  list = leaked.map { |doc| "  - #{doc.relative_path}" }.join("\n")
+  raise "Draft(s) listed on the landing page in a production build:\n#{list}"
+end
+
+# Guard against empty `date:` front matter in published blog posts.
+# Drafts (`draft: true`) may leave the date out until they are published.
 class BlogDateGuard < Jekyll::Generator
   priority :high
 
   def generate(site)
-    undated = site.collections["blog"]&.docs&.reject { |doc| doc.data["date"] } || []
+    docs = site.collections["blog"]&.docs || []
+    undated = docs.reject { |doc| doc.data["draft"] || doc.data["date"] }
     return if undated.empty?
 
     list = undated.map { |doc| "  - #{doc.relative_path}" }.join("\n")
