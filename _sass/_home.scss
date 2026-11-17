@@ -75,6 +75,41 @@ h2 {
 .post-excerpt {
   margin-top: 0.5em;
 }
+
+// Featured post: a large card with the post's preview image on top
+.post-card-featured {
+  margin-top: 2em;
+  margin-bottom: 0;
+  padding: 0;
+  overflow: hidden;
+
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(v.$primary, 0.28);
+    transform: translateY(-2px);
+  }
+
+  .post-card-body {
+    padding: 1em;
+  }
+
+  .post-excerpt {
+    margin-bottom: 0;
+  }
+}
+
+.post-card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 40 / 21;
+  object-fit: cover;
+
+  border: 0;
+  border-bottom: 2px solid v.$primary;
+  border-radius: 0;
+  box-shadow: none;
+}
 .legal-link {
   margin-top: 0.4em;
   font-family: v.$normal-font;

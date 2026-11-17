@@ -12,6 +12,7 @@ katex:
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 table_of_contents: true
+featured: true
 preview_image: preview.png
 preview_image_alt: >
   Phase space of a pendulum: its energy levels have the form of "cat eyes". Some volume in this phase space is highlighted in brown. This volume is deformed as a spiral.
