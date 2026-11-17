@@ -326,7 +326,7 @@ $$ <eq:liouville>
 
 </div>
 
-Or equivalently, the density only depends on the initial conditions of the copy, not on time:
+Or equivalently, the density along a trajectory is always the same as at the trajectory's starting point:
 
 $$
 \rho(\bm q(t), \bm p(t), t) = \rho(\bm q(0), \bm p(0), 0)
