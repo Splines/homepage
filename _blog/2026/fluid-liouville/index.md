@@ -528,6 +528,8 @@ To summarize: Hamilton's equations tell us how a copy of the system moves throug
 
 I hope this was somewhat helpful to you. I find it fascinating that the same mathematical structure appears in fluid dynamics and in statistical physics and that we can actually use tools from fluid dynamics to better understand statistical physics.
 
+<small>_Thanks a lot for the great reviews by Amelie Olivia Rürup, Martin and Jakob. They caught typos, mathematical mistakes and unclear explanations._</small>
+
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
 [^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
