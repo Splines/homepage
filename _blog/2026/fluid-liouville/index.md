@@ -529,7 +529,7 @@ To summarize: Hamilton's equations tell us how a copy of the system moves throug
 
 I hope this was somewhat helpful to you. I find it fascinating that the same mathematical structure appears in fluid dynamics and in statistical physics and that we can actually use tools from fluid dynamics to better understand statistical physics.
 
-<small>_Thanks a lot for the great reviews by Amelie Olivia Rürup, Martin and Jakob. They caught typos, mathematical mistakes and unclear explanations._</small>
+<small>_Thanks a lot for the great reviews by Amelie Olivia Rürup, Martin Dermendzhiev and Jakob. They caught typos, mathematical mistakes and unclear explanations._</small>
 
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
