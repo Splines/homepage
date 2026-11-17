@@ -425,7 +425,7 @@ Before we can answer the question about equilibrium, let's look at the following
       <p><strong>Harmonic oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> The blob in phase space turns clockwise and keeps its shape. The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period.</p>
     </div>
     <div data-explains="ring" hidden>
-      <p><strong>Harmonic oscillator with a ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same flow as for the blob, but now the density only depends on the energy, $\rho = \Phi(\Ham)$. The copies still circle the origin, but each copy that leaves a point is replaced by one with the same density. This will lead us to Jeans' theorem below.</p>
+      <p><strong>Harmonic oscillator with a ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same flow as for the blob, but now the density only depends on the energy, $\rho = \Phi(\Ham)$. The copies still circle the origin, but each copy that leaves a point is replaced by one from the same circle, so the observer standing still always measures the same density. This will lead to Jeans' theorem below.</p>
     </div>
     <div data-explains="damped" hidden>
       <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing (as all copies spiral into the origin).</p>
