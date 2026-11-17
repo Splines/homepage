@@ -182,7 +182,7 @@ It tells us: the mass inside a _fixed_ region $V$ can only change by what flows 
 
 ## Connection to phase space
 
-In phase space, each point represents a possible state of our system. The axes of this multidimensional space are the generalized coordinates of the system and their conjugate momenta. For our purposes, we consider $N$ particles in three dimensions, so we have $3N$ position coordinates $\bm q = (q_1, \dots, q_{3N})$ and $3N$ momentum coordinates $\bm p = (p_1, \dots, p_{3N})$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
+In phase space, each point represents a possible state of our system. The axes of this multidimensional space are the generalized coordinates of the system and their conjugate momenta. For our purposes, we consider $N$ particles in three dimensions, i.e. $3N$ position coordinates $\bm q = (q_1, \dots, q_{3N})$ and $3N$ momentum coordinates $\bm p = (p_1, \dots, p_{3N})$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
 
 The funny thing is that this abstract point in phase space, representing a state of a particle system, can itself be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
 
