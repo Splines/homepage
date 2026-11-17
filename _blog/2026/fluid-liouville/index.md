@@ -115,7 +115,7 @@ Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behav
 
 ## Balance equation
 
-Since at every given moment the material volume is made up of the same fluid particles, its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
+Since the material volume is made up of the same fluid particles at all times, its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
 
 $$
 \dv{m}{t} = \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x \overset{!}{=} 0
@@ -231,7 +231,7 @@ You can click on "Many copies" to fill the phase space with many copies of the s
 
 Let's recap our general setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field.
 
-But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track all of them, neither in real space nor in the $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all copies of the system, weighted by how likely each state is.
+But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them, neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
 
 This "how likely each state is" can be described by a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
 
@@ -385,7 +385,7 @@ $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
 $$ <eq:ensemble-average>
 
-These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ gives us the temperature $T$ (equipartition theorem). So in equilibrium, these ensemble averages don't change with time.
+These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant in time.
 
 Note that the copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
@@ -517,7 +517,7 @@ Let's see again where our assumptions were used:
 - _Time-independent Hamiltonian:_ the energy of every copy is conserved @eq:energy-conservation.
 - _Ansatz_ @eq:ansatz: the initial density only depends on the energy. This model choice is up to us, but it is physically motivated: we expect that the equilibrium state of a system only depends on its energy, not on the details of how it got there. And we showed that such densities indeed stay stationary. (The converse doesn't hold in general: other conserved quantities, like angular momentum, can also give stationary densities.)
 
-You may wonder how the density at a fixed point can stay the same, given that the copies keep moving and carry their values of $\rho$ with them. Couldn't these values get shuffled around? No, because a copy is only ever replaced by a copy that sees the _same_ value of $\rho$ at its position. Every copy stays on its energy surface, and by the ansatz, $\rho$ has the same value $\Phi(E)$ everywhere on that surface. So whatever copy arrives at a fixed point comes from the same energy surface as the copy that just left. In terms of the balance equation @eq:balance: the probability that flows into a fixed region from one energy surface is exactly balanced by the probability that flows out of it along the same energy surface.
+You may wonder how the density at a fixed point can stay the same, although copies keep moving. Couldn't the values of $\rho$ get shuffled around? No. A copy is just a point in phase space and doesn't have a density itself. But if we ride along with it, we always measure the same $\rho$ (Liouville's theorem). Whatever copy passes through a fixed point $(\bm q, \bm p)$ has the energy $\Ham(\bm q, \bm p)$ there. And since its energy is conserved, it had this energy all along (i.e. from the start of the trajectory at $t = 0$). So by the ansatz, every rider passing through this point measures the same value $\Phi\bigl(\Ham(\bm q, \bm p)\bigr)$, and hence densities at fixed points don't change with time. In terms of the balance equation @eq:balance: since $\rho$ doesn't change anywhere inside a fixed region $V$, whatever probability flows into $V$ has to flow out again.
 
 The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle see different values of $\rho$. So the observer standing still observes a change in density as the blob passes by.
 
