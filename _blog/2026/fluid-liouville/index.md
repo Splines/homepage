@@ -231,7 +231,7 @@ You can click on "Many copies" to fill the phase space with many copies of the s
 
 Let's recap our general setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field.
 
-But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them, neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
+But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them: neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
 
 This "how likely each state is" can be described by a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
 
@@ -239,7 +239,7 @@ $$
 \int_{\RR^{6N}} \rho(\bm q, \bm p, t) \,\mathrm{d}\bm q \, \mathrm{d}\bm p = 1
 $$
 
-This is analogous to the mass density of a fluid, and mass conservation now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
+This is analogous to the mass density of a fluid, and mass conservation @eq:mass-conservation now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
 
 
 ## Liouville's theorem
@@ -254,7 +254,7 @@ $$
 \end{aligned}
 $$ <eq:continuity-expanded>
 
-We focus on $\nabla \cdot \bm v$ first. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$ and nabla is the gradient in phase space, $\nabla = (\partial / \partial \bm q, \partial / \partial \bm p)$.
+We focus on $\nabla \cdot \bm v$ first. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$ and that nabla is the gradient in phase space, $\nabla = (\partial / \partial \bm q, \partial / \partial \bm p)$.
 
 $$
 \begin{aligned}
@@ -334,8 +334,8 @@ $$ <eq:liouville-integrated>
 
 Let's see again where our assumptions were used:
 
-- _Conservation of probability_ @eq:mass-conservation resulted in the continuity equation @eq:continuity. Copies of the system don't spawn or vanish.
-- _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$, i.e. the incompressibility of the probability fluid. This is not true for general flows, e.g. with friction.
+- _Conservation of probability_ @eq:mass-conservation, i.e. copies of the system neither spawn nor vanish, resulted in the continuity equation @eq:continuity.
+- _Hamilton's equations_ made the velocity field divergence-free: $\nabla \cdot \bm v = 0$. This means that the probability fluid is incompressible, which is not true for general flows, e.g. such with friction.
 
 Note that the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
 
