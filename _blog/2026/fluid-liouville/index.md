@@ -22,7 +22,7 @@ excerpt: >
   It is surprising how many ideas and formulas from fluid dynamics appear in statistical physics. In this post, we derive Liouville's theorem from mass conservation, the Reynolds transport theorem and Hamilton's equations. We then use Jeans' theorem to see which ensembles are in equilibrium.
 ---
 
-Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's theorem, starting from mass conservation, then using the Reynolds transport theorem and finally Hamilton's equations. At the end, we'll use Jeans' theorem to see which ensembles are in equilibrium.
+Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I had already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's theorem, starting from mass conservation, then using the Reynolds transport theorem and finally Hamilton's equations. At the end, we'll use Jeans' theorem to see which ensembles are in equilibrium.
 
 <small>
 _Tip: Hover over footnote and equation references to get a preview without scrolling._
