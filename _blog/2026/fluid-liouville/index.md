@@ -22,7 +22,7 @@ excerpt: >
   It is surprising how many ideas and formulas from fluid dynamics appear in statistical physics. In this post, we derive Liouville's theorem from mass conservation, the Reynolds transport theorem and Hamilton's equations. We then use Jeans' theorem to see which ensembles are in equilibrium.
 ---
 
-Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I have already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's theorem, starting from mass conservation, then using the Reynolds transport theorem and finally Hamilton's equations. At the end, we'll use Jeans' theorem to see which ensembles are in equilibrium.
+Lately in my statistical physics course at university, I was quite surprised to run across many ideas and formulas I had already encountered in fluid dynamics. It's beautiful to see two fields that at first sight have nothing to do with each other come together. In this post, I want to share this beauty with you. We will derive Liouville's theorem, starting from mass conservation, then using the Reynolds transport theorem and finally Hamilton's equations. At the end, we'll use Jeans' theorem to see which ensembles are in equilibrium.
 
 <small>
 _Tip: Hover over footnote and equation references to get a preview without scrolling._
@@ -115,7 +115,7 @@ Given our assumptions[^phi] on $\phi$, the material volume $V(t)$ is "well-behav
 
 ## Balance equation
 
-Since over time, the material volume always contains the same fluid particles, its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
+Since the material volume is made up of the same fluid particles at all times, its mass cannot change. Let $\rho$ denote the mass density, i.e. integrating over it gives the total mass inside $V(t)$. Then the conservation of mass reads:
 
 $$
 \dv{m}{t} = \dv{}{t} \int_{V(t)} \rho \,\mathrm{d}\bm x \overset{!}{=} 0
@@ -231,7 +231,9 @@ You can click on "Many copies" to fill the phase space with many copies of the s
 
 Let's recap our general setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field.
 
-To describe which states of the system are more likely than others, we introduce a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
+But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them, neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
+
+This "how likely each state is" can be described by a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
 
 $$
 \int_{\RR^{6N}} \rho(\bm q, \bm p, t) \,\mathrm{d}\bm q \, \mathrm{d}\bm p = 1
@@ -264,7 +266,7 @@ $$
 \end{aligned}
 $$
 
-This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can deform, but never shrink or grow! To see this, we can use the Reynolds transport theorem @eq:reynolds once more, this time with $f := 1$. Then the left-hand side is simply the change of the volume of the material region $V(t)$.
+This result, $\nabla \cdot \bm v = 0$, means that the probability fluid is _incompressible_. A region in phase space can change its shape, but never its volume! To see this, we can use the Reynolds transport theorem @eq:reynolds once more, this time with $f := 1$. Then the left-hand side is simply the change of the volume of the material region $V(t)$.
 
 $$
 \dv{}{t} \int_{V(t)} \mathrm{d}\bm x = \int_{V(t)} \nabla \cdot \bm v \,\mathrm{d}\bm x = 0
@@ -309,7 +311,7 @@ $$
 \dv{}{t} \rho(\bm q(t), \bm p(t), t)
 = \pdv{\rho}{t} + \sum_{i=1}^{3N} \left( \pdv{\rho}{q_i} \dot q_i + \pdv{\rho}{p_i} \dot p_i \right)
 = \pdv{\rho}{t} + \bm v \cdot \nabla \rho
-$$
+$$ <eq:material-derivative-rho>
 
 Putting this together with @eq:liouville-partial, we find that the material time derivative of $\rho$ vanishes:
 
@@ -324,7 +326,7 @@ $$ <eq:liouville>
 
 </div>
 
-Or equivalently, the density only depends on the initial conditions of the copy, not on time:
+Or equivalently, the density along a trajectory is always the same as at the trajectory's starting point:
 
 $$
 \rho(\bm q(t), \bm p(t), t) = \rho(\bm q(0), \bm p(0), 0)
@@ -383,12 +385,13 @@ $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
 $$ <eq:ensemble-average>
 
-The copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
+These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant in time.
 
+Note that the copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
 To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point at the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is in phase space at the beginning.
 
-Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
+Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded and @eq:material-derivative-rho, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
 
 <figure class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
@@ -422,7 +425,7 @@ Before we can answer the question about equilibrium, let's look at the following
       <p><strong>Harmonic oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t = 0$, but $\partial \rho / \partial t \neq 0$.</strong> The blob in phase space turns clockwise and keeps its shape. The rider always sees the same density. The observer standing still sees nothing at first, then the blob sweeps past once per period.</p>
     </div>
     <div data-explains="ring" hidden>
-      <p><strong>Harmonic oscillator with a ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same flow as for the blob, but now the density only depends on the energy, $\rho = \Phi(\Ham)$. The copies still circle the origin, but each copy that leaves a point is replaced by one with the same density. This will lead us to Jeans' theorem below.</p>
+      <p><strong>Harmonic oscillator with a ring: $\mathrm{d}\rho / \mathrm{d}t = 0$ and $\partial \rho / \partial t = 0$.</strong> Same flow as for the blob, but now the density only depends on the energy, $\rho = \Phi(\Ham)$. The copies still circle the origin, but each copy that leaves a point is replaced by one from the same circle, so the observer standing still always measures the same density. This will lead to Jeans' theorem below.</p>
     </div>
     <div data-explains="damped" hidden>
       <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing (as all copies spiral into the origin).</p>
@@ -435,7 +438,7 @@ Before we can answer the question about equilibrium, let's look at the following
 
 Liouville's theorem holds for the top row since $\nabla \cdot \bm v = 0$. Yet, the blob is not in equilibrium, while the ring is. The difference is that the density of the ring only depends on the energy, while the blob has a more complicated dependence on $(\bm q, \bm p)$. This is essentially the content of Jeans' theorem. Let's analyze the situation now.
 
-By $E(t)$, we denote the energy of a single copy of the system that is at the point $\bigl(\bm q(t), \bm p(t)\bigr)$ in phase space at time $t$ (not the energy of the whole ensemble):
+By $E(t)$, we denote the energy of a single copy of the system that is at the point $\bigl(\bm q(t), \bm p(t)\bigr)$ in phase space at time $t$ (not the energy of the whole phase space ensemble):
 
 $$
 E(t) := \Ham\bigl(\bm q(t), \bm p(t), t\bigr)
@@ -514,9 +517,9 @@ Let's see again where our assumptions were used:
 - _Time-independent Hamiltonian:_ the energy of every copy is conserved @eq:energy-conservation.
 - _Ansatz_ @eq:ansatz: the initial density only depends on the energy. This model choice is up to us, but it is physically motivated: we expect that the equilibrium state of a system only depends on its energy, not on the details of how it got there. And we showed that such densities indeed stay stationary. (The converse doesn't hold in general: other conserved quantities, like angular momentum, can also give stationary densities.)
 
-You may wonder how the density at a fixed point can stay the same, given that the copies keep moving and carry their values of $\rho$ with them. Couldn't these values get shuffled around? No, because a copy is only ever replaced by a copy with the _same_ density. Every copy stays on its energy surface, and by the ansatz, $\rho$ has the same value $\Phi(E)$ everywhere on that surface. So whatever copy arrives at a fixed point comes from the same energy surface as the copy that just left. In terms of the balance equation @eq:balance: as much probability flows into any fixed region as flows out of it.
+You may wonder how the density at a fixed point can stay the same, although copies keep moving. Couldn't the values of $\rho$ get shuffled around? No. A copy is just a point in phase space and doesn't have a density itself. But if we ride along with it, we always measure the same $\rho$ (Liouville's theorem). Whatever copy passes through a fixed point $(\bm q, \bm p)$ has the energy $\Ham(\bm q, \bm p)$ there. And since its energy is conserved, it had this energy all along (i.e. from the start of the trajectory at $t = 0$). So by the ansatz, every rider passing through this point measures the same value $\Phi\bigl(\Ham(\bm q, \bm p)\bigr)$, and hence densities at fixed points don't change with time. In terms of the balance equation @eq:balance: since $\rho$ doesn't change anywhere inside a fixed region $V$, whatever probability flows into $V$ has to flow out again.
 
-The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle have different densities. So the observer standing still observes a change in density as the blob passes by.
+The ring in the above matrix is an example of Jeans' theorem. Every copy rotates around the origin on the circle of its own energy. All copies on one circle rotate together, but since $\rho$ is the same everywhere on that circle, the picture looks the same at every instant[^sampling]. In contrast, for the blob, if you consider one circle of constant energy, the copies of the system along that circle see different values of $\rho$. So the observer standing still observes a change in density as the blob passes by.
 
 Note that how exactly $\rho$ depends on the energy, i.e. the function $\Phi$ in the ansatz @eq:ansatz, is a model choice. E.g. for an isolated system with known energy $E_0$, we pick the microcanonical ensemble $\rho \propto \delta(\Ham - E_0)$[^microcanonical]. This density only depends on the energy, so by Jeans' theorem @eq:jeans, it describes a system in equilibrium, that is, one where the statistics don't change with time, see @eq:ensemble-average.
 
