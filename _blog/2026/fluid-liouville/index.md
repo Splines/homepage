@@ -126,7 +126,7 @@ Next, we use the Reynolds transport theorem (without proof):
 <div class="fl-panel" markdown="1">
 <p class="fl-key-title">Reynolds transport theorem</p>
 
-Let $V(t)$ be a material volume moving with the velocity field $\bm v$, and let $f(\bm x, t)$ be a (smooth) density. Then
+Let $V(t) = \phi(\hat V, t)$ be a material volume moving with the velocity field $\bm v$, and let $f(\bm x, t)$ be a density, where $\phi$ and $f$ are sufficiently differentiable[^reynolds]. Then
 
 $$
 \dv{}{t} \int_{V(t)} f \,\mathrm{d}\bm x = \int_{V(t)} \left( \pdv{f}{t} + \nabla \cdot (f \bm v) \right) \mathrm{d}\bm x
@@ -534,6 +534,8 @@ I hope this was somewhat helpful to you. I find it fascinating that the same mat
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
 [^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
+
+[^reynolds]: More precisely, $f$ needs to be defined on a region that contains $V(t)$ for all $t$, and the spatial derivatives $D_{\bm X} \phi(\cdot, t)$ (the Jacobian of $\phi$) and $\nabla f(\cdot, t)$ need to be integrable for each $t$. "Sufficiently differentiable" includes that $\phi$ can be differentiated in time _and_ space, so that the velocity $\bm v$ has spatial derivatives and $\nabla \cdot (f \bm v)$ makes sense.
 
 [^vanish]: For this conclusion, we need the integrand to be continuous (which is the case if we assume $\rho$ and $\bm v$ to be continuously differentiable). Let's see why the integrand then has to vanish everywhere. We do this by contradiction. Assume that at some time $t$, the integrand is positive at a point $\bm x_0$. By continuity, it is then also positive on a small ball $B$ around $\bm x_0$. We define $\hat V$ as the set of particles that end up in $B$ at time $t$, i.e. $\hat V = \phi^{-1}(B, t)$. This $\hat V$ is connected (as $B$ is connected and $\phi^{-1}(\cdot, t)$ is continuous), so it is a valid starting region for a material volume. And at time $t$, this material volume is exactly the ball: $V(t) = \phi(\hat V, t) = B$. Since the integral equation holds for _every_ material volume, it also holds for this one, so the integral over $B$ has to vanish. But integrating something positive over $B$ gives something positive, a contradiction. The same works if the integrand is negative at $\bm x_0$. Without continuity, we couldn't construct the contradiction since the integrand could be positive at a single point and zero everywhere else, and then the integral over any volume would still vanish. So we need continuity to conclude that the integrand vanishes everywhere (and not just "almost everywhere").
 
