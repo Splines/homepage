@@ -110,6 +110,33 @@ sup {
   }
 }
 
+// Collapsed footnotes, see _plugins/footnotes.rb
+.footnotes-details {
+  margin-top: 2em;
+
+  > summary {
+    width: fit-content;
+    cursor: pointer;
+    font-size: 0.9rem;
+    // same as links, e.g. "Back" right below
+    color: #88593a;
+    transition: v.$link-color-transition;
+
+    &:hover {
+      color: v.$link-color-hover;
+    }
+  }
+
+  .footnotes-count {
+    // the font would turn "(8)" into a circled digit
+    font-variant-ligatures: no-common-ligatures;
+  }
+
+  .footnotes {
+    margin-top: 0.6em;
+  }
+}
+
 h2 {
   padding-top: 0.9em;
   margin-bottom: 0;
