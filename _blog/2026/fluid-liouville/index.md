@@ -335,7 +335,7 @@ $$ <eq:liouville-integrated>
 Let's see again where our assumptions were used:
 
 - _Conservation of probability_ @eq:mass-conservation, i.e. copies of the system neither spawn nor vanish, resulted in the continuity equation @eq:continuity.
-- _Hamilton's equations_ made the velocity field divergence-free: $\nabla \cdot \bm v = 0$. This means that the probability fluid is incompressible, which is not true for general flows, e.g. such with friction.
+- _Hamilton's equations_ made the velocity field divergence-free: $\nabla \cdot \bm v = 0$. This means that the probability fluid is incompressible, which is not true for general flows, e.g. those with friction.
 
 Note that the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
 
@@ -353,7 +353,7 @@ $$
 \end{aligned}
 $$
 
-The sum on the right-hand side is the Poisson bracket. Note that other textbooks may define it with the opposite sign.
+The sum on the right-hand side is the Poisson bracket. Note that other textbooks may define it with the opposite sign. In our notation, we use:
 
 $$
 \{A, B\} := \sum_{i=1}^{3N} \left( \pdv{A}{p_i} \pdv{B}{q_i} - \pdv{A}{q_i} \pdv{B}{p_i} \right)
@@ -385,13 +385,13 @@ $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
 $$ <eq:ensemble-average>
 
-These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant in time.
+These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant time.
 
 Note that the copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
-To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point at the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is in phase space at the beginning.
+To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point in the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is at $t=0$ in phase space.
 
-Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded and @eq:material-derivative-rho, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
+Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different _rows_ based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded and @eq:material-derivative-rho, this decides whether the density along a trajectory changes. We land in different _columns_ based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
 
 <figure class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
@@ -431,7 +431,7 @@ Before we can answer the question about equilibrium, let's look at the following
       <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing (as all copies spiral into the origin).</p>
     </div>
     <div data-explains="traffic" hidden>
-      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point, you see a constant density there.</p>
+      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point, you see a constant density there. To avoid the jam altogether, just ride a bicycle.</p>
     </div>
   </figcaption>
 </figure>
@@ -484,7 +484,7 @@ $$
   &\explain{\text{energy conservation } @eq:energy-conservation \text{: } E(0) = E(t)} \\
   &= \Phi\bigl(E(t)\bigr) = \Phi\bigl(\Ham(\bm q(t), \bm p(t))\bigr)
 \end{aligned}
-$$
+$$ <eq:jeans-lagrangian>
 
 So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where possibly $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
@@ -492,10 +492,10 @@ So far, this is a statement along a single trajectory, i.e. from the Lagrangian 
 
 - _At least one trajectory (surjective):_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
-Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique trajectory with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
+Now back to where we left off. Fix any time $t$ and any point $(\bm q, \bm p)$. As we've just seen, exactly one trajectory $s \mapsto (\bm q(s), \bm p(s))$ passes through this point at time $t$, i.e. $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$. Substituting this into both sides of @eq:jeans-lagrangian, we get:
 
 $$
-\rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t
+\rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t \text{ and all } (\bm q, \bm p)
 $$
 
 The right-hand side doesn't depend on $t$, so the density at every fixed point stays the same, $\partial \rho / \partial t = 0$. This is Jeans' theorem, here for the special case of the energy[^jeans]:
