@@ -65,6 +65,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules/
+  - .venv/ # Python env for post scripts; its lib64 -> lib symlink confuses the file watcher
   - vendor/bundle/
   - vendor/cache/
   - vendor/gems/

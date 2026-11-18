@@ -1,7 +1,6 @@
 ---
 layout: page
-draft: true
-permalink: /blog/drafts/5a7f11d8b35b9201
+date: 2026-11-18
 title: "A Fluid Dynamics View on Liouville's Theorem"
 katex:
   enabled: true
@@ -13,6 +12,7 @@ katex:
 custom_css: /blog/2026/fluid-liouville/fluid-liouville.css
 vite_entrypoint: main.ts
 table_of_contents: true
+featured: true
 preview_image: preview.png
 preview_image_alt: >
   Phase space of a pendulum: its energy levels have the form of "cat eyes". Some volume in this phase space is highlighted in brown. This volume is deformed as a spiral.
@@ -62,7 +62,7 @@ In this material view, quantities like temperature are attached to a particle $\
   </div>
 </figure>
 
-Both views describe the same physics, it's just another perspective:
+Both views describe the same physics, just from different perspectives:
 
 $$
 T \bigl(\phi(\bm X, t), t\bigr)
@@ -93,7 +93,7 @@ $$
 \dv{}{t} T \bigl(\phi(\bm X, t), t\bigr) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
 $$ <eq:material-derivative>
 
-Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor-expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
+Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
 
 ### Material volume
 
@@ -126,7 +126,7 @@ Next, we use the Reynolds transport theorem (without proof):
 <div class="fl-panel" markdown="1">
 <p class="fl-key-title">Reynolds transport theorem</p>
 
-Let $V(t)$ be a material volume moving with the velocity field $\bm v$, and let $f(\bm x, t)$ be a (smooth) density. Then
+Let $V(t) = \phi(\hat V, t)$ be a material volume moving with the velocity field $\bm v$, and let $f(\bm x, t)$ be a density, where $\phi$ and $f$ are sufficiently differentiable[^reynolds]. Then
 
 $$
 \dv{}{t} \int_{V(t)} f \,\mathrm{d}\bm x = \int_{V(t)} \left( \pdv{f}{t} + \nabla \cdot (f \bm v) \right) \mathrm{d}\bm x
@@ -182,7 +182,7 @@ It tells us: the mass inside a _fixed_ region $V$ can only change by what flows 
 
 ## Connection to phase space
 
-In phase space, each point represents a possible state of our system. The axes of this multidimensional space are the generalized coordinates of the system and their conjugate momenta. For our purposes, we consider $N$ particles in three dimensions, so we have $3N$ position coordinates $\bm q = (q_1, \dots, q_{3N})$ and $3N$ momentum coordinates $\bm p = (p_1, \dots, p_{3N})$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
+In phase space, each point represents a possible state of our system. The axes of this multidimensional space are the generalized coordinates of the system and their conjugate momenta. For our purposes, we consider $N$ particles in three dimensions, i.e. $3N$ position coordinates $\bm q = (q_1, \dots, q_{3N})$ and $3N$ momentum coordinates $\bm p = (p_1, \dots, p_{3N})$. The phase space is then $6N$-dimensional and we denote a point in it by $(\bm q, \bm p)$.
 
 The funny thing is that this abstract point in phase space, representing a state of a particle system, can itself be considered as a particle in a fluid. The "fluid" is the ensemble of copies of our system, each with a different initial condition. The time evolution of the system is then a trajectory through phase space, determined by Hamilton's equations.
 
@@ -231,7 +231,7 @@ You can click on "Many copies" to fill the phase space with many copies of the s
 
 Let's recap our general setting in statistical physics: we consider a real system of $N$ particles. We represent the state of this system by a single point in $6N$-dimensional phase space. With the system evolving in time, this point will move around in phase space. We then take many copies of this system, each with different initial conditions, i.e. many points in phase space. We let the systems evolve in time, so now many points move around in phase space. And this movement is like a flow of a fluid, just very abstract. The points in phase space are the "fluid particles", and the Hamiltonian gives us a velocity field.
 
-But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them, neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
+But one fundamental problem remains: a real system has $N \sim 10^{23}$ particles, so we cannot possibly track them: neither as $3N$ coordinates in real space nor as one point in $6N$-dimensional phase space. Luckily, we don't have to. What we care about in the end are macroscopic quantities like pressure or internal energy. These are averages over all states, weighted by how likely each state is.
 
 This "how likely each state is" can be described by a probability density $\rho(\bm q, \bm p, t)$ in phase space. It tells us what fraction of the copies of the system is in a small region around $(\bm q, \bm p)$ at time $t$ (per volume of that region). The total probability of finding the system somewhere in phase space is always 1 (normalization):
 
@@ -239,7 +239,7 @@ $$
 \int_{\RR^{6N}} \rho(\bm q, \bm p, t) \,\mathrm{d}\bm q \, \mathrm{d}\bm p = 1
 $$
 
-This is analogous to the mass density of a fluid, and mass conservation now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
+This is analogous to the mass density of a fluid, and mass conservation @eq:mass-conservation now becomes the conservation of probability. The continuity equation @eq:continuity then describes how the probability density $\rho$ changes in time, and it is exactly the same as in fluid dynamics. This is so powerful because we can now use tools from fluid dynamics to study problems in statistical physics.
 
 
 ## Liouville's theorem
@@ -254,7 +254,7 @@ $$
 \end{aligned}
 $$ <eq:continuity-expanded>
 
-We focus on $\nabla \cdot \bm v$ first. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$ and nabla is the gradient in phase space, $\nabla = (\partial / \partial \bm q, \partial / \partial \bm p)$.
+We focus on $\nabla \cdot \bm v$ first. Remember that the velocity in phase space is $\bm v = (\dot{\bm q}, \dot{\bm p})$ and that nabla is the gradient in phase space, $\nabla = (\partial / \partial \bm q, \partial / \partial \bm p)$.
 
 $$
 \begin{aligned}
@@ -334,8 +334,8 @@ $$ <eq:liouville-integrated>
 
 Let's see again where our assumptions were used:
 
-- _Conservation of probability_ @eq:mass-conservation resulted in the continuity equation @eq:continuity. Copies of the system don't spawn or vanish.
-- _Hamilton's equations_ gave us $\nabla \cdot \bm v = 0$, i.e. the incompressibility of the probability fluid. This is not true for general flows, e.g. with friction.
+- _Conservation of probability_ @eq:mass-conservation, i.e. copies of the system neither spawn nor vanish, resulted in the continuity equation @eq:continuity.
+- _Hamilton's equations_ made the velocity field divergence-free: $\nabla \cdot \bm v = 0$. This means that the probability fluid is incompressible, which is not true for general flows, e.g. those with friction.
 
 Note that the Hamiltonian may depend explicitly on time, e.g. for a gas in a cylinder with a moving piston. Liouville's theorem still holds.
 
@@ -353,7 +353,7 @@ $$
 \end{aligned}
 $$
 
-The sum on the right-hand side is the Poisson bracket. Note that other textbooks may define it with the opposite sign.
+The sum on the right-hand side is the Poisson bracket. Note that other textbooks may define it with the opposite sign. In our notation, we use:
 
 $$
 \{A, B\} := \sum_{i=1}^{3N} \left( \pdv{A}{p_i} \pdv{B}{q_i} - \pdv{A}{q_i} \pdv{B}{p_i} \right)
@@ -389,9 +389,9 @@ These ensemble averages correspond to macroscopic quantities. For example, choos
 
 Note that the copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
-To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point at the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is in phase space at the beginning.
+To see this, let's discuss what the physical system determines and what is up to us. Hamilton's equations determine the velocity $\bm v$ at every point in phase space, so they tell us how a copy moves, wherever it might be. But they don't tell us how probability is distributed in phase space, i.e. how many copies are at each point in the beginning. The initial density $\rho(\bm q, \bm p, 0)$ is a choice we make to hopefully have a good model of the real system. Think of a river: its shape determines how the water flows. If you pour some ink into the river, it will be carried along with the flow. But where this ink ends up depends on where you poured it in. With the initial density, we determine where the ink is at $t=0$ in phase space.
 
-Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different rows based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded and @eq:material-derivative-rho, this decides whether the density along a trajectory changes. We land in different columns based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
+Before we can answer the question about equilibrium, let's look at the following matrix, which shows all four combinations of the two time derivatives being zero or not. We land in different _rows_ based on the physics: is the flow incompressible (as every Hamiltonian flow is) or not? Since $\mathrm{d}\rho / \mathrm{d}t = -\rho \, (\nabla \cdot \bm v)$ by @eq:continuity-expanded and @eq:material-derivative-rho, this decides whether the density along a trajectory changes. We land in different _columns_ based on our choice of the initial density for that flow. In the top row, both examples show the same harmonic oscillator from above, only with different initial densities. For contrast, the bottom row depicts two compressible flows (which are hence not Hamiltonian). Click on an example to see how the density $\rho$ evolves and what the two observers measure: the one standing still (Eulerian) and the one riding along (Lagrangian). The density is shown in orange, the individual copies (sampled from that density) as dots.
 
 <figure class="fl-figure fl-wide" data-scene="derivatives">
   <div class="fl-matrix" aria-label="Examples" role="group">
@@ -431,7 +431,7 @@ Before we can answer the question about equilibrium, let's look at the following
       <p><strong>Damped oscillator with a blob: $\mathrm{d}\rho / \mathrm{d}t \neq 0$ and $\partial \rho / \partial t \neq 0$.</strong> Friction makes the flow compressible, $\nabla \cdot \bm v < 0$. The blob shrinks but keeps its probability, so the density around the rider grows. The observer standing still sees the blob pass by once, then nothing (as all copies spiral into the origin).</p>
     </div>
     <div data-explains="traffic" hidden>
-      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point, you see a constant density there.</p>
+      <p><strong>Traffic flow with a jam: $\mathrm{d}\rho / \mathrm{d}t \neq 0$, but $\partial \rho / \partial t = 0$.</strong> A compressible flow, so it is not Hamiltonian. Like a bottleneck on a highway, the density fluctuates when you "ride along" with it: copies get squeezed together when entering the jam and spread apart again when leaving it. But when you stand still as observer at any point, you see a constant density there. To avoid the jam altogether, just ride a bicycle.</p>
     </div>
   </figcaption>
 </figure>
@@ -484,18 +484,18 @@ $$
   &\explain{\text{energy conservation } @eq:energy-conservation \text{: } E(0) = E(t)} \\
   &= \Phi\bigl(E(t)\bigr) = \Phi\bigl(\Ham(\bm q(t), \bm p(t))\bigr)
 \end{aligned}
-$$
+$$ <eq:jeans-lagrangian>
 
-So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where possibly $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
+So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
-- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz's theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
 
 - _At least one trajectory (surjective):_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
-Now back to where we left off. For any time $t$ and any point $(\bm q, \bm p)$, we pick the unique trajectory with $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$ and get:
+Now back to where we left off. Fix any time $t$ and any point $(\bm q, \bm p)$. As we've just seen, exactly one trajectory $s \mapsto (\bm q(s), \bm p(s))$ passes through this point at time $t$, i.e. $(\bm q(t), \bm p(t)) = (\bm q, \bm p)$. Substituting this into both sides of @eq:jeans-lagrangian, we get:
 
 $$
-\rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t
+\rho(\bm q, \bm p, t) = \Phi\bigl(\Ham(\bm q, \bm p)\bigr) \quad \text{for all } t \text{ and all } (\bm q, \bm p)
 $$
 
 The right-hand side doesn't depend on $t$, so the density at every fixed point stays the same, $\partial \rho / \partial t = 0$. This is Jeans' theorem, here for the special case of the energy[^jeans]:
@@ -529,9 +529,13 @@ To summarize: Hamilton's equations tell us how a copy of the system moves throug
 
 I hope this was somewhat helpful to you. I find it fascinating that the same mathematical structure appears in fluid dynamics and in statistical physics and that we can actually use tools from fluid dynamics to better understand statistical physics.
 
+<small>_Thanks a lot for the great reviews by Amelie Olivia Rürup, Martin Dermendzhiev and Jakob. They caught typos, mathematical mistakes and unclear explanations._</small>
+
 [^phi]: Assumptions for $\phi$: First, for each $t$, $\phi(\cdot, t)$ is a $C^1$-diffeomorphism (bijective, $C^1$ and with $C^1$ inverse $\phi^{-1}(\cdot, t)$). Second, $\phi(\bm X, \cdot)\in C^1$ for each $\bm X$. And last but not least, $\phi(\cdot, 0) = \mathrm{id}$.
 
 [^well-behaved]: Here's a proof overview. Particles that started in $\hat V$ are in $V(t)$ by definition, so they don't leave. Could a particle $\bm X$ from outside sneak in? No, since it would have to sit at the same place as some particle $\bm Y \in \hat V$, i.e. $\phi(\bm X, t) = \phi(\bm Y, t)$. But as $\phi(\cdot, t)$ is injective, this means $\bm X = \bm Y$, so $\bm X$ was in $\hat V$ all along. Hence $V(t)$ always contains exactly the particles that started in $\hat V$: nothing ever enters or leaves. Moreover, $\phi(\cdot, t)$ is a diffeomorphism (in particular a homeomorphism, i.e. continuous with continuous inverse) and preserves topological properties. Thus, $V(t)$ stays connected as $\hat V$ was assumed to be connected. In other words, $V(t)$ cannot tear apart (and no new holes can appear).
+
+[^reynolds]: More precisely, $f$ needs to be defined on a region that contains $V(t)$ for all $t$, and the spatial derivatives $D_{\bm X} \phi(\cdot, t)$ (the Jacobian of $\phi$) and $\nabla f(\cdot, t)$ need to be integrable for each $t$. "Sufficiently differentiable" includes that $\phi$ can be differentiated in time _and_ space, so that the velocity $\bm v$ has spatial derivatives and $\nabla \cdot (f \bm v)$ makes sense.
 
 [^vanish]: For this conclusion, we need the integrand to be continuous (which is the case if we assume $\rho$ and $\bm v$ to be continuously differentiable). Let's see why the integrand then has to vanish everywhere. We do this by contradiction. Assume that at some time $t$, the integrand is positive at a point $\bm x_0$. By continuity, it is then also positive on a small ball $B$ around $\bm x_0$. We define $\hat V$ as the set of particles that end up in $B$ at time $t$, i.e. $\hat V = \phi^{-1}(B, t)$. This $\hat V$ is connected (as $B$ is connected and $\phi^{-1}(\cdot, t)$ is continuous), so it is a valid starting region for a material volume. And at time $t$, this material volume is exactly the ball: $V(t) = \phi(\hat V, t) = B$. Since the integral equation holds for _every_ material volume, it also holds for this one, so the integral over $B$ has to vanish. But integrating something positive over $B$ gives something positive, a contradiction. The same works if the integrand is negative at $\bm x_0$. Without continuity, we couldn't construct the contradiction since the integrand could be positive at a single point and zero everywhere else, and then the integral over any volume would still vanish. So we need continuity to conclude that the integrand vanishes everywhere (and not just "almost everywhere").
 

@@ -159,7 +159,10 @@ function showPreview(preview: HTMLElement, link: HTMLAnchorElement, withJump: bo
     const jump = document.createElement("a");
     jump.className = "ref-preview-jump";
     jump.href = `#${id}`;
-    const below = target.anchor.getBoundingClientRect().top > link.getBoundingClientRect().top;
+    // While the footnotes are collapsed (see footnotes.ts), a footnote may have no position
+    // of its own (all zeros). Their <details> is visible and in its place.
+    const visibleAnchor = target.anchor.closest(".footnotes-details:not([open])") ?? target.anchor;
+    const below = visibleAnchor.getBoundingClientRect().top > link.getBoundingClientRect().top;
     jump.textContent = `${target.jumpLabel} ${below ? "↓" : "↑"}`;
     preview.append(jump);
   }

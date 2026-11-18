@@ -65,16 +65,48 @@
       </div>
     </a>
 
+    {% assign posts = site.blog | sort: "date" | reverse %}
+
+    {% for post in posts %}
+    {% if post.featured and post.preview_image %}
+    {% if post.draft != true or site.show_drafts_in_lists == true %}
+    <div class="post-card post-card-featured{% if post.draft %} post-card-draft{% endif %}">
+      <a class="post-card-link" aria-label="{{ post.title | xml_escape }}" href="{{ post.url | relative_url }}"></a>
+
+      <img class="post-card-image" alt="{{ post.preview_image_alt | default: post.title | strip | xml_escape }}" src="{{ post.bundle_url | default: post.url | append: post.preview_image | relative_url }}">
+
+      <div class="post-card-body">
+        <h2>{{ post.title }}</h2>
+
+        <p class="post-time">
+          {% if post.draft %}
+          draft, only listed here in local previews
+          {% else %}
+          <time datetime="{{ post.date | date: '%Y-%m-%d' }}">
+            {{ post.date | date: "%B %Y" }}
+          </time>
+          {% endif %}
+        </p>
+
+        <p class="post-excerpt">
+          {{ post.description | default: post.excerpt }}
+        </p>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
     <div class="post-list">
 
-      {% assign posts = site.blog | sort: "date" | reverse %}
       {% for post in posts %}
+      {% if post.featured and post.preview_image %}{% continue %}{% endif %}
       {% if post.draft != true or site.show_drafts_in_lists == true %}
       <div class="post-card{% if post.draft %} post-card-draft{% endif %}">
         <a class="post-card-link" href="{{ post.url | relative_url }}"></a>
 
         <h2>
-          {{ post.title }}</a>
+          {{ post.title }}
         </h2>
 
         <p class="post-time">
