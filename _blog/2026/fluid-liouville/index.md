@@ -62,7 +62,7 @@ In this material view, quantities like temperature are attached to a particle $\
   </div>
 </figure>
 
-Both views describe the same physics, it's just another perspective:
+Both views describe the same physics, just from different perspectives:
 
 $$
 T \bigl(\phi(\bm X, t), t\bigr)
@@ -93,7 +93,7 @@ $$
 \dv{}{t} T \bigl(\phi(\bm X, t), t\bigr) = \pdv{T}{t} + \underbrace{\bm v \cdot \nabla T}_{\text{convective part}}
 $$ <eq:material-derivative>
 
-Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor-expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
+Note how it makes sense to denote this by a total time derivative $\mathrm{d}T / \mathrm{d}t$, because what we did with the Taylor expansion above is just the multivariable chain rule for the limit $\delta t \to 0$. But now we know that the total derivative $\mathrm{d}T / \mathrm{d}t$ corresponds to the picture of riding along with a fluid particle, whereas the partial derivative $\partial T / \partial t$ corresponds to standing still at a fixed point in space. This will become important later.
 
 ### Material volume
 
@@ -385,7 +385,7 @@ $$
 \dv{}{t} \langle A \rangle = \int A \, \pdv{\rho}{t} \,\mathrm{d}\bm q \,\mathrm{d}\bm p = 0
 $$ <eq:ensemble-average>
 
-These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant time.
+These ensemble averages correspond to macroscopic quantities. For example, choosing $A = \Ham$ gives the internal energy $U = \langle \Ham \rangle$. And for $N$ particles of mass $m$ in thermal equilibrium, the average kinetic energy $\bigl\langle \sum_{i=1}^{3N} p_i^2 / (2m) \bigr\rangle = \frac{3}{2} N k_B T$ (equipartition theorem in Cartesian coordinates) gives us the temperature $T$. So in equilibrium, $U$ and $T$ are constant in time.
 
 Note that the copies themselves still move along their trajectories. Only the _statistics_ are frozen, not the individual systems. So given Liouville's theorem, can we conclude that the ensemble is in equilibrium? No!
 
@@ -486,9 +486,9 @@ $$
 \end{aligned}
 $$ <eq:jeans-lagrangian>
 
-So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where possibly $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
+So far, this is a statement along a single trajectory, i.e. from the Lagrangian perspective. To switch to the Eulerian one, we need that every point $(\bm q, \bm p)$ in phase space is reached at time $t$ by exactly one trajectory (even where $\rho = 0$). In other words, the time evolution mapping each initial state $(\bm q(0), \bm p(0))$ to the state $(\bm q(t), \bm p(t))$ has to be a bijection of phase space onto itself. For a fluid, this is the bijectivity we simply assumed for the map $\phi$[^phi]. For Hamilton's equations, we don't have to assume it. It follows from two properties of their solutions:
 
-- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz' theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
+- _At most one trajectory (injective):_ Suppose two copies were at the same point at time $t$. So they are in exactly the same state and both solve Hamilton's equations. Given that $\Ham$ is twice continuously differentiable (which we already needed for Schwarz's theorem above), the right-hand sides $\partial \Ham / \partial p_i$ and $-\partial \Ham / \partial q_i$ are continuously differentiable. Then by the Picard–Lindelöf theorem, there is only one solution to Hamilton's equations that passes through this state (forwards and backwards in time). So the two copies agree at all times, in particular at $t = 0$. They were the same copy of the system (i.e. the same particle in phase space) all along. So we have shown that trajectories in phase space never cross.
 
 - _At least one trajectory (surjective):_ Start at $(\bm q, \bm p)$ and run Hamilton's equations backwards in time until $t = 0$. This gives the initial state of a copy that arrives at $(\bm q, \bm p)$ at time $t$. For this, the solution has to exist on the whole time interval $[0, t]$, i.e. no copy should escape to infinity in finite time. This is true for many systems, e.g. for the harmonic oscillator, since the surfaces of constant energy are bounded. In general, we have to assume that the Hamiltonian is "well-behaved" in the sense that it doesn't allow for any singularities or solutions that blow up in finite time.
 
