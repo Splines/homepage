@@ -11,6 +11,22 @@ title: MaMpf HiWi-Stelle
   <title>{{ page.title }}</title>
   <link href="{{ '/assets/css/main.css' | relative_url }}" rel="stylesheet">
   <link href="{{ '/assets/css/page.css' | relative_url }}" rel="stylesheet">
+  <style>
+    .mampf-posting-frame {
+      container-type: inline-size;
+    }
+
+    /*
+      Page aspect ratio (2133 × 2404 pt) plus room for the viewer's toolbar.
+      The PDF is fitted to the height (view=FitV), so too much extra height
+      makes the page wider than the box and causes horizontal scrolling.
+    */
+    .mampf-posting {
+      display: block;
+      width: 100%;
+      height: calc(100cqi * 2404 / 2133 + 3rem);
+    }
+  </style>
 </head>
 
 <body>
@@ -19,20 +35,38 @@ title: MaMpf HiWi-Stelle
     <header>
       <h1>{{ page.title }}</h1>
       <p>
-        Diese Stelle ist mittlerweile bereits vergeben.
+        Nice! Stand jetzt ist die Stelle noch zu vergeben.
+        <br>
+        Wir freuen uns auf deine Bewerbung.
       </p>
     </header>
 
     <hr class="header-content-separator">
 
+    <h2>Stellenausschreibung</h2>
+    <!--
+      Open the PDF fitted to its page height and without the thumbnail sidebar
+      (same as in the bachelor-thesis-typst post): view=FitV and navpanes=0 for
+      Chromium, pagemode=none for Firefox (pdf.js). Since the box has the page's
+      aspect ratio (plus the toolbar), fitting the height shows the whole page.
+    -->
+    <div class="mampf-posting-frame">
+      <object type="application/pdf" class="mampf-posting"
+        data="{{ '/assets/mampf/mampf-hiwi-posting-december-2026.pdf' | relative_url }}#view=FitV&navpanes=0&pagemode=none">
+        <p>
+          Das PDF kann hier leider nicht angezeigt werden.
+          <a href="{{ '/assets/mampf/mampf-hiwi-posting-december-2026.pdf' | relative_url }}">Lade es stattdessen herunter</a>.
+        </p>
+      </object>
+    </div>
+
+    <h2>MaMpf</h2>
     <p>
       MaMpf läuft produktiv
       <a href="https://mampf.mathi.uni-heidelberg.de/">hier</a>.
       Zudem findest du MaMpf open-source auf
       <a href="https://github.com/MaMpf-HD/mampf">GitHub</a>.
     </p>
-  </body>
-    </div>
 
   </article>
 
